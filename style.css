@@ -1,0 +1,21 @@
+.inputForm form{
+    background: lightgrey;
+    padding: 5px 5px 5px 5px;
+    margin: 5px 5px 5px 5px;
+}
+
+.inputForm label{
+    display: block;
+    width: 140px;
+    float: left;
+    clear: both;
+}
+
+.inputForm input[type="text"],input[type="email"],input[type="tel"],select{
+    width: 100%;
+}
+
+.inputForm span{
+    overflow: hidden;
+    display: block;
+}
