@@ -1,0 +1,702 @@
+{
+  "motors": [
+    {
+      "armMax": 450.0,
+      "bladeMax": 500.0,
+      "hoh": 50.0,
+      "armType": "MD1/E",
+      "bladeType": "std",
+      "artNr": "0",
+      "name": "223KG",
+      "comment": null
+    },
+    {
+      "armMax": 600.0,
+      "bladeMax": 600.0,
+      "hoh": 45.0,
+      "armType": "LD",
+      "bladeType": "LD",
+      "artNr": "0",
+      "name": "215BD",
+      "comment": null
+    },
+    {
+      "armMax": 750.0,
+      "bladeMax": 750.0,
+      "hoh": 50.0,
+      "armType": "MD1/E",
+      "bladeType": "std",
+      "artNr": "0",
+      "name": "223BD",
+      "comment": null
+    },
+    {
+      "armMax": 750.0,
+      "bladeMax": 700.0,
+      "hoh": 50.0,
+      "armType": "MD1/E",
+      "bladeType": "std",
+      "artNr": "0",
+      "name": "223BS",
+      "comment": null
+    },
+    {
+      "armMax": 750.0,
+      "bladeMax": 750.0,
+      "hoh": 50.0,
+      "armType": "MD1/E",
+      "bladeType": "std",
+      "artNr": "0",
+      "name": "233BD",
+      "comment": null
+    },
+    {
+      "armMax": 750.0,
+      "bladeMax": 800.0,
+      "hoh": 50.0,
+      "armType": "MD1/E",
+      "bladeType": "std",
+      "artNr": "0",
+      "name": "232BD",
+      "comment": null
+    },
+    {
+      "armMax": 900.0,
+      "bladeMax": 900.0,
+      "hoh": 60.0,
+      "armType": "MD2",
+      "bladeType": "std/HD",
+      "artNr": "0",
+      "name": "240BS",
+      "comment": null
+    },
+    {
+      "armMax": 1000.0,
+      "bladeMax": 1200.0,
+      "hoh": 60.0,
+      "armType": "HD1",
+      "bladeType": "std/HD",
+      "artNr": "0",
+      "name": "255BS",
+      "comment": null
+    },
+    {
+      "armMax": 1400.0,
+      "bladeMax": 1850.0,
+      "hoh": 60.0,
+      "armType": "HD2",
+      "bladeType": "HD",
+      "artNr": "0",
+      "name": "280BS",
+      "comment": null
+    },
+    {
+      "armMax": 1850.0,
+      "bladeMax": 2000.0,
+      "hoh": 60.0,
+      "armType": "HD2",
+      "bladeType": "HD",
+      "artNr": "0",
+      "name": "2110BS",
+      "comment": null
+    }
+  ],
+  "arms": [
+    {
+      "armType": "LD",
+      "lengthMin": 350.0,
+      "lengthMax": 450.0,
+      "hoh": 0.0,
+      "bladeLengthMin": 280.0,
+      "bladeLengthMax": 600.0,
+      "bladeType": "LD",
+      "applType": "enkel",
+      "artNr": "21581118",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "LD",
+      "lengthMin": 451.0,
+      "lengthMax": 600.0,
+      "hoh": 0.0,
+      "bladeLengthMin": 280.0,
+      "bladeLengthMax": 600.0,
+      "bladeType": "LD",
+      "applType": "enkel",
+      "artNr": "21581124",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "E",
+      "lengthMin": 200.0,
+      "lengthMax": 450.0,
+      "hoh": 0.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "enkel",
+      "artNr": "2103",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "E",
+      "lengthMin": 451.0,
+      "lengthMax": 600.0,
+      "hoh": 0.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "enkel",
+      "artNr": "2106",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "E",
+      "lengthMin": 550.0,
+      "lengthMax": 750.0,
+      "hoh": 0.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "enkel",
+      "artNr": "2109",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "LD",
+      "lengthMin": 350.0,
+      "lengthMax": 450.0,
+      "hoh": 45.0,
+      "bladeLengthMin": 280.0,
+      "bladeLengthMax": 600.0,
+      "bladeType": "LD",
+      "applType": "parallel",
+      "artNr": "21581318",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "LD",
+      "lengthMin": 350.0,
+      "lengthMax": 450.0,
+      "hoh": 45.0,
+      "bladeLengthMin": 280.0,
+      "bladeLengthMax": 600.0,
+      "bladeType": "LD",
+      "applType": "parallel",
+      "artNr": "21581318P",
+      "name": null,
+      "comment": "Polished"
+    },
+    {
+      "armType": "LD",
+      "lengthMin": 451.0,
+      "lengthMax": 600.0,
+      "hoh": 45.0,
+      "bladeLengthMin": 280.0,
+      "bladeLengthMax": 600.0,
+      "bladeType": "LD",
+      "applType": "parallel",
+      "artNr": "21581324",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "LD",
+      "lengthMin": 451.0,
+      "lengthMax": 600.0,
+      "hoh": 45.0,
+      "bladeLengthMin": 280.0,
+      "bladeLengthMax": 600.0,
+      "bladeType": "LD",
+      "applType": "parallel",
+      "artNr": "21581324P",
+      "name": null,
+      "comment": "Polished"
+    },
+    {
+      "armType": "MD1",
+      "lengthMin": 350.0,
+      "lengthMax": 450.0,
+      "hoh": 50.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2133",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "MD1",
+      "lengthMin": 350.0,
+      "lengthMax": 450.0,
+      "hoh": 50.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2133.01",
+      "name": null,
+      "comment": "2 springs"
+    },
+    {
+      "armType": "MD1",
+      "lengthMin": 451.0,
+      "lengthMax": 600.0,
+      "hoh": 50.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2136",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "MD1",
+      "lengthMin": 451.0,
+      "lengthMax": 600.0,
+      "hoh": 50.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2136.01",
+      "name": null,
+      "comment": "2 springs"
+    },
+    {
+      "armType": "MD1",
+      "lengthMin": 650.0,
+      "lengthMax": 750.0,
+      "hoh": 50.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2139",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "MD1",
+      "lengthMin": 650.0,
+      "lengthMax": 750.0,
+      "hoh": 50.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2139.01",
+      "name": null,
+      "comment": "2 springs"
+    },
+    {
+      "armType": "MD1",
+      "lengthMin": 650.0,
+      "lengthMax": 750.0,
+      "hoh": 50.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2139.P",
+      "name": null,
+      "comment": "Adjustable Spring"
+    },
+    {
+      "armType": "MD2",
+      "lengthMin": 800.0,
+      "lengthMax": 800.0,
+      "hoh": 50.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2140.800.S",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "MD2",
+      "lengthMin": 800.0,
+      "lengthMax": 800.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 610.0,
+      "bladeLengthMax": 900.0,
+      "bladeType": "HD",
+      "applType": "parallel",
+      "artNr": "2140.800.B",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "MD2",
+      "lengthMin": 850.0,
+      "lengthMax": 850.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2140.850.S",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "MD2",
+      "lengthMin": 800.0,
+      "lengthMax": 800.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 610.0,
+      "bladeLengthMax": 900.0,
+      "bladeType": "HD",
+      "applType": "parallel",
+      "artNr": "2140.850.B",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "MD2",
+      "lengthMin": 900.0,
+      "lengthMax": 900.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2140.900.S",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "MD2",
+      "lengthMin": 900.0,
+      "lengthMax": 900.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 0.0,
+      "bladeLengthMax": 900.0,
+      "bladeType": "HD",
+      "applType": "parallel",
+      "artNr": "2140.900.B",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "HD1",
+      "lengthMin": 750.0,
+      "lengthMax": 1000.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2142.S",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "HD1",
+      "lengthMin": 750.0,
+      "lengthMax": 1000.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 610.0,
+      "bladeLengthMax": 1200.0,
+      "bladeType": "HD",
+      "applType": "parallel",
+      "artNr": "2142.B",
+      "name": null,
+      "comment": null
+    },
+    {
+      "armType": "HD1",
+      "lengthMin": 750.0,
+      "lengthMax": 1000.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2142.SP",
+      "name": null,
+      "comment": "Poished"
+    },
+    {
+      "armType": "HD1",
+      "lengthMin": 750.0,
+      "lengthMax": 1000.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 610.0,
+      "bladeLengthMax": 1200.0,
+      "bladeType": "HD",
+      "applType": "parallel",
+      "artNr": "2142.BP",
+      "name": null,
+      "comment": "Polished"
+    },
+    {
+      "armType": "HD1",
+      "lengthMin": 750.0,
+      "lengthMax": 1000.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 250.0,
+      "bladeLengthMax": 800.0,
+      "bladeType": "std",
+      "applType": "parallel",
+      "artNr": "2142.SAS",
+      "name": null,
+      "comment": "Adjustable Spring"
+    },
+    {
+      "armType": "HD1",
+      "lengthMin": 750.0,
+      "lengthMax": 1000.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 610.0,
+      "bladeLengthMax": 1200.0,
+      "bladeType": "HD",
+      "applType": "parallel",
+      "artNr": "2142.BAS",
+      "name": null,
+      "comment": "Adjustable Spring"
+    },
+    {
+      "armType": "HD2",
+      "lengthMin": 1000.0,
+      "lengthMax": 1850.0,
+      "hoh": 60.0,
+      "bladeLengthMin": 610.0,
+      "bladeLengthMax": 2000.0,
+      "bladeType": "HD",
+      "applType": "parallel",
+      "artNr": "2144.B",
+      "name": null,
+      "comment": null
+    }
+  ],
+  "blades": [
+    {
+      "bladeType": "LD",
+      "length": 280.0,
+      "artNr": "21582011",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "LD",
+      "length": 300.0,
+      "artNr": "21582012",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "LD",
+      "length": 350.0,
+      "artNr": "21582014",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "LD",
+      "length": 400.0,
+      "artNr": "21582016",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "LD",
+      "length": 450.0,
+      "artNr": "21582018",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "LD",
+      "length": 500.0,
+      "artNr": "21582020",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "LD",
+      "length": 550.0,
+      "artNr": "21582022",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "LD",
+      "length": 600.0,
+      "artNr": "21582024",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 250.0,
+      "artNr": "2170",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 300.0,
+      "artNr": "2171",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 350.0,
+      "artNr": "2172",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 400.0,
+      "artNr": "2173",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 450.0,
+      "artNr": "2174",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 500.0,
+      "artNr": "2175",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 550.0,
+      "artNr": "2176",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 600.0,
+      "artNr": "2177",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 650.0,
+      "artNr": "2178",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 700.0,
+      "artNr": "2179",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 750.0,
+      "artNr": "2195",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "std",
+      "length": 800.0,
+      "artNr": "2196",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 610.0,
+      "artNr": "216120",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 650.0,
+      "artNr": "216121",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 700.0,
+      "artNr": "216122",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 750.0,
+      "artNr": "216123",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 800.0,
+      "artNr": "216124",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 850.0,
+      "artNr": "216125",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 900.0,
+      "artNr": "216126",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 950.0,
+      "artNr": "216127",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 1000.0,
+      "artNr": "216128",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 1100.0,
+      "artNr": "216129",
+      "name": null,
+      "comment": null
+    },
+    {
+      "bladeType": "HD",
+      "length": 1200.0,
+      "artNr": "216130",
+      "name": null,
+      "comment": null
+    }
+  ]
+}
