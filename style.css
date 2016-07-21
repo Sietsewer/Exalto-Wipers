@@ -6,12 +6,12 @@
 
 .inputForm label{
     display: block;
-    width: 140px;
+    width: 200px;
     float: left;
     clear: both;
 }
 
-.inputForm input[type="text"],input[type="email"],input[type="tel"],select{
+.inputForm input[type="text"],input[type="email"],input[type="tel"],input[type="number"],select{
     width: 100%;
 }
 
