@@ -2,6 +2,8 @@
     <head>
         <title>Wiper Calculator</title>
         <link rel="stylesheet" type="text/css" href="style.css">
+        <script type="text/javascript" src="databaseControl.js"></script>
+		<script type="text/javascript" src="main.js"></script>
     </head>
     <body>
         <!-- Form -->
@@ -290,7 +292,7 @@
             </form>
             <form id="switchgear">
                 <label>Switchgear</label>
-                <span><select id="switchgear" name="switchgear">
+                <span><select id="switchgearType" name="switchgear">
                     <option value="none">No Switcgear needed</option>
                     <option value="ECP">Electronic Control Panel</option>
                     <option value="EWS">Electronic Wiper Switch</option>
@@ -300,7 +302,7 @@
             </form>
             <form id="washing">
                 <label>Washing System</label>
-                <span><select id="switchgear" name="switchgear">
+                <span><select id="washingSystem" name="washing">
                     <option value="none">No System needed</option>
                     <option value="CSfSS">Complete System from Ship's Supply</option>
                     <option value="CSdR">Complete System from Reservoir</option>
@@ -317,6 +319,11 @@
                     <option value="WD">Window D</option>
                     <option value="WE">Window E</option>
                     <option value="WF">Window F</option>
+                </select></span>
+				<label>Wiper Type</label>
+                <span><select id="wiperType" name="wiperType">
+                    <option value="pendulum">Pendulum</option>
+                    <option value="pantograph">Pantograph</option>
                 </select></span>
                 <label>Window Height (C)</label>
                 <span><input type="number" name="windowHeight" id="windowHeight" /></span>
@@ -336,5 +343,13 @@
         <div id="outputArea">
             
         </div>
+		<p id="demo"></p>
+		<button onclick="gatherData()">Click me</button>
+		<script>
+			function testFunc(){
+				var x = 5;
+				document.getElementById("demo").innerHTML = (getWithinRange(database["motors"], "armMax", 450, 600).length);
+			}
+		</script>
     </body>
 </html>
