@@ -35,24 +35,53 @@ function gatherData () {
 			document.getElementById("windowCentreDistance").value,
 			document.getElementById("windowEyeLevel").value,
 			document.getElementById("windowBulkheadThickness").value
+		),
+		new Meta (
+			document.getElementById("units").value
 		)
 	);
+	
+	if(data.meta.isInches){
+		data = convertToMM (data);
+	}
+	
 	formData = data;
 	return data;
 }
 
+function convertToMM (data) {
+	data.windowData.height = inchToMM(data.windowData.height);
+	data.windowData.topWidth = inchToMM(data.windowData.topWidth);
+	data.windowData.bottomWidth = inchToMM(data.windowData.bottomWidth);
+	data.windowData.centreDistance = inchToMM(data.windowData.centreDistance);
+	data.windowData.eyeLevel = inchToMM(data.windowData.eyeLevel);
+	data.windowData.bulkheadThickness = inchToMM(data.windowData.bulkheadThickness);
+	return data;
+}
+
+function inchToMM (num){
+	return Number(num) * 25.4;
+}
+
+function mmToInch (num) {
+	return Number(num) / 25.4;
+}
+
+
+
 function computeWiperset () {
 	var dataSet = gatherData();
+	var results;
 	if (dataSet !== null){
 		
 		var armLength, bladeLength, maxWipeAngle, Marginhorizontal, MarginverticalBelow, MarginverticalAbove, MarginverticalMovement;
 		
-		if (dataSet.windowData.wiperType === "pendulum"){
+		if (dataSet.windowData.wiperType === "pantograph"){
 			// Parameters
-			var pEyeLevel = dataSet.windowData.eyeLevel;
-			var pCentreHeight = dataSet.windowData.centreDistance;
-			var pHeight = dataSet.windowData.height;
-			var pWidth = dataSet.windowData.topWidth;
+			var pEyeLevel = Number(dataSet.windowData.eyeLevel);
+			var pCentreHeight = Number(dataSet.windowData.centreDistance);
+			var pHeight = Number(dataSet.windowData.height);
+			var pWidth = Number(dataSet.windowData.topWidth);
 			
 			// Represents the cells on the Excel sheet used for calculations.
 			var pArmLength, pBladeLength, pBladeLengthCorrected, pSineAngleAlpha, pHalfSineAngleAlpha, pWipeAngle, pF19, pWipeAngleCorrected,
@@ -65,16 +94,15 @@ function computeWiperset () {
 			
 			pMarginVerticalUnder = PantographMarginVerticalUnder (pHeight, pCentreHeight, pArmLength, pBladeLength);
 			
-			pWipeAngle = PantographWipeAngle(pWidth, pArmLength);
+			pSineAngleAlpha = PantographSineAngleAlpha (pWidth, pArmLength);
+			
+			pHalfSineAngleAlpha = PantographHalfSineAngleAlpha (pSineAngleAlpha);
+						
+			pWipeAngle = PantographWipeAngle(pWidth, pArmLength, pHalfSineAngleAlpha);
 			
 			pVerticalMovement = PantographVerticalMovement (pArmLength, pWipeAngle);
 			
 			pAh = PantographAh (pWipeAngle, pArmLength);
-			
-			pSineAngleAlpha = PantographSineAngleAlpha (pWidth, pArmLength);
-			
-			pHalfSineAngleAlpha = PantographHalfSineAngleAlpha (pSineAngleAlpha);
-			
 			pMaxWipeAngle = PanthogaphMaxWipeAngle (pHalfSineAngleAlpha);
 			
 			pMarginVerticalAbove = PantographMarginVerticalAbove (pArmLength, pAh, pBladeLength, pCentreHeight);
@@ -106,12 +134,12 @@ function computeWiperset () {
 			MarginverticalAbove = pMv1Corrected;
 			MarginverticalMovement = pVerticalMovementCorrected;
 			
-		} else { // pantograph (probably)
+		} else { // pendulum (probably)
 			// Parameters
-			var eEyeLevel = dataSet.windowData.eyeLevel;
-			var eCentreHeight = dataSet.windowData.centreDistance;
-			var eHeight = dataSet.windowData.height;
-			var eWidth = dataSet.windowData.topWidth;
+			var eEyeLevel = Number(dataSet.windowData.eyeLevel);
+			var eCentreHeight = Number(dataSet.windowData.centreDistance);
+			var eHeight = Number(dataSet.windowData.height);
+			var eWidth = Number(dataSet.windowData.topWidth);
 			
 			// Represents the cells on the Excel sheet used for calculations.
 			var eArmLength, eBladeLength, eWipeAngle, eSineAngleAlpha, eHalfAngleAlpha, eMaxWipeAngle, eHorizontalMargin, eVerticalMarginUnder, eVerticalMarginAbove;
@@ -145,10 +173,23 @@ function computeWiperset () {
 			MarginverticalMovement = null;
 		}
 		
+		results = new Results (armLength, bladeLength, maxWipeAngle, Marginhorizontal, MarginverticalBelow, MarginverticalAbove, MarginverticalMovement);
 		
 	} else {
 		console.error ("Something went terribly wrong.");
 	}
+	
+	return results;
+}
+
+function Results (armLength, bladeLength, maxWiperAngle, marginHorizontal, marginBelow, marginAbove, marginVerticalMovement) {
+	this.armLenth = armLength;
+	this.bladeLength = bladeLength;
+	this.maxWiperAngle = maxWiperAngle;
+	this.marginHorizontal = marginHorizontal;
+	this.marginBelow = marginBelow;
+	this.marginAbove = marginAbove;
+	this.marginVerticalMovements = marginVerticalMovement;
 }
 
 // 
@@ -166,7 +207,7 @@ function PantographArmLength (eyeLevel, centreHeight, height) {
 }
 
 function PantographBladeLength (centreHeight, height, armLength){
-	return Math.ceil(height + centreHeight - armLength - 20) * 2.5;
+	return Math.floor(((height + centreHeight - armLength - 20) * 2) / 5) * 5;
 }
 
 function PantographBladeLengthCorrected (marginVertUnder, marginVertAbove, bladeLength) {
@@ -188,10 +229,10 @@ function PantographHalfSineAngleAlpha (sineAngleAlpha) {
 	return Math.asin(sineAngleAlpha) * 180 / Math.PI;
 }
 
-function PantographWipeAngle (width, armLegth) {
-	var a = PantographHalfSineAngleAlpha(PantographSineAngleAlpha(width, armLegth));
+function PantographWipeAngle (width, armLegth, sineAngleAlpha) {
+	//var a = PantographHalfSineAngleAlpha(PantographSineAngleAlpha(width, armLegth));
 	
-	var angle = Math.round (((2 * a) - 15) / 5) * 5;
+	var angle = Math.round (((2 * sineAngleAlpha) - 15) / 5) * 5;
 	if (angle >= 90){
 		return 90;
 	} else {
@@ -206,7 +247,7 @@ function PantographF19 (armLength, ah, bladeLengthCorrected, centreHeight) {
 function PantographWipeAngleCorrected (halfAngleAlpha, f19, bladeLengthCorrected, centreHeight, armLength, wipeAngle) {
 	if (Math.round(((2 * halfAngleAlpha) - 15) / 5) * 5 >= 90) {
 		if (f19 <= 35){
-			return Math.round((Math.acos((0.5 * bladeLengthCorrected+centreHeight+35)/armLength)*180/Math.PI)*5)/5;	
+			return Math.round(((Math.acos((0.5 * bladeLengthCorrected+centreHeight+35)/armLength)*180/Math.PI) * 2) / 5) * 5;
 		} else {
 			return wipeAngle;
 		}
@@ -239,7 +280,7 @@ function PantographAh (wipeAngle, armLength) {
 }
 
 function PantographAhCorrected (wipeAngleCorrected, armLength) {
-	return Math.sin((wipeAngleCorrected) / 180 * Math.PI) * armLength;
+	return Math.sin((wipeAngleCorrected / 2) / 180 * Math.PI) * armLength;
 }
 
 function PantographMv2Corrected (height, centreHeight, armLength, bladeLengthCorrected){
@@ -267,7 +308,7 @@ function PendulumArmLength (eyeLevel, centreHeight, height) {
 	if (eyeLevel < 0){
 		a = eyeLevel + centreHeight;
 	} else {
-		a = ((height + centreHeight) - 10);
+		a = ((height + centreHeight)  *0.6325) - 10;
 	}
 	
 	return Math.ceil(a / 5) * 5;
@@ -308,12 +349,13 @@ function PendulumMaxWipeAngle (halfAngleAlpha) {
 
 // ---
 
-function DataSet (contactData, motorData, switchgearData, washingData, windowData){
+function DataSet (contactData, motorData, switchgearData, washingData, windowData, meta){
 	this.contactData = contactData;
 	this.motorData = motorData;
 	this.switchgearData = switchgearData;
 	this.washing = washingData;
 	this.windowData = windowData;
+	this.meta = meta;
 }
 
 function Contact (name, company, address, zip, place, country, tel, fax, email){
@@ -352,4 +394,8 @@ function Window (type, wiperType, height, topWidth, bottomWidth, centreDistance,
 	this.centreDistance = centreDistance;
 	this.eyeLevel = eyeLevel;
 	this.bulkheadThickness = bulkheadThickness;
+}
+
+function Meta (units) {
+	this.isInches = units === "inch" ? true : units === "mm" ? false : null; 
 }

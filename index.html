@@ -3,7 +3,8 @@
         <title>Wiper Calculator</title>
         <link rel="stylesheet" type="text/css" href="style.css">
         <script type="text/javascript" src="databaseControl.js"></script>
-		<script type="text/javascript" src="main.js"></script>
+		<script type="text/javascript" src="calculations.js"></script>
+		<script type="text/javascript" src="pageControl.js"></script>
     </head>
     <body>
         <!-- Form -->
@@ -341,10 +342,39 @@
         </div>
         <!-- Output -->
         <div id="outputArea">
-            
+            <table style="width:100%">
+  				<tr>
+    				<th>armLenth</th>
+    				<td id="armLength" contenteditable="true">...</td> 
+  				</tr>
+				<tr>
+    				<th>bladeLength</th>
+    				<td id="bladeLength" contenteditable="true">...</td> 
+  				</tr>
+				<tr>
+    				<th>maxWiperAngle</th>
+    				<td id="maxWiperAngle" contenteditable="true">...</td> 
+  				</tr>
+				<tr>
+    				<th>marginHorizontal</th>
+    				<td id="marginHorizontal" contenteditable="true">...</td> 
+  				</tr>
+				<tr>
+    				<th>marginBelow</th>
+    				<td id="marginBelow" contenteditable="true">...</td> 
+  				</tr>
+				<tr>
+    				<th>marginAbove</th>
+    				<td id="marginAbove" contenteditable="true">...</td> 
+  				</tr>
+				<tr>
+    				<th>marginVerticalMovements</th>
+    				<td id="marginVerticalMovements" contenteditable="true">...</td> 
+  				</tr>
+			</table>
         </div>
 		<p id="demo"></p>
-		<button onclick="gatherData()">Click me</button>
+		<button onclick="fillTable()">Click me</button>
 		<script>
 			function testFunc(){
 				var x = 5;
