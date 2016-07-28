@@ -34,11 +34,6 @@ function init() {
 		database = JSON.parse(response);
 		databaseIsLoaded = true;
 		databaseLoaded();
-		console.log(
-			database.arms.where(function f (a) {
-				return a.armType === "LD";
-			}).length + "<DIS ONE"
-		);
     });
 }
 

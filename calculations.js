@@ -4,37 +4,37 @@ var formData;
 function gatherData () {
 	var data = new DataSet (
 		new Contact (
-			document.getElementById("contactName").value,
-			document.getElementById("contactCompany").value,
-			document.getElementById("contactAddress").value,
-			document.getElementById("contactZIP").value,
-			document.getElementById("contactPlace").value,
-			document.getElementById("contactCountry").value,
-			document.getElementById("contactTel").value,
-			document.getElementById("contactFax").value,
-			document.getElementById("contactEmail").value
+			(document.getElementById("contactName") || "").value,
+			(document.getElementById("contactCompany") || "").value,
+			(document.getElementById("contactAddress") || "").value,
+			(document.getElementById("contactZIP") || "").value,
+			(document.getElementById("contactPlace") || "").value,
+			(document.getElementById("contactCountry") || "").value,
+			(document.getElementById("contactTel") || "").value,
+			(document.getElementById("contactFax") || "").value,
+			(document.getElementById("contactEmail") || "").value
 		),
 		new Motor (
-			document.getElementById("motor12V").checked,
-			document.getElementById("motor24V").checked,
-			document.getElementById("motorBelow").checked,
-			document.getElementById("motorAbove").checked
+			(document.getElementById("motor12V") || "").checked,
+			(document.getElementById("motor24V") || "").checked,
+			(document.getElementById("motorBelow") || "").checked,
+			(document.getElementById("motorAbove") || "").checked
 		),
 		new Switchgear (
-			document.getElementById("motorAbove").value
+			(document.getElementById("motorAbove") || "").value
 		),
 		new Washing (
-			document.getElementById("motorAbove").value
+			(document.getElementById("motorAbove") || "").value
 		),
 		new Window (
-			document.getElementById("windowType").value,
-			document.getElementById("wiperType").value,
-			document.getElementById("windowHeight").value,
-			document.getElementById("windowTopWidth").value,
-			document.getElementById("windowBottomWidth").value,
-			document.getElementById("windowCentreDistance").value,
-			document.getElementById("windowEyeLevel").value,
-			document.getElementById("windowBulkheadThickness").value
+			(document.getElementById("windowType") || "").value,
+			(document.getElementById("wiperType") || "").value,
+			(document.getElementById("windowHeight") || "").value,
+			(document.getElementById("windowTopWidth") || "").value,
+			(document.getElementById("windowBottomWidth") || "").value,
+			(document.getElementById("windowCentreDistance") || "").value,
+			(document.getElementById("windowEyeLevel") || "").value,
+			(document.getElementById("windowBulkheadThickness") || "").value
 		),
 		new Meta (
 			document.getElementById("units").value

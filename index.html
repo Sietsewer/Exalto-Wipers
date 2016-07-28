@@ -340,46 +340,50 @@
                 <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
             </form>
         </div>
+		
+		<button onclick="fillTable()" style="width:100%;">Calculate</button>
         <!-- Output -->
-        <div id="outputArea">
-            <table style="width:100%">
+        <div id="outputArea" class="inputForm">
+            <table id="generalOutput" style="width:100%">
   				<tr>
-    				<th>armLenth</th>
-    				<td id="armLength" contenteditable="true">...</td> 
+    				<td>armLenth</td>
+    				<td id="armLength" >...</td> 
   				</tr>
 				<tr>
-    				<th>bladeLength</th>
-    				<td id="bladeLength" contenteditable="true">...</td> 
+    				<td>bladeLength</td>
+    				<td id="bladeLength" >...</td> 
   				</tr>
 				<tr>
-    				<th>maxWiperAngle</th>
-    				<td id="maxWiperAngle" contenteditable="true">...</td> 
+    				<td>maxWiperAngle</td>
+    				<td id="maxWiperAngle" >...</td> 
   				</tr>
 				<tr>
-    				<th>marginHorizontal</th>
-    				<td id="marginHorizontal" contenteditable="true">...</td> 
+    				<td>marginHorizontal</td>
+    				<td id="marginHorizontal" >...</td> 
   				</tr>
 				<tr>
-    				<th>marginBelow</th>
-    				<td id="marginBelow" contenteditable="true">...</td> 
+    				<td>marginBelow</td>
+    				<td id="marginBelow" >...</td> 
   				</tr>
 				<tr>
-    				<th>marginAbove</th>
-    				<td id="marginAbove" contenteditable="true">...</td> 
+    				<td>marginAbove</td>
+    				<td id="marginAbove" >...</td> 
   				</tr>
 				<tr>
-    				<th>marginVerticalMovements</th>
-    				<td id="marginVerticalMovements" contenteditable="true">...</td> 
+    				<td>marginVerticalMovements</td>
+    				<td id="marginVerticalMovements" >...</td> 
   				</tr>
+			</table>
+			<h2>Arms</h2>
+			<table id="arms" class="inputForm"  style="width:100%">
+			</table>
+			<h2>Blades</h2>
+			<table id="blades" class="inputForm"  style="width:100%">
+			</table>
+			<h2>Motors</h2>
+			<table id="motors" class="inputForm"  style="width:100%">
 			</table>
         </div>
 		<p id="demo"></p>
-		<button onclick="fillTable()">Click me</button>
-		<script>
-			function testFunc(){
-				var x = 5;
-				document.getElementById("demo").innerHTML = (getWithinRange(database["motors"], "armMax", 450, 600).length);
-			}
-		</script>
     </body>
 </html>
