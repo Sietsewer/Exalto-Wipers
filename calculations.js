@@ -399,9 +399,3 @@ function Window (type, wiperType, height, topWidth, bottomWidth, centreDistance,
 function Meta (units) {
 	this.isInches = units === "inch" ? true : units === "mm" ? false : null; 
 }
-
-function HelloGit (text) {
-	alert(text);
-}
-
-// Maar dit wel
