@@ -63,3 +63,29 @@ function buildTable (data, headers, labels, tableID) {
 		table.appendChild(row);
 	}
 }
+
+function calculateSize (paperSize, dpi){
+	var paperHeight = 0;
+	var paperWidth = 0;
+	
+	var mm2in = 0.0393701;
+	
+	paperSize = paperSize.toLowerCase().replace(/[^a-z0-9,.]/g, "");
+	// Check if in 12.34x56.78mm format
+	if (! /^[0-9]+([\.,][0-9]+)?x[0-9]+([\.,][0-9]+)?mm$/g.test(paperSize)){
+		return [800, 600];
+	}
+	
+	paperSize = paperSize.replace(/mm/g,"").split('x');
+
+	paperWidth  = Number(paperSize[1]) * mm2in * dpi;
+	paperHeight = Number(paperSize[0]) * mm2in * dpi;
+	
+	return [paperWidth, paperHeight];
+}
+
+function resizeCanvas () {
+	var size = calculateSize(document.getElementById("paperSize").value, document.getElementById("paperDpi").value);
+	game.width = size[0];
+	game.height = size[1];
+}
