@@ -173,7 +173,7 @@ function computeWiperset () {
 			MarginverticalMovement = null;
 		}
 		
-		results = new Results (armLength, bladeLength, maxWipeAngle, Marginhorizontal, MarginverticalBelow, MarginverticalAbove, MarginverticalMovement);
+		results = new Results (armLength, bladeLength, maxWipeAngle, Marginhorizontal, MarginverticalBelow, MarginverticalAbove, MarginverticalMovement, dataSet);
 		
 	} else {
 		console.error ("Something went terribly wrong.");
@@ -182,7 +182,7 @@ function computeWiperset () {
 	return results;
 }
 
-function Results (armLength, bladeLength, maxWiperAngle, marginHorizontal, marginBelow, marginAbove, marginVerticalMovement) {
+function Results (armLength, bladeLength, maxWiperAngle, marginHorizontal, marginBelow, marginAbove, marginVerticalMovement, inputData) {
 	this.armLenth = armLength;
 	this.bladeLength = bladeLength;
 	this.maxWiperAngle = maxWiperAngle;
@@ -190,6 +190,7 @@ function Results (armLength, bladeLength, maxWiperAngle, marginHorizontal, margi
 	this.marginBelow = marginBelow;
 	this.marginAbove = marginAbove;
 	this.marginVerticalMovements = marginVerticalMovement;
+	this.inputData = inputData;
 }
 
 // 

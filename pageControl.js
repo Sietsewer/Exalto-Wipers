@@ -35,6 +35,8 @@ function fillTable (){
 	buildTable (fBlades, ["bladeType", "length", "artNr"], ["bladeType", "length", "artNr"], "blades");
 	
 	buildTable (fMotors, ["armMax", "bladeMax", "hoh", "armType", "bladeType", "name"], ["armMax", "bladeMax", "hoh", "armType", "bladeType", "name"], "motors");
+	
+	drawSheme (data);
 }
 
 function buildTable (data, headers, labels, tableID) {
@@ -86,6 +88,5 @@ function calculateSize (paperSize, dpi){
 
 function resizeCanvas () {
 	var size = calculateSize(document.getElementById("paperSize").value, document.getElementById("paperDpi").value);
-	game.width = size[0];
-	game.height = size[1];
+	resize(size[0], size[1]);
 }
