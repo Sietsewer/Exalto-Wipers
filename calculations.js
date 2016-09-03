@@ -252,8 +252,8 @@ function PantographWipeAngleCorrected (halfAngleAlpha, f19, bladeLengthCorrected
 		} else {
 			return wipeAngle;
 		}
-		return wipeAngle;
 	}
+	return wipeAngle;
 }
 
 function PantographMarginHorizontal (width, armLength, wipeAngle){

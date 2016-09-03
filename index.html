@@ -392,15 +392,13 @@
 		
 		<div id="graphicView" class="inputForm">
 			<form id="canvasSettings">
-				<input type="text" id="paperDpi" list="dpiList">		
-				<datalist id="dpiList">
+				<select id="paperDpi">		
 					<option value="72">Web (72)</option>
 					<option value="200">Printer (200)</option>
 					<option value="300">Printer (300)</option>
 					<option value="600">Printer (600)</option>
-				</datalist>
-				<input type="text" id="paperSize" list="sizeList">		
-				<datalist id="sizeList">
+				</select>
+				<select id="paperSize">
 					<option value="841x1189mm">ISO A0</option>
 					<option value="594x841mm">ISO A1</option>
 					<option value="420x594mm">ISO A2</option>
@@ -458,7 +456,7 @@
 					<option value="280x430mm">CAN P3</option>
 					<option value="430x560mm">CAN P2</option>
 					<option value="560x860mm">CAN P1</option>
-				</datalist>
+				</select>
 				
 			</form>
 			<button onclick="resizeCanvas()" style="width:100%;">Resize</button>
