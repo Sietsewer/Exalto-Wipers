@@ -7,6 +7,8 @@
 		<script type="text/javascript" src="pageControl.js"></script>
 		<!-- Import Phaser -->
 		<script src="//cdn.jsdelivr.net/phaser/2.6.1/phaser.min.js"></script>
+		<!-- Import jsPDF -->
+		<script src="jsPDF/jspdf.min.js"></script>
 		<!-- Start display -->
 		<script src="graphicDisplay.js">
 		</script>
@@ -345,51 +347,6 @@
                 <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
             </form>
         </div>
-		
-		<button onclick="fillTable()" style="width:100%;">Calculate</button>
-        <!-- Output -->
-        <div id="outputArea" class="inputForm">
-            <table id="generalOutput" style="width:100%">
-  				<tr>
-    				<td>armLenth</td>
-    				<td id="armLength" >...</td> 
-  				</tr>
-				<tr>
-    				<td>bladeLength</td>
-    				<td id="bladeLength" >...</td> 
-  				</tr>
-				<tr>
-    				<td>maxWiperAngle</td>
-    				<td id="maxWiperAngle" >...</td> 
-  				</tr>
-				<tr>
-    				<td>marginHorizontal</td>
-    				<td id="marginHorizontal" >...</td> 
-  				</tr>
-				<tr>
-    				<td>marginBelow</td>
-    				<td id="marginBelow" >...</td> 
-  				</tr>
-				<tr>
-    				<td>marginAbove</td>
-    				<td id="marginAbove" >...</td> 
-  				</tr>
-				<tr>
-    				<td>marginVerticalMovements</td>
-    				<td id="marginVerticalMovements" >...</td> 
-  				</tr>
-			</table>
-			<h2>Arms</h2>
-			<table id="arms" class="inputForm"  style="width:100%">
-			</table>
-			<h2>Blades</h2>
-			<table id="blades" class="inputForm"  style="width:100%">
-			</table>
-			<h2>Motors</h2>
-			<table id="motors" class="inputForm"  style="width:100%">
-			</table>
-        </div>
-		
 		<div id="graphicView" class="inputForm">
 			<form id="canvasSettings">
 				<select id="paperDpi">		
@@ -404,7 +361,7 @@
 					<option value="420x594mm">ISO A2</option>
 					<option value="297x420mm">ISO A3</option>
 					<option value="210x297mm">ISO A4</option>
-					<option value="148x210mm">ISO A5</option>
+					<option selected value="148x210mm">ISO A5</option>
 					<option value="105x148mm">ISO A6</option>
 					<option value="74x105mm">ISO A7</option>
 					<option value="52x74mm">ISO A8</option>
@@ -459,8 +416,55 @@
 				</select>
 				
 			</form>
-			<button onclick="resizeCanvas()" style="width:100%;">Resize</button>
+			<!--<button onclick="resizeCanvas()" style="width:100%;">Resize</button>-->
 		</div>
+		<button onclick="fillTable()" style="width:100%;">Calculate</button>
+        <!-- Output -->
+        <div id="outputArea" class="inputForm">
+            <table id="generalOutput" style="width:100%">
+  				<tr>
+    				<td>armLenth</td>
+    				<td id="armLength" >...</td> 
+  				</tr>
+				<tr>
+    				<td>bladeLength</td>
+    				<td id="bladeLength" >...</td> 
+  				</tr>
+				<tr>
+    				<td>maxWiperAngle</td>
+    				<td id="maxWiperAngle" >...</td> 
+  				</tr>
+				<tr>
+    				<td>marginHorizontal</td>
+    				<td id="marginHorizontal" >...</td> 
+  				</tr>
+				<tr>
+    				<td>marginBelow</td>
+    				<td id="marginBelow" >...</td> 
+  				</tr>
+				<tr>
+    				<td>marginAbove</td>
+    				<td id="marginAbove" >...</td> 
+  				</tr>
+				<tr>
+    				<td>marginVerticalMovements</td>
+    				<td id="marginVerticalMovements" >...</td> 
+  				</tr>
+			</table>
+			<h2>Arms</h2>
+			<table id="arms" class="inputForm"  style="width:100%">
+			</table>
+			<h2>Blades</h2>
+			<table id="blades" class="inputForm"  style="width:100%">
+			</table>
+			<h2>Motors</h2>
+			<table id="motors" class="inputForm"  style="width:100%">
+			</table>
+        </div>
+		<div id="pdfArea" class="inputForm">
+			<button onclick="makePDF()" style="width:100%;">Make PDF</button>
+		</div>
+		
 		<p id="demo"></p>
     </body>
 </html>

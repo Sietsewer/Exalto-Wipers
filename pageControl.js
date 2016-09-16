@@ -36,6 +36,8 @@ function fillTable (){
 	
 	buildTable (fMotors, ["armMax", "bladeMax", "hoh", "armType", "bladeType", "name"], ["armMax", "bladeMax", "hoh", "armType", "bladeType", "name"], "motors");
 	
+	resizeCanvas(data);
+	
 	drawSheme (data);
 }
 
@@ -86,7 +88,28 @@ function calculateSize (paperSize, dpi){
 	return [paperWidth, paperHeight];
 }
 
-function resizeCanvas () {
+function resizeCanvas (data) {
 	var size = calculateSize(document.getElementById("paperSize").value, document.getElementById("paperDpi").value);
-	resize(size[0], size[1]);
+	resize(size[0], size[1], data);
+}
+
+function makePDF () {
+	var paperSize = document.getElementById("paperSize").value;
+	
+	if (! /^[0-9]+([\.,][0-9]+)?x[0-9]+([\.,][0-9]+)?mm$/g.test(paperSize)){
+		return;
+	}
+	
+	
+	paperSize = paperSize.replace(/mm/g,"").split('x');
+
+	var paperWidth  = Number(paperSize[1]);
+	var paperHeight = Number(paperSize[0]);
+	
+	//var imageData = game.canvas.toDataURL();
+	var doc = new jsPDF('l', 'mm', [paperWidth, paperHeight]);
+	
+	doc.addImage(game.canvas, 'JPEG', 0 ,0 ,paperWidth ,paperHeight);
+	
+	doc.save('wiper.pdf');
 }

@@ -208,7 +208,7 @@ function PantographArmLength (eyeLevel, centreHeight, height) {
 }
 
 function PantographBladeLength (centreHeight, height, armLength){
-	return Math.floor(((height + centreHeight - armLength - 20) * 2) / 5) * 5;
+	return Math.floor(((height + centreHeight - armLength - 20) * 2) / 50) * 50;
 }
 
 function PantographBladeLengthCorrected (marginVertUnder, marginVertAbove, bladeLength) {
