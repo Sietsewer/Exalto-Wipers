@@ -1,0 +1,82 @@
+$exalto_red : #d00032;
+$exalto_alt_red : #810000;
+$exalto_shadow_red : #870004;
+$exalto_light_grey : #f5f5f5;
+$exalto_middle_grey : #666666;
+$exlato_blue : #082833;
+
+body{
+	
+	padding: 0;
+	margin: 0;
+	
+	font-family: "Arial", "Arial", "Gadget",sans-serif;
+	
+	.header {
+		img {
+			display: block;
+			margin: 15px auto 25px;
+		}
+		.linkbar{
+			font-family: "Arial Black", "Arial Bold", "Gadget",sans-serif;
+			color: white;
+			background: $exalto_red;
+			
+			width: auto;
+			padding: 0 0 0 0;
+			margin: 0 0 0 0;
+			
+			text-align: center;
+			
+			a:link, a:visited {
+				background-color: $exalto_red;
+    			color: white;
+    			padding: 13px 25px;
+				text-align: center;
+    			text-decoration: none;
+    			display: inline-block;
+				
+				text-shadow: 2px 2px 2px rgba($exalto_shadow_red, 1);
+
+			}
+			a:hover, a:active {
+				background-color: $exalto_alt_red;
+			}
+		}
+	}
+	.wrapper {
+		@media (min-width: 400px){
+			width: 400px;
+			margin: 0 auto;
+		}
+		
+		.inputForm {
+			form, table{
+				background: $exalto_light_grey;
+    			padding: 5px 5px 5px 5px;
+				margin: 5px 5px 5px 5px;
+			}
+
+			cavas{
+				width: 100%;
+				height: auto;
+			}
+
+			label{
+    			display: block;
+    			width: 200px;
+    			float: left;
+    			clear: both;
+			}
+
+			input[type="text"],input[type="email"],input[type="tel"],input[type="number"],select{
+    			width: 100%;
+			}
+	
+			span{
+    			overflow: hidden;
+				display: block;
+			}
+		}
+	}
+}
