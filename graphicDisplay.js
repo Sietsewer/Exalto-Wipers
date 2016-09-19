@@ -429,7 +429,8 @@ function drawSheme (data) {
 	var mmWidth = Number(data.inputData.windowData.topWidth);
 	var mmHeight = Number(data.inputData.windowData.height);
 	
-	pixelSize = calculateScale(mmWidth, mmHeight + (Number(data.inputData.windowData.centreDistance) * 2), millimeterMargin);
+	pixelSize = calculateScale(mmWidth, mmHeight + Math.abs(Number(data.inputData.windowData.centreDistance) * 2), millimeterMargin);
+	
 	
 	
 	
