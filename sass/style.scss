@@ -78,13 +78,35 @@ body{
 		}
 		
 		.inputForm {
-			form, table{
+			.scrollable{
+				width: 100%;
+				overflow-x: auto;
 				background: $exalto_light_grey;
-    			padding: 5px 5px 5px 5px;
+				padding: 5px 5px 5px 5px;
 				margin: 5px 5px 5px 5px;
+			}
+			
+			div{
+				padding: 5px 5px 5px 5px;
+				margin: 5px 5px 5px 5px;
+			}
+			
+			.meta {
+				padding: 5px 5px 5px 5px;
+				margin: 5px 5px 5px 5px;
+			}
+			
+			form, table{
+				color: $exalto_blue;
+				background: $exalto_light_grey;
+    			//padding: 5px 5px 5px 5px;
+				//margin: 5px 5px 5px 5px;
 				div{
 					height: 25px;
 				}
+				
+				//padding: 5px 5px 5px 5px;
+				//margin: 5px 5px 5px 5px;
 			}
 
 			canvas {
