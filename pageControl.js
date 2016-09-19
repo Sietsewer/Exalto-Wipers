@@ -15,7 +15,11 @@ function fillTable (){
 	
 	// Filter tables based on data
 	var fArms = database.arms.where(function (a) {
-		return a.lengthMax >= data.armLenth && a.lengthMin <= data.armLenth && a.bladeLengthMax >= data.bladeLength && a.bladeLengthMin <= data.bladeLength;
+		return a.lengthMax >= data.armLenth &&
+			a.lengthMin <= data.armLenth &&
+			a.bladeLengthMax >= data.bladeLength &&
+			a.bladeLengthMin <= data.bladeLength &&
+			a.applType === (data.inputData.windowData.wiperType === "pendulum" ? "enkel" : "parallel");
 	});
 	var fBlades = database.blades.where(function (a) {
 		return a.length === data.bladeLength;

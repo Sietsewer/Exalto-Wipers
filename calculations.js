@@ -400,3 +400,14 @@ function Window (type, wiperType, height, topWidth, bottomWidth, centreDistance,
 function Meta (units) {
 	this.isInches = units === "inch" ? true : units === "mm" ? false : null; 
 }
+
+// size must be MM to work correctly.
+function SizeNotation (size) {
+	var dat = document.getElementById("units").value;
+	var isInch = dat === "inch";
+	if (isInch){ // inch
+		return (Number(size) / 25.4).toFixed(3) + " in"
+	} else { // mm
+		return (Number(size).toFixed(2) + " mm");
+	}
+}

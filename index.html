@@ -338,21 +338,31 @@
                     <option value="WE">Window E</option>
                     <option value="WF">Window F</option>
                 </select></span>-->
-				<label>Wiper Type</label>
-                <span><select id="wiperType" name="wiperType">
-                    <option value="pendulum">Pendulum</option>
-                    <option value="pantograph">Pantograph</option>
-                </select></span>
-                <label>Window Height (C)</label>
-                <span><input type="number" name="windowHeight" id="windowHeight" /></span>
-                <label>Window Top Width (A)</label>
-                <span><input type="number" name="windowTopWidth" id="windowTopWidth" /></span>
-                <!-- <label>Window Bottom Width (B)</label>
+				<div>
+					<label>Type</label>
+					<span><select id="wiperType" name="wiperType">
+						<option value="pendulum">Pendulum</option>
+						<option value="pantograph">Pantograph</option>
+					</select></span>
+				</div>
+				<div>
+					<label>Window Height</label>
+					<span><input type="number" name="windowHeight" id="windowHeight" /></span>
+                </div>
+				<div>
+					<label>Window Width</label>
+                	<span><input type="number" name="windowTopWidth" id="windowTopWidth" /></span>
+                </div>
+				<!-- <label>Window Bottom Width (B)</label>
                 <span><input type="number" name="windowBottomWidth" id="windowBottomWidth" /></span>-->
-                <label>Centre Distance (D)</label>
-                <span><input type="number" name="windowCentreDistance" id="windowCentreDistance" /></span>
-                <label>Eye Level (E)</label>
-                <span><input type="number"  name="windowEyeLevel" id="windowEyeLevel" /></span>
+				<div>
+                	<label>Pivot Offset</label>
+                	<span><input type="number" name="windowCentreDistance" id="windowCentreDistance" /></span>
+				</div>
+				<div>
+					<label>Eye Level</label>
+					<span><input type="number"  name="windowEyeLevel" id="windowEyeLevel" /></span>
+				</div>
                 <!-- <label>Bulkhead Thickness</label>
                 <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
             </form>

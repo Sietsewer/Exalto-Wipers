@@ -118,7 +118,7 @@ function drawMeasure (graphics, startPoint, endPoint, group){
 	}
 	
 	
-	var lineLable = game.add.bitmapText(textPos.x, textPos.y, 'arial', Math.round(distance * pixelSize), 15);
+	var lineLable = game.add.bitmapText(textPos.x, textPos.y, 'arial', SizeNotation(Math.round(distance * pixelSize)), 15);
 	lineLable.angle = textAngle;
 	
 	lineLable.anchor.setTo(0.5); 
