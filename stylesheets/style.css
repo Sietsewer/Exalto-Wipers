@@ -116,6 +116,10 @@ body .wrapper .inputForm form div, body .wrapper .inputForm table div {
   height: 25px;
 }
 /* line 125, ../sass/style.scss */
+body .wrapper .inputForm table {
+  border: 1px #082833;
+}
+/* line 129, ../sass/style.scss */
 body .wrapper .inputForm canvas {
   position: absolute;
   display: none;
@@ -124,7 +128,7 @@ body .wrapper .inputForm canvas {
   height: 0;
   left: -999em;
 }
-/* line 135, ../sass/style.scss */
+/* line 139, ../sass/style.scss */
 body .wrapper .inputForm label {
   display: block;
   width: 200px;
@@ -132,18 +136,18 @@ body .wrapper .inputForm label {
   clear: both;
   height: 1em;
 }
-/* line 143, ../sass/style.scss */
+/* line 147, ../sass/style.scss */
 body .wrapper .inputForm input[type="text"], body .wrapper .inputForm input[type="email"], body .wrapper .inputForm input[type="tel"], body .wrapper .inputForm input[type="number"], body .wrapper .inputForm select {
   font-size: 16px;
   width: 100%;
   height: auto;
 }
-/* line 149, ../sass/style.scss */
+/* line 153, ../sass/style.scss */
 body .wrapper .inputForm span {
   overflow: hidden;
   display: block;
 }
-/* line 156, ../sass/style.scss */
+/* line 160, ../sass/style.scss */
 body .graphicsDisplay {
   position: absolute;
   display: none;
@@ -151,4 +155,10 @@ body .graphicsDisplay {
   width: 0;
   height: 0;
   left: -999em;
+}
+/* line 169, ../sass/style.scss */
+body .previewImage {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
 }

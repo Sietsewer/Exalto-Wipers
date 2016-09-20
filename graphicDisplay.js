@@ -29,6 +29,30 @@ var parallelDistance = 80;
 
 function preload() {
 	loadAssets();
+	game.state.onRenderCallback = renderDone;
+}
+
+var updateStack = [];
+
+function inUpdate(func){
+	updateStack.push(func);
+}
+
+var drawCount;
+var drawMin = 10;
+
+function renderDone (){
+	if (drawDone){
+		if(drawCount >= drawMin){
+			while(updateStack.length > 0){
+				updateStack.pop()();
+			}
+		} else {
+			drawCount++;
+		}
+	} else {
+		drawCount = 0;	
+	}
 }
 
 function create() {	
@@ -402,7 +426,11 @@ function drawWiper (graphics, point, data) {
 	}
 }
 
+var drawDone = false;
+
 function drawSheme (data) {
+	drawCount = 0;	
+	drawDone = false;
 	// Clear old graphics.
 	
 	windowPattern.width = game.width;
@@ -430,9 +458,6 @@ function drawSheme (data) {
 	var mmHeight = Number(data.inputData.windowData.height);
 	
 	pixelSize = calculateScale(mmWidth, mmHeight + Math.abs(Number(data.inputData.windowData.centreDistance) * 2), millimeterMargin);
-	
-	
-	
 	
 	buildWindow (windowGraphic, mmWidth, mmHeight, windowPattern);
 	
@@ -464,6 +489,8 @@ function drawSheme (data) {
 	drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, data.maxWiperAngle/2, data.armLenth , 0xdddddd, 0.7, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
 	drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, -data.maxWiperAngle/2, data.armLenth , 0xffffff, 1, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
 	
+	drawDone = true;
+	drawCount = 0;	
 }
 
 function buildWindow(graphics, width, height, patternSprite) {
@@ -504,6 +531,12 @@ function calculateScale (width, height, margin){
 }
 
 function resize (width, height,data) {
+	
+	if (data === null || data === undefined){
+		game.scale.setGameSize(width, height);
+		return;
+	}
+	
 	var maxVal = 0;
 	var minVal = 0;
 	

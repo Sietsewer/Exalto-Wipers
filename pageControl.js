@@ -3,20 +3,21 @@ var sectionOne = 	function(){return document.getElementById("unitsSettings");};
 var sectionTwo  = 	function(){return document.getElementById("windowSettings");};
 var	sectionThree = 	function(){return document.getElementById("outputArea");};
 
+var data;
 
 /*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: false, mootools: false, prototypejs: false*/
 function fillTable (){
 	// Calc data
-	var data = computeWiperset();
+	data = computeWiperset();
 	
 	// Fill out data
-	document.getElementById("armLength").textContent = data.armLenth;
-	document.getElementById("bladeLength").textContent = data.bladeLength;
-	document.getElementById("maxWiperAngle").textContent = data.maxWiperAngle;
-	document.getElementById("marginHorizontal").textContent = data.marginHorizontal;
-	document.getElementById("marginBelow").textContent = data.marginBelow;
-	document.getElementById("marginAbove").textContent = data.marginAbove;
-	document.getElementById("marginVerticalMovements").textContent = data.marginVerticalMovement;
+	document.getElementById("armLength").textContent = SizeNotation(data.armLenth);
+	document.getElementById("bladeLength").textContent = SizeNotation(data.bladeLength);
+	document.getElementById("maxWiperAngle").textContent = SizeNotation(data.maxWiperAngle);
+	document.getElementById("marginHorizontal").textContent = SizeNotation(data.marginHorizontal);
+	document.getElementById("marginBelow").textContent = SizeNotation(data.marginBelow);
+	document.getElementById("marginAbove").textContent = SizeNotation(data.marginAbove);
+	document.getElementById("marginVerticalMovements").textContent = SizeNotation(data.marginVerticalMovement);
 	
 	
 	// Filter tables based on data
@@ -46,9 +47,13 @@ function fillTable (){
 	
 	buildTable (fMotors, ["armMax", "bladeMax", "hoh", "armType", "bladeType", "name"], ["armMax", "bladeMax", "hoh", "armType", "bladeType", "name"], "motors");
 	
-	resizeCanvas(data);
-	
+	resizeCanvas(null);
 	drawSheme (data);
+	
+	inUpdate(function(){
+		setPreviewImage(game.canvas.toDataURL());
+	});
+	
 }
 
 function buildTable (data, headers, labels, tableID) {
@@ -99,29 +104,40 @@ function calculateSize (paperSize, dpi){
 }
 
 function resizeCanvas (data) {
-	var size = calculateSize(document.getElementById("paperSize").value, document.getElementById("paperDpi").value);
-	resize(size[0], size[1], data);
+	if(data !== null){
+		var size = calculateSize(document.getElementById("paperSize").value, document.getElementById("paperDpi").value);
+		resize(size[0], size[1], data);
+	} else {
+		resize(500, 500);
+	}
 }
 
 function makePDF () {
+	resizeCanvas(data);
+	
+	drawSheme (data);
+	
+	
 	var paperSize = document.getElementById("paperSize").value;
 	
 	if (! /^[0-9]+([\.,][0-9]+)?x[0-9]+([\.,][0-9]+)?mm$/g.test(paperSize)){
 		return;
 	}
 	
+	inUpdate(function(){
 	
-	paperSize = paperSize.replace(/mm/g,"").split('x');
+		paperSize = paperSize.replace(/mm/g,"").split('x');
 
-	var paperWidth  = Number(paperSize[1]);
-	var paperHeight = Number(paperSize[0]);
+		var paperWidth  = Number(paperSize[1]);
+		var paperHeight = Number(paperSize[0]);
 	
-	//var imageData = game.canvas.toDataURL();
-	var doc = new jsPDF('l', 'mm', [paperWidth, paperHeight]);
+		//var imageData = game.canvas.toDataURL();
+		var doc = new jsPDF('l', 'mm', [paperWidth, paperHeight]);
 	
-	doc.addImage(game.canvas, 'JPEG', 0 ,0 ,paperWidth ,paperHeight);
+		doc.addImage(game.canvas, 'JPEG', 0 ,0 ,paperWidth ,paperHeight);
 	
-	doc.save('wiper.pdf');
+		doc.save('wiper.pdf');
+	});
 }
 
 function p1Next () {
@@ -153,4 +169,9 @@ function p3Next(){
 	sectionOne().style.display = "block";
 	sectionTwo().style.display = "none";
 	sectionThree().style.display = "none";
+}
+
+function setPreviewImage(source){
+	var img = document.getElementById("preview-image");
+	img.src = source;
 }

@@ -26,6 +26,7 @@
 		<div class="wrapper">
         <!-- Form -->
     	    <div id="unitsSettings" class="inputForm">
+				<div>
 				Choose which units will be used within this application. You can choose between millimeters and inches.
     	        <form id="meta" class="meta">
     	        <label>Units</label>
@@ -34,10 +35,12 @@
     	                <option value="inch">Inches</option>
     	                </select></span>
     	        </form>
-				<button class="button-sidebyside" style="width : 100%;">Next</button>
+				</div>
+				<button onclick="p1Next()" class="button-sidebyside" style="width : 100%;">Next</button>
 				
 			</div>
 			<div id="windowSettings" class="inputForm">
+				<div>
 				Describe your window, and the assembly point for the wiper.
     	        <form id="window">
 					<div>
@@ -68,14 +71,16 @@
     	            <!-- <label>Bulkhead Thickness</label>
     	            <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
     	        </form>
+			</div>
 				<span>
-					<button class="button-sidebyside">previous</button>
-					<button onclick="fillTable()" class="button-sidebyside">Calculate</button>
+					<button onclick="p2Previous()" class="button-sidebyside">previous</button>
+					<button onclick="p2Next()" class="button-sidebyside">Calculate</button>
 				</span>
 							
     	    </div>
     	    <!-- Output -->
     	    <div id="outputArea" class="inputForm">
+				<div>
 				<div class="scrollable">
     	        	<table id="generalOutput" style="width:100%">
   						<tr>
@@ -124,6 +129,10 @@
 					<table id="motors" class="inputForm"  style="width:100%">
 					</table>
 				</div>
+				
+				<img id="preview-image" class="previewImage">
+					
+				<h2>Print settings</h2>
 				<form id="canvasSettings">
 					<select id="paperDpi">		
 						<option value="72">Web (72)</option>
@@ -193,10 +202,10 @@
 					
 				</form>
 				<button onclick="makePDF()" style="width:100%;">Make PDF</button>
-				
+				</div>
 				<span>
-				<button class="button-sidebyside">Previous</button>
-				<button class="button-sidebyside">New window</button>	
+				<button onclick="p3Previous()" class="button-sidebyside">Previous</button>
+				<button onclick="p3Next()" class="button-sidebyside">New window</button>	
 				</span>
 				<!--<button onclick="resizeCanvas()" style="width:100%;">Resize</button>-->
 			</div>

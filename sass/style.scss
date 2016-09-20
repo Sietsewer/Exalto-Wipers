@@ -121,6 +121,10 @@ span{
 				//padding: 5px 5px 5px 5px;
 				//margin: 5px 5px 5px 5px;
 			}
+			
+			table{
+				border: 1px $exalto_blue;
+			}
 
 			canvas {
 				position: absolute;
@@ -154,11 +158,17 @@ span{
 	}
 	
 	.graphicsDisplay {
-						position: absolute;
+				position: absolute;
 				display:none;
 				visibility: collapse;
 				width: 0;
 				height: 0;
 				left: -999em;
+	}
+	
+	.previewImage {
+		display: block;
+		margin-right: auto;
+		margin-left: auto;
 	}
 }
