@@ -1,3 +1,9 @@
+
+var sectionOne = 	function(){return document.getElementById("unitsSettings");};
+var sectionTwo  = 	function(){return document.getElementById("windowSettings");};
+var	sectionThree = 	function(){return document.getElementById("outputArea");};
+
+
 /*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: false, mootools: false, prototypejs: false*/
 function fillTable (){
 	// Calc data
@@ -116,4 +122,35 @@ function makePDF () {
 	doc.addImage(game.canvas, 'JPEG', 0 ,0 ,paperWidth ,paperHeight);
 	
 	doc.save('wiper.pdf');
+}
+
+function p1Next () {
+	sectionOne().style.display = "none";
+	sectionTwo().style.display = "block";
+	sectionThree().style.display = "none";
+}
+
+function p2Previous (){
+	sectionOne().style.display = "block";
+	sectionTwo().style.display = "none";
+	sectionThree().style.display = "none";
+}
+
+function p2Next(){
+	fillTable();
+	sectionOne().style.display = "none";
+	sectionTwo().style.display = "none";
+	sectionThree().style.display = "block";
+}
+
+function p3Previous(){
+	sectionOne().style.display = "none";
+	sectionTwo().style.display = "block";
+	sectionThree().style.display = "none";
+}
+
+function p3Next(){
+	sectionOne().style.display = "block";
+	sectionTwo().style.display = "none";
+	sectionThree().style.display = "none";
 }

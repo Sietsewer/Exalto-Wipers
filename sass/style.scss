@@ -4,6 +4,7 @@ $exalto_shadow_red : #870004;
 $exalto_light_grey : #f5f5f5;
 $exalto_middle_grey : #666666;
 $exalto_blue : #082833;
+$exalto_darkblue : #04141a;
 
 $font_body : "Arial", "Arial", "Gadget",sans-serif;
 $font_highlight :  "Arial Black", "Arial Bold", "Gadget",sans-serif;
@@ -53,6 +54,14 @@ body{
 			}
 		}
 	}
+	
+span{
+	.button-sidebyside{
+		width: 50%;
+		float: left;
+	}
+}
+	
 	.wrapper {
 		h2{
 			font-family: $font_highlight;
@@ -69,6 +78,9 @@ body{
 			height: 2em;
 			padding:5px 5px 5px 5px;
 		}
+		button:hover{
+			background-color: $exalto_darkblue;
+		}
 		@media only screen and (min-width: 600px) {
 			width: 600px;
 			margin: 0 auto;
@@ -78,6 +90,7 @@ body{
 		}
 		
 		.inputForm {
+			
 			.scrollable{
 				width: 100%;
 				overflow-x: auto;
@@ -138,5 +151,14 @@ body{
 				display: block;
 			}
 		}
+	}
+	
+	.graphicsDisplay {
+						position: absolute;
+				display:none;
+				visibility: collapse;
+				width: 0;
+				height: 0;
+				left: -999em;
 	}
 }

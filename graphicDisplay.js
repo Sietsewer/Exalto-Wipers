@@ -2,7 +2,7 @@
 /*globals Phaser*/
 
 // phaser 2.6.1
-var game = new Phaser.Game((210 * 0.0393701) * 72, (148 * 0.0393701) * 72, Phaser.CANVAS, 'graphicView', { preload: preload, create: create, update: update });
+var game = new Phaser.Game((210 * 0.0393701) * 72, (148 * 0.0393701) * 72, Phaser.CANVAS, 'graphicsDisplay', { preload: preload, create: create, update: update });
 
 var pixelSize = 0;
 var millimeterMargin = 100;

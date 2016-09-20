@@ -25,172 +25,186 @@
 		</div>
 		<div class="wrapper">
         <!-- Form -->
-        <div id="inputArea" class="inputForm">
-            <form id="meta" class="meta">
-            <label>Units</label>
-                <span><select id="units" name="units">
-                    <option value="mm">Millimeters</option>
-                    <option value="inch">Inches</option>
-                    </select></span>
-            </form>
-            <form id="window">
-				<div>
-					<label>Type</label>
-					<span><select id="wiperType" name="wiperType">
-						<option value="pendulum">Pendulum</option>
-						<option value="pantograph">Pantograph</option>
-					</select></span>
-				</div>
-				<div>
-					<label>Window Height</label>
-					<span><input type="number" name="windowHeight" id="windowHeight" /></span>
-                </div>
-				<div>
-					<label>Window Width</label>
-                	<span><input type="number" name="windowTopWidth" id="windowTopWidth" /></span>
-                </div>
-				<!-- <label>Window Bottom Width (B)</label>
-                <span><input type="number" name="windowBottomWidth" id="windowBottomWidth" /></span>-->
-				<div>
-                	<label>Pivot Offset</label>
-                	<span><input type="number" name="windowCentreDistance" id="windowCentreDistance" /></span>
-				</div>
-				<div>
-					<label>Eye Level</label>
-					<span><input type="number"  name="windowEyeLevel" id="windowEyeLevel" /></span>
-				</div>
-                <!-- <label>Bulkhead Thickness</label>
-                <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
-            </form>
-        </div>
-		<div id="graphicView" class="inputForm">
-			<form id="canvasSettings">
-				<select id="paperDpi">		
-					<option value="72">Web (72)</option>
-					<option value="200">Printer (200)</option>
-					<option value="300">Printer (300)</option>
-					<option value="600">Printer (600)</option>
-				</select>
-				<select id="paperSize">
-					<option value="841x1189mm">ISO A0</option>
-					<option value="594x841mm">ISO A1</option>
-					<option value="420x594mm">ISO A2</option>
-					<option value="297x420mm">ISO A3</option>
-					<option value="210x297mm">ISO A4</option>
-					<option selected value="148x210mm">ISO A5</option>
-					<option value="105x148mm">ISO A6</option>
-					<option value="74x105mm">ISO A7</option>
-					<option value="52x74mm">ISO A8</option>
-					<option value="37x52mm">ISO A9</option>
-					<option value="26x37mm">ISO A10</option>
-					
-					<option value="1000x1414mm">ISO B0</option>
-					<option value="707x1000mm">ISO B1</option>
-					<option value="500x707mm">ISO B2</option>
-					<option value="353x500mm">ISO B3</option>
-					<option value="250x353mm">ISO B4</option>
-					<option value="176x250mm">ISO B5</option>
-					<option value="125x176mm">ISO B6</option>
-					<option value="88x125mm">ISO B7</option>
-					<option value="62x88mm">ISO B8</option>
-					<option value="44x62mm">ISO B9</option>
-					<option value="31x44mm">ISO B10</option>
-					
-					<option value="917x1297mm">ISO C0</option>
-					<option value="648x917mm">ISO C1</option>
-					<option value="458x648mm">ISO C2</option>
-					<option value="324x458mm">ISO C3</option>
-					<option value="229x324mm">ISO C4</option>
-					<option value="162x229mm">ISO C5</option>
-					<option value="114x162mm">ISO C6</option>
-					<option value="81x114mm">ISO C7</option>
-					<option value="57x81mm">ISO C8</option>
-					<option value="40x57mm">ISO C9</option>
-					<option value="28x40mm">ISO C10</option>
-					
-					<option value="216x279mm">North American Loose Paper Size Letter</option>
-					<option value="216x356mm">North American Loose Paper Size Legal</option>
-					<option value="279x432mm">North American Loose Paper Size Tabloid</option>
-					<option value="432x279mm">North American Loose Paper Size Ledger</option>
-					<option value="127x203mm">North American Loose Paper Size Junior Legal</option>
-					<option value="140x216mm">North American Loose Paper Size Half Letter</option>
-					<option value="203x267mm">North American Loose Paper Size Government Letter</option>
-					<option value="216x330mm">North American Loose Paper Size Government Legal</option>
-					
-					<option value="216x279mm">US ANSI A</option>
-					<option value="279x432mm">US ANSI B</option>
-					<option value="432x559mm">US ANSI C</option>
-					<option value="559x864mm">US ANSI D</option>
-					<option value="864x1118mm">US ANSI E</option>
-					
-					<option value="107x140mm">CAN P6</option>
-					<option value="140x215mm">CAN P5</option>
-					<option value="215x280mm">CAN P4</option>
-					<option value="280x430mm">CAN P3</option>
-					<option value="430x560mm">CAN P2</option>
-					<option value="560x860mm">CAN P1</option>
-				</select>
+    	    <div id="unitsSettings" class="inputForm">
+				Choose which units will be used within this application. You can choose between millimeters and inches.
+    	        <form id="meta" class="meta">
+    	        <label>Units</label>
+    	            <span><select id="units" name="units">
+    	                <option value="mm">Millimeters</option>
+    	                <option value="inch">Inches</option>
+    	                </select></span>
+    	        </form>
+				<button class="button-sidebyside" style="width : 100%;">Next</button>
 				
-			</form>
-			<!--<button onclick="resizeCanvas()" style="width:100%;">Resize</button>-->
-		</div>
-		<button onclick="fillTable()" style="width:100%;">Calculate</button>
-        <!-- Output -->
-        <div id="outputArea" class="inputForm">
-			<div class="scrollable">
-            	<table id="generalOutput" style="width:100%">
-  					<tr>
-						<td>armLenth</td>
-						<td id="armLength" >...</td> 
-					</tr>
-					<tr>
-						<td>bladeLength</td>
-						<td id="bladeLength" >...</td> 
-					</tr>
-					<tr>
-						<td>maxWiperAngle</td>
-						<td id="maxWiperAngle" >...</td> 
-					</tr>
-					<tr>
-						<td>marginHorizontal</td>
-						<td id="marginHorizontal" >...</td> 
-					</tr>
-					<tr>
-						<td>marginBelow</td>
-						<td id="marginBelow" >...</td> 
-					</tr>
-					<tr>
-						<td>marginAbove</td>
-						<td id="marginAbove" >...</td> 
-					</tr>
-					<tr>
-						<td>marginVerticalMovements</td>
-						<td id="marginVerticalMovements" >...</td> 
-					</tr>
-				</table>
 			</div>
-			<h2>Arms</h2>
-			<div class="scrollable">
+			<div id="windowSettings" class="inputForm">
+				Describe your window, and the assembly point for the wiper.
+    	        <form id="window">
+					<div>
+						<label>Type</label>
+						<span><select id="wiperType" name="wiperType">
+							<option value="pendulum">Pendulum</option>
+							<option value="pantograph">Pantograph</option>
+						</select></span>
+					</div>
+					<div>
+						<label>Window Height</label>
+						<span><input type="number" name="windowHeight" id="windowHeight" /></span>
+    	            </div>
+					<div>
+						<label>Window Width</label>
+    	            	<span><input type="number" name="windowTopWidth" id="windowTopWidth" /></span>
+    	            </div>
+					<!-- <label>Window Bottom Width (B)</label>
+    	            <span><input type="number" name="windowBottomWidth" id="windowBottomWidth" /></span>-->
+					<div>
+    	            	<label>Pivot Offset</label>
+    	            	<span><input type="number" name="windowCentreDistance" id="windowCentreDistance" /></span>
+					</div>
+					<div>
+						<label>Eye Level</label>
+						<span><input type="number"  name="windowEyeLevel" id="windowEyeLevel" /></span>
+					</div>
+    	            <!-- <label>Bulkhead Thickness</label>
+    	            <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
+    	        </form>
+				<span>
+					<button class="button-sidebyside">previous</button>
+					<button onclick="fillTable()" class="button-sidebyside">Calculate</button>
+				</span>
+							
+    	    </div>
+    	    <!-- Output -->
+    	    <div id="outputArea" class="inputForm">
+				<div class="scrollable">
+    	        	<table id="generalOutput" style="width:100%">
+  						<tr>
+							<td>armLenth</td>
+							<td id="armLength" >...</td> 
+						</tr>
+						<tr>
+							<td>bladeLength</td>
+							<td id="bladeLength" >...</td> 
+						</tr>
+						<tr>
+							<td>maxWiperAngle</td>
+							<td id="maxWiperAngle" >...</td> 
+						</tr>
+						<tr>
+							<td>marginHorizontal</td>
+							<td id="marginHorizontal" >...</td> 
+						</tr>
+						<tr>
+							<td>marginBelow</td>
+							<td id="marginBelow" >...</td> 
+						</tr>
+						<tr>
+							<td>marginAbove</td>
+							<td id="marginAbove" >...</td> 
+						</tr>
+						<tr>
+							<td>marginVerticalMovements</td>
+							<td id="marginVerticalMovements" >...</td> 
+						</tr>
+					</table>
+				</div>
+				<h2>Arms</h2>
+				<div class="scrollable">
+					
+					<table id="arms" class="inputForm"  style="width:100%">
+					</table>
+				</div>
+				<h2>Blades</h2>
+				<div class="scrollable">
+					<table id="blades" class="inputForm"  style="width:100%">
+					</table>
+				</div>
+				<h2>Motors</h2>
+				<div class="scrollable">
+					<table id="motors" class="inputForm"  style="width:100%">
+					</table>
+				</div>
+				<form id="canvasSettings">
+					<select id="paperDpi">		
+						<option value="72">Web (72)</option>
+						<option value="200">Printer (200)</option>
+						<option value="300">Printer (300)</option>
+						<option value="600">Printer (600)</option>
+					</select>
+					<select id="paperSize">
+						<option value="841x1189mm">ISO A0</option>
+						<option value="594x841mm">ISO A1</option>
+						<option value="420x594mm">ISO A2</option>
+						<option value="297x420mm">ISO A3</option>
+						<option value="210x297mm">ISO A4</option>
+						<option selected value="148x210mm">ISO A5</option>
+						<option value="105x148mm">ISO A6</option>
+						<option value="74x105mm">ISO A7</option>
+						<option value="52x74mm">ISO A8</option>
+						<option value="37x52mm">ISO A9</option>
+						<option value="26x37mm">ISO A10</option>
+						
+						<option value="1000x1414mm">ISO B0</option>
+						<option value="707x1000mm">ISO B1</option>
+						<option value="500x707mm">ISO B2</option>
+						<option value="353x500mm">ISO B3</option>
+						<option value="250x353mm">ISO B4</option>
+						<option value="176x250mm">ISO B5</option>
+						<option value="125x176mm">ISO B6</option>
+						<option value="88x125mm">ISO B7</option>
+						<option value="62x88mm">ISO B8</option>
+						<option value="44x62mm">ISO B9</option>
+						<option value="31x44mm">ISO B10</option>
+						
+						<option value="917x1297mm">ISO C0</option>
+						<option value="648x917mm">ISO C1</option>
+						<option value="458x648mm">ISO C2</option>
+						<option value="324x458mm">ISO C3</option>
+						<option value="229x324mm">ISO C4</option>
+						<option value="162x229mm">ISO C5</option>
+						<option value="114x162mm">ISO C6</option>
+						<option value="81x114mm">ISO C7</option>
+						<option value="57x81mm">ISO C8</option>
+						<option value="40x57mm">ISO C9</option>
+						<option value="28x40mm">ISO C10</option>
+						
+						<option value="216x279mm">North American Loose Paper Size Letter</option>
+						<option value="216x356mm">North American Loose Paper Size Legal</option>
+						<option value="279x432mm">North American Loose Paper Size Tabloid</option>
+						<option value="432x279mm">North American Loose Paper Size Ledger</option>
+						<option value="127x203mm">North American Loose Paper Size Junior Legal</option>
+						<option value="140x216mm">North American Loose Paper Size Half Letter</option>
+						<option value="203x267mm">North American Loose Paper Size Government Letter</option>
+						<option value="216x330mm">North American Loose Paper Size Government Legal</option>
+						
+						<option value="216x279mm">US ANSI A</option>
+						<option value="279x432mm">US ANSI B</option>
+						<option value="432x559mm">US ANSI C</option>
+						<option value="559x864mm">US ANSI D</option>
+						<option value="864x1118mm">US ANSI E</option>
+						
+						<option value="107x140mm">CAN P6</option>
+						<option value="140x215mm">CAN P5</option>
+						<option value="215x280mm">CAN P4</option>
+						<option value="280x430mm">CAN P3</option>
+						<option value="430x560mm">CAN P2</option>
+						<option value="560x860mm">CAN P1</option>
+					</select>
+					
+				</form>
+				<button onclick="makePDF()" style="width:100%;">Make PDF</button>
 				
-				<table id="arms" class="inputForm"  style="width:100%">
-				</table>
+				<span>
+				<button class="button-sidebyside">Previous</button>
+				<button class="button-sidebyside">New window</button>	
+				</span>
+				<!--<button onclick="resizeCanvas()" style="width:100%;">Resize</button>-->
 			</div>
-			<h2>Blades</h2>
-			<div class="scrollable">
-				<table id="blades" class="inputForm"  style="width:100%">
-				</table>
+			<div id="pdfArea" class="inputForm">
 			</div>
-			<h2>Motors</h2>
-			<div class="scrollable">
-				<table id="motors" class="inputForm"  style="width:100%">
-				</table>
-			</div>
-        </div>
-		<div id="pdfArea" class="inputForm">
-			<button onclick="makePDF()" style="width:100%;">Make PDF</button>
+			
+			<p id="demo"></p>
 		</div>
-		
-		<p id="demo"></p>
-		</div>
+		<div id="graphicsDisplay" class="graphicsDisplay"></div>
     </body>
 </html>
