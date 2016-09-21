@@ -13,7 +13,7 @@ function fillTable (){
 	// Fill out data
 	document.getElementById("armLength").textContent = SizeNotation(data.armLenth);
 	document.getElementById("bladeLength").textContent = SizeNotation(data.bladeLength);
-	document.getElementById("maxWiperAngle").textContent = SizeNotation(data.maxWiperAngle);
+	document.getElementById("maxWiperAngle").textContent = data.maxWiperAngle + "°";
 	document.getElementById("marginHorizontal").textContent = SizeNotation(data.marginHorizontal);
 	document.getElementById("marginBelow").textContent = SizeNotation(data.marginBelow);
 	document.getElementById("marginAbove").textContent = SizeNotation(data.marginAbove);

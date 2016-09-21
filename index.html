@@ -27,7 +27,9 @@
         <!-- Form -->
     	    <div id="unitsSettings" class="inputForm">
 				<div>
-				Choose which units will be used within this application. You can choose between millimeters and inches.
+					<div>
+						Choose which units will be used within this application. You can choose between millimeters and inches.
+					</div>
     	        <form id="meta" class="meta">
     	        <label>Units</label>
     	            <span><select id="units" name="units">
@@ -41,7 +43,9 @@
 			</div>
 			<div id="windowSettings" class="inputForm" style="display: none;">
 				<div>
-				Describe your window, and the assembly point for the wiper.
+					<div>
+						Describe your window, and the assembly point for the wiper.<br />
+					</div>
     	        <form id="window">
 					<div>
 						<label>Type</label>
@@ -61,8 +65,11 @@
 					<!-- <label>Window Bottom Width (B)</label>
     	            <span><input type="number" name="windowBottomWidth" id="windowBottomWidth" /></span>-->
 					<div>
-    	            	<label>Pivot Offset</label>
+    	            	<label>Assembly Offset</label>
     	            	<span><input type="number" name="windowCentreDistance" id="windowCentreDistance" /></span>
+					</div>
+					<div>
+						<i>The offset between the window edge and assembly point.</i> 
 					</div>
 					<div>
 						<label>Eye Level</label>
@@ -81,33 +88,34 @@
     	    <!-- Output -->
     	    <div id="outputArea" class="inputForm" style="display: none;">
 				<div>
+				<div>Assembly specifications. </div>
 				<div class="scrollable">
     	        	<table id="generalOutput" style="width:100%">
   						<tr>
-							<td>armLenth</td>
+							<td>Arm length</td>
 							<td id="armLength" >...</td> 
 						</tr>
 						<tr>
-							<td>bladeLength</td>
+							<td>Blade length</td>
 							<td id="bladeLength" >...</td> 
 						</tr>
 						<tr>
-							<td>maxWiperAngle</td>
+							<td>Maximum wiping angle</td>
 							<td id="maxWiperAngle" >...</td> 
 						</tr>
 						<tr>
-							<td>marginHorizontal</td>
+							<td>Horizontal margin</td>
 							<td id="marginHorizontal" >...</td> 
 						</tr>
 						<tr>
-							<td>marginBelow</td>
+							<td>Bottom margin</td>
 							<td id="marginBelow" >...</td> 
 						</tr>
 						<tr>
-							<td>marginAbove</td>
+							<td>Top margin</td>
 							<td id="marginAbove" >...</td> 
 						</tr>
-						<tr>
+						<tr style="display: none;">
 							<td>marginVerticalMovements</td>
 							<td id="marginVerticalMovements" >...</td> 
 						</tr>
@@ -136,17 +144,17 @@
 				<form id="canvasSettings">
 					<select id="paperDpi">		
 						<option value="72">Web (72)</option>
-						<option value="200">Printer (200)</option>
+						<option selected value="200">Printer (200)</option>
 						<option value="300">Printer (300)</option>
-						<option value="600">Printer (600)</option>
+						<!--<option value="600">Printer (600)</option>-->
 					</select>
 					<select id="paperSize">
 						<option value="841x1189mm">ISO A0</option>
 						<option value="594x841mm">ISO A1</option>
 						<option value="420x594mm">ISO A2</option>
 						<option value="297x420mm">ISO A3</option>
-						<option value="210x297mm">ISO A4</option>
-						<option selected value="148x210mm">ISO A5</option>
+						<option selected value="210x297mm">ISO A4</option>
+						<option value="148x210mm">ISO A5</option>
 						<option value="105x148mm">ISO A6</option>
 						<option value="74x105mm">ISO A7</option>
 						<option value="52x74mm">ISO A8</option>

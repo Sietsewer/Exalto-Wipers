@@ -10,16 +10,6 @@ body {
 body input {
   font-size: 16px;
 }
-@media only screen and (-webkit-min-device-pixel-ratio: 2) {
-  /* line 12, ../sass/style.scss */
-  body {
-    font-size: 26px;
-  }
-  /* line 21, ../sass/style.scss */
-  body input {
-    font-size: 26px;
-  }
-}
 /* line 26, ../sass/style.scss */
 body .header img {
   display: block;

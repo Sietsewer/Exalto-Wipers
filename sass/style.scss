@@ -16,10 +16,10 @@ body{
     font-size: 16px;
 	input{font-size: 16px;}
 	
-	@media only screen and (-webkit-min-device-pixel-ratio: 2){
-		font-size: 26px;
-		input{font-size: 26px;}
-	}
+	//@media only screen and (-webkit-min-device-pixel-ratio: 2){
+	//	font-size: 26px;
+	//	input{font-size: 26px;}
+	//}
 	font-family: $font_body;
 	
 	.header {

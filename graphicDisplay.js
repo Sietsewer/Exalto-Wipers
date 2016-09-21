@@ -101,8 +101,8 @@ function create() {
 function drawMeasure (graphics, startPoint, endPoint, group){
 	graphics.lineStyle(2, lineColor);
 	
-	var boundLength = 30;
-	var lineDistance = 20;
+	var boundLength = 30 / pixelSize;
+	var lineDistance = 20 / pixelSize;
 	var direction = new Phaser.Point(endPoint.x - startPoint.x, endPoint.y - startPoint.y).normalize();
 	var distance = startPoint.distance(endPoint);
 	var normalDirection = new Phaser.Point(direction.y, -direction.x);
@@ -142,7 +142,7 @@ function drawMeasure (graphics, startPoint, endPoint, group){
 	}
 	
 	
-	var lineLable = game.add.bitmapText(textPos.x, textPos.y, 'arial', SizeNotation(Math.round(distance * pixelSize)), 15);
+	var lineLable = game.add.bitmapText(textPos.x, textPos.y, 'arial', SizeNotation(Math.round(distance * pixelSize)), 25 / pixelSize);
 	lineLable.angle = textAngle;
 	
 	lineLable.anchor.setTo(0.5); 
