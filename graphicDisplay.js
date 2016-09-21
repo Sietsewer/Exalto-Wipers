@@ -484,7 +484,7 @@ function drawSheme (data) {
 	
 	var bladeOriginX = Math.sin(game.math.degToRad(data.maxWiperAngle / 2)) * (data.armLenth / pixelSize);
 	var bladeOriginY = Math.cos(game.math.degToRad(data.maxWiperAngle / 2)) * (data.armLenth / pixelSize);
-		drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, 0, data.armLenth , 0xdddddd, 0.3, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
+	//drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, 0, data.armLenth , 0xdddddd, 0.3, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
 
 	drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, data.maxWiperAngle/2, data.armLenth , 0xdddddd, 0.7, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
 	drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, -data.maxWiperAngle/2, data.armLenth , 0xffffff, 1, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");

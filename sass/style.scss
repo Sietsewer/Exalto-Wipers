@@ -122,8 +122,23 @@ span{
 				//margin: 5px 5px 5px 5px;
 			}
 			
-			table{
-				border: 1px $exalto_blue;
+			table {
+				border-collapse: collapse;
+			}
+			
+			table, th, td{
+				border: 1px solid $exalto_blue;
+				padding: 3px 3px 3px 3px;
+			}
+			
+			td{
+				background-color: white;
+				text-align: center;
+			}
+			
+			.align-left{
+				text-align: left;
+				width: 200px;
 			}
 
 			canvas {

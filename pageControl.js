@@ -36,16 +36,18 @@ function fillTable (){
 	});
 	
 	// Clear table
-	document.getElementById("arms").innerHTML = "";
+	document.getElementById("arms").innerHTML   = "";
 	document.getElementById("blades").innerHTML = "";
 	document.getElementById("motors").innerHTML = "";
 
 	// Recreate tables
-	buildTable (fArms, ["armType", "lengthMin", "lengthMax", "hoh", "bladeLengthMin", "bladeLengthMax", "bladeType", "applType", "artNr"], ["armType", "lengthMin", "lengthMax", "hoh", "bladeLengthMin", "bladeLengthMax", "bladeType", "applType", "artNr"], "arms");
+	buildTable (fArms,
+				["armType", 	"lengthMin", 		"lengthMax", 	"bladeLengthMin", 	"bladeLengthMax", 	"bladeType",	"artNr"],
+				["Arm Type", 	"Arm Length Min", 	"Max", 			"Blade Length Min", "Max", 				"Blade Type", 	"Art. Nr."], "arms");
 	
-	buildTable (fBlades, ["bladeType", "length", "artNr"], ["bladeType", "length", "artNr"], "blades");
+	buildTable (fBlades, ["bladeType", "length", "artNr"], ["Blade Type", "Length", "Art. Nr."], "blades");
 	
-	buildTable (fMotors, ["armMax", "bladeMax", "hoh", "armType", "bladeType", "name"], ["armMax", "bladeMax", "hoh", "armType", "bladeType", "name"], "motors");
+	buildTable (fMotors, ["armMax", "bladeMax", "armType", "bladeType", "name"], ["Arm Max", "Blade Max", "Arm Type", "Blade Type", "Name"], "motors");
 	
 	resizeCanvas(null);
 	drawSheme (data);
@@ -53,7 +55,6 @@ function fillTable (){
 	inUpdate(function(){
 		setPreviewImage(game.canvas.toDataURL());
 	});
-	
 }
 
 function buildTable (data, headers, labels, tableID) {
