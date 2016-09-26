@@ -5,7 +5,7 @@ var	sectionThree = 	function(){return document.getElementById("outputArea");};
 
 var data;
 
-/*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: false, mootools: false, prototypejs: false*/
+/*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: true, mootools: false, prototypejs: false*/
 function fillTable (){
 	// Calc data
 	data = computeWiperset();
@@ -136,8 +136,68 @@ function makePDF () {
 		var doc = new jsPDF('l', 'mm', [paperWidth, paperHeight]);
 	
 		doc.addImage(game.canvas, 'JPEG', 0 ,0 ,paperWidth ,paperHeight);
-	
-		doc.save('wiper.pdf');
+		
+		//var element1 = document.getElementById("pdfAble");
+		
+		/*html2canvas(element1, {
+			onrendered: function(canvas) {
+				doc.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, paperWidth, paperHeight);
+			}
+		});*/
+		
+		doc.addPage([paperWidth, paperHeight], 'portrait');
+		/*doc.addHTML(document.body, function () {
+			doc.save('wiper.pdf');
+		});*/
+		
+		doc.setFont("helvetica");
+		doc.setFontType("bold");
+		doc.setFontSize(9);
+
+		
+        var source = $('#pdfAble')[0];
+
+        // we support special element handlers. Register them with jQuery-style 
+        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+        // There is no support for any other type of selectors 
+        // (class, of compound) at this time.
+        var specialElementHandlers = {
+            // element with id of "bypass" - jQuery style selector
+            '#bypassme': function (element, renderer) {
+                // true = "handled elsewhere, bypass text extraction"
+                return true;
+            }
+        };
+		
+        var margins = {
+            top: 80,
+            bottom: 60,
+            left: 40,
+            width: 522
+        };
+        // all coords and widths are in jsPDF instance's declared units
+		
+		/*
+        doc.fromHTML(
+            source, // HTML string or DOM elem ref.
+            margins.left, // x coord
+            margins.top, { // y coord
+                'width': margins.width, // max width of content on PDF
+                'elementHandlers': specialElementHandlers
+            },
+
+            function (dispose) {
+                // dispose: object with X, Y of the last line add to the PDF 
+                //          this allow the insertion of new lines after html
+                doc.save('wiper.pdf');
+            }, margins
+        );*/
+		
+		
+		doc.addHTML( $('#pdfAble')[0] , function() {
+    		doc.save('filename.pdf');
+		});
+		
 	});
 }
 

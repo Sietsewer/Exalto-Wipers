@@ -1,7 +1,12 @@
 <html lang="en">
     <head>
         <title>Wiper Calculator</title>
-        <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/style.css">
+		<link rel="stylesheet" type="text/css" media="print" href="stylesheets/style-print.css">
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
         <script type="text/javascript" src="databaseControl.js"></script>
 		<script type="text/javascript" src="calculations.js"></script>
 		<script type="text/javascript" src="pageControl.js"></script>
@@ -88,7 +93,7 @@
     	    <!-- Output -->
     	    <div id="outputArea" class="inputForm" style="display: none;">
 				<div>
-				<div class="scrollable">
+				<div id="wiperSpecs" class="scrollable">
     	        	<table id="generalOutput" style="width:100%">
   						<tr>
 							<td class="align-left">Arm length</td>
@@ -120,23 +125,25 @@
 						</tr>
 					</table>
 				</div>
+					<div id="pdfAble">
 				<h2>Arms</h2>
-				<div class="scrollable">
+				<div id="armsList" class="scrollable">
 					
 					<table id="arms" class="inputForm"  style="width:100%">
 					</table>
 				</div>
 				<h2>Blades</h2>
-				<div class="scrollable">
+				<div id="bladesList" class="scrollable">
 					<table id="blades" class="inputForm"  style="width:100%">
 					</table>
 				</div>
 				<h2>Motors</h2>
-				<div class="scrollable">
+				<div id="motorsList" class="scrollable">
 					<table id="motors" class="inputForm"  style="width:100%">
 					</table>
 				</div>
 				
+					</div>
 				<img id="preview-image" class="previewImage">
 					
 				<h2>Print settings</h2>
