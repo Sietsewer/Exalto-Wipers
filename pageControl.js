@@ -64,13 +64,20 @@ function buildTable (data, headers, labels, tableID) {
 	} else {
 		table = tableID;
 	}
+	
+	var thead = document.createElement("thead");
+	
 	var row = document.createElement("tr");
 	for (var k = 0; k < headers.length; k++) { // Iterate over columns
 		var label = document.createElement("th");
 		label.textContent = labels[k];
 		row.appendChild(label);
 	}
-	table.appendChild(row);
+	thead.appendChild(row);
+	table.appendChild(thead);
+	
+	var tbody = document.createElement("tbody");
+
 	for (var i = 0; i < data.length; i++){ // Iterate over rows
 		row = document.createElement("tr");
 		for (var j = 0; j < headers.length; j++) { // Iterate over columns
@@ -80,8 +87,9 @@ function buildTable (data, headers, labels, tableID) {
 			cell.textContent = dataRow[header];
 			row.appendChild(cell);
 		}
-		table.appendChild(row);
+		tbody.appendChild(row);
 	}
+	table.appendChild(tbody);
 }
 
 function calculateSize (paperSize, dpi){
@@ -129,11 +137,11 @@ function makePDF () {
 	
 		paperSize = paperSize.replace(/mm/g,"").split('x');
 
-		var paperWidth  = Number(paperSize[1]);
-		var paperHeight = Number(paperSize[0]);
+		var paperWidth  = Number(paperSize[1] * 2.83465);
+		var paperHeight = Number(paperSize[0] * 2.83465);
 	
 		//var imageData = game.canvas.toDataURL();
-		var doc = new jsPDF('l', 'mm', [paperWidth, paperHeight]);
+		var doc = new jsPDF('l', 'pt', [paperWidth, paperHeight]);
 	
 		doc.addImage(game.canvas, 'JPEG', 0 ,0 ,paperWidth ,paperHeight);
 		
@@ -146,39 +154,98 @@ function makePDF () {
 		});*/
 		
 		doc.addPage([paperWidth, paperHeight], 'portrait');
+		
+		
+		var res = doc.autoTableHtmlToJson(document.getElementById("arms"));
+		
+		doc.autoTable (res.columns, res.data, {startY:60})
+		
+		
+		doc.save('wiper.pdf');
+		
+		
+		
 		/*doc.addHTML(document.body, function () {
 			doc.save('wiper.pdf');
 		});*/
 		
-		doc.setFont("helvetica");
+		/*doc.setFont("helvetica");
 		doc.setFontType("bold");
 		doc.setFontSize(9);
 
 		
-        var source = $('#pdfAble')[0];
+        var source = $('#pdfAble')[0];**/
 
         // we support special element handlers. Register them with jQuery-style 
         // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
         // There is no support for any other type of selectors 
         // (class, of compound) at this time.
+		
+		/*
         var specialElementHandlers = {
             // element with id of "bypass" - jQuery style selector
             '#bypassme': function (element, renderer) {
                 // true = "handled elsewhere, bypass text extraction"
                 return true;
             }
-        };
+        };*/
 		
+		
+		
+		/*
         var margins = {
             top: 80,
             bottom: 60,
             left: 40,
             width: 522
-        };
+        };*/
+		/*
+		// wp = 1 width percent
+		var wp = paperWidth / 100;
+		
+		var tableArms = tableToJson($('#arms').get(0));
+		doc.cellInitialize();
+		$.each(tableArms, function (i, row){
+                doc.setFontSize(10);
+
+                $.each(row, function (j, cell){
+                if(j=='armlengthmin')
+                {
+                    doc.cell(1*wp, 1*wp, 10*wp, 5*wp, cell, i);
+                }
+                else if(j=='armtype')
+                {
+                    doc.cell(1*wp, 1*wp, 10*wp, 5*wp, cell, i);
+                }
+                else if(j=='art.nr.')
+                {
+                    doc.cell(1*wp, 1*wp, 10*wp, 5*wp, cell, i);
+                }
+                else if(j=='bladelengthmin')
+                {
+                    doc.cell(1*wp, 1*wp, 10*wp, 5*wp, cell, i);
+                }
+                else if(j=='bladetype')
+                {
+                    doc.cell(1*wp, 1*wp, 10*wp, 5*wp, cell, i);
+                }
+				else if(j=='max')
+                {
+                    doc.cell(1*wp, 1*wp, 10*wp, 5*wp, cell, i);
+                }
+                else 
+                {
+                    doc.cell(1*wp, 1*wp, 10*wp, 5*wp, cell, i);
+                }
+            });
+        });
+		doc.save('filename.pdf');
+		
+		*/
         // all coords and widths are in jsPDF instance's declared units
 		
-		/*
-        doc.fromHTML(
+		
+        /*doc.fromHTML(
             source, // HTML string or DOM elem ref.
             margins.left, // x coord
             margins.top, { // y coord
@@ -194,9 +261,9 @@ function makePDF () {
         );*/
 		
 		
-		doc.addHTML( $('#pdfAble')[0] , function() {
+		/*doc.addHTML( $('#pdfAble')[0] , function() {
     		doc.save('filename.pdf');
-		});
+		});*/
 		
 	});
 }
@@ -235,4 +302,36 @@ function p3Next(){
 function setPreviewImage(source){
 	var img = document.getElementById("preview-image");
 	img.src = source;
+}
+
+function tableToJson(table) {
+    var data = [];
+
+    // first row needs to be headers
+    var headers = [];
+	
+	var actualHeaders = [];
+	
+    for (var ii=0; ii<table.rows[0].cells.length; ii++) {
+        headers[ii] = table.rows[0].cells[ii].innerHTML.toLowerCase().replace(/ /gi,'');
+		actualHeaders[ headers [ii] ] = table.rows[0].cells[ii].innerHTML;
+    }
+	
+	data.push(actualHeaders);
+	
+    // go through cells
+    for (var i=1; i<table.rows.length; i++) {
+
+        var tableRow = table.rows[i];
+        var rowData = {};
+
+        for (var j=0; j<tableRow.cells.length; j++) {
+
+            rowData[ headers[j] ] = tableRow.cells[j].innerHTML;
+
+        }
+
+        data.push(rowData);
+    }       
+    return data;
 }
