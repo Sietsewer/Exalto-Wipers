@@ -167,3 +167,9 @@ body .previewImage {
   margin-right: auto;
   margin-left: auto;
 }
+/* line 190, ../sass/style.scss */
+body .error {
+  color: #d00032;
+  text-align: center;
+  font-weight: bold;
+}

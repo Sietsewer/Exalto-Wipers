@@ -64,16 +64,22 @@
 						<label>Window Height</label>
 						<span><input type="number" name="windowHeight" id="windowHeight" /></span>
     	            </div>
+					<p id="window-height-error-small" style="display:none;" class="error">Window height is too small.</p>
+					<p id="window-height-error-large" style="display:none;" class="error">Window height is too large.</p>
 					<div>
 						<label>Window Width</label>
     	            	<span><input type="number" name="windowTopWidth" id="windowTopWidth" /></span>
     	            </div>
+					<p id="window-width-error-small" style="display:none;" class="error">Window width is too small.</p>
+					<p id="window-width-error-large" style="display:none;" class="error">Window width is too large.</p>
 					<!-- <label>Window Bottom Width (B)</label>
     	            <span><input type="number" name="windowBottomWidth" id="windowBottomWidth" /></span>-->
 					<div>
     	            	<label>Assembly Offset</label>
     	            	<span><input type="number" name="windowCentreDistance" id="windowCentreDistance" /></span>
 					</div>
+					<p id="window-offset-error-small" style="display:none;" class="error">Assembly Offset is too small.</p>
+					<p id="window-offset-error-large" style="display:none;" class="error">Assembly Offset is too large.</p>
 					<div>
 						<i>The offset between the window edge and assembly point.</i> 
 					</div>
@@ -81,6 +87,8 @@
 						<label>Eye Level</label>
 						<span><input type="number"  name="windowEyeLevel" id="windowEyeLevel" /></span>
 					</div>
+						<p id="window-eyelevel-error-small" style="display:none;" class="error">Eye Level is too small.</p>
+						<p id="window-eyelevel-error-large" style="display:none;" class="error">Eye Level is too large.</p>
     	            <!-- <label>Bulkhead Thickness</label>
     	            <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
     	        </form>
