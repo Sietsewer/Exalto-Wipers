@@ -207,6 +207,7 @@ function PantographArmLength (eyeLevel, centreHeight, height) {
 	return Math.ceil(num / 5) * 5;
 }
 
+// Check for eyelevel, smallest distance = blade length/2, marge!
 function PantographBladeLength (centreHeight, height, armLength){
 	return Math.floor(((height + centreHeight - armLength - 20) * 2) / 50) * 50;
 }

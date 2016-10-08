@@ -469,8 +469,6 @@ function drawSheme (data) {
 	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), game.height - ((game.height - pixelHeight) / 2));
 	var pointD = new Phaser.Point((game.width - pixelWidth) / 2,				 game.height - ((game.height - pixelHeight) / 2));
 	
-	
-	
 	drawMeasure (measurementGraphics, pointC, pointD, textGroup);
 	drawMeasure (measurementGraphics, pointB, pointC, textGroup);
 	//drawMeasure (measurementGraphics, new Phaser.Point(500, 100), new Phaser.Point(500, 500));
@@ -489,6 +487,13 @@ function drawSheme (data) {
 	drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, data.maxWiperAngle/2, data.armLenth , 0xdddddd, 0.7, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
 	drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, -data.maxWiperAngle/2, data.armLenth , 0xffffff, 1, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
 	
+    	//top measure
+    var pointTopMeasure = new Phaser.Point(pointB.x, wiperOrigin.y / pixelSize);
+    
+    drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
+    measurementGraphics.moveTo(pointTopMeasure.x, pointTopMeasure.y);
+    measurementGraphics.lineTo(wiperOrigin.x / pixelSize, wiperOrigin.y / pixelSize);
+    
 	drawDone = true;
 	drawCount = 0;	
 }
