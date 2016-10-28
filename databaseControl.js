@@ -9,7 +9,7 @@ function loadJSON(callback) {
     
     var xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/JSON");
-    xobj.open('GET', 'componentsDatabase.json', true); // Replace 'my_data' with the path to your file
+    xobj.open('GET', 'componentsDatabase.json', true);
     xobj.onreadystatechange = function () {
         if (this.status >= 200 && this.status < 400) {
             // Required use of an anonymous callback as .open will NOT return a value but simply returns 

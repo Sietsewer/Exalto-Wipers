@@ -1,8 +1,8 @@
-
+ 
 var sectionOne = 	function(){return document.getElementById("unitsSettings");};
 var sectionTwo  = 	function(){return document.getElementById("windowSettings");};
 var	sectionThree = 	function(){return document.getElementById("outputArea");};
-
+var sectionFour   = function(){return document.getElementById("printArea")};
 var data;
 
 /*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: true, mootools: false, prototypejs: false*/
@@ -28,9 +28,9 @@ function fillTable (){
 			a.bladeLengthMin <= data.bladeLength &&
 			a.applType === (data.inputData.windowData.wiperType === "pendulum" ? "enkel" : "parallel");
 	});
-	var fBlades = database.blades.where(function (a) {
-		return a.length === data.bladeLength;
-	});
+	var fBlades = data.blades; //database.blades.where(function (a) {
+		//return a.length === data.bladeLength;
+	//});
 	var fMotors = database.motors.where(function (a) {
 		return a.armMax >= data.armLenth && a.bladeMax >= data.bladeLength;
 	});
@@ -45,7 +45,7 @@ function fillTable (){
 				["armType", 	"lengthMin", 		"lengthMax", 	"bladeLengthMin", 	"bladeLengthMax", 	"bladeType",	"artNr"],
 				["Arm Type", 	"Arm Length Min", 	"Max", 			"Blade Length Min", "Max", 				"Blade Type", 	"Art. Nr."], "arms");
 	
-	buildTable (fBlades, ["bladeType", "length", "artNr"], ["Blade Type", "Length", "Art. Nr."], "blades");
+	buildTable (fBlades, ["bladeType", "length", "artNr", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Blade Type", "Length", "Art. Nr.", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,null,null, function (val) {return SizeNotation(Number(val));}, function(val){return Math.round((Number(Number(val) * 57.295780181884765625)) * 10) / 10 + "°";}, function(val){return (Math.round(Number(val) * 10000) / 100)+"%";}]);
 	
 	buildTable (fMotors, ["armMax", "bladeMax", "armType", "bladeType", "name"], ["Arm Max", "Blade Max", "Arm Type", "Blade Type", "Name"], "motors");
 	
@@ -57,7 +57,7 @@ function fillTable (){
 	});
 }
 
-function buildTable (data, headers, labels, tableID) {
+function buildTable (data, headers, labels, tableID, functions) {
 	var table;
 	if (typeof tableID === "string"){
 		table = document.getElementById(tableID);
@@ -85,12 +85,16 @@ function buildTable (data, headers, labels, tableID) {
 			var dataRow = data[i];
 			var header = headers[j];
 			cell.textContent = dataRow[header];
+			if(functions !== null && functions !== undefined && functions[j] !== null && functions[j] !== undefined){
+				cell.textContent = functions[j](cell.textContent);
+			}
 			row.appendChild(cell);
 		}
 		tbody.appendChild(row);
 	}
 	table.appendChild(tbody);
 }
+
 
 function calculateSize (paperSize, dpi){
 	var paperHeight = 0;
@@ -208,18 +212,6 @@ function makePDF () {
 	});
 }
 
-function p1Next () {
-	sectionOne().style.display = "none";
-	sectionTwo().style.display = "block";
-	sectionThree().style.display = "none";
-}
-
-function p2Previous (){
-	sectionOne().style.display = "block";
-	sectionTwo().style.display = "none";
-	sectionThree().style.display = "none";
-}
-
 function showError (element){
 	element.style.display = "block";
 }
@@ -297,12 +289,27 @@ function inputError () {
 	return errored;
 }
 
+function p1Next () {
+	sectionOne().style.display = "none";
+	sectionTwo().style.display = "block";
+	sectionThree().style.display = "none";
+	sectionFour().style.display = "none";
+}
+
+function p2Previous (){
+	sectionOne().style.display = "block";
+	sectionTwo().style.display = "none";
+	sectionThree().style.display = "none";
+	sectionFour().style.display = "none";
+}
+
 function p2Next(){
 	if(!inputError()){
 		fillTable();
 		sectionOne().style.display = "none";
 		sectionTwo().style.display = "none";
 		sectionThree().style.display = "block";
+		sectionFour().style.display = "none";
 	}
 }
 
@@ -310,12 +317,28 @@ function p3Previous(){
 	sectionOne().style.display = "none";
 	sectionTwo().style.display = "block";
 	sectionThree().style.display = "none";
+	sectionFour().style.display = "none";
 }
 
 function p3Next(){
+	sectionOne().style.display = "none";
+	sectionTwo().style.display = "none";
+	sectionThree().style.display = "none";
+	sectionFour().style.display = "block";
+}
+
+function p4Previous(){
+	sectionOne().style.display = "none";
+	sectionTwo().style.display = "none";
+	sectionThree().style.display = "block";
+	sectionFour().style.display = "none";
+}
+
+function p4Next(){
 	sectionOne().style.display = "block";
 	sectionTwo().style.display = "none";
 	sectionThree().style.display = "none";
+	sectionFour().style.display = "none";
 }
 
 function setPreviewImage(source){

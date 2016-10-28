@@ -175,6 +175,14 @@ function computeWiperset () {
 		
 		results = new Results (armLength, bladeLength, maxWipeAngle, Marginhorizontal, MarginverticalBelow, MarginverticalAbove, MarginverticalMovement, dataSet);
 		
+		// ToDo: fix margins
+		results.blades = processBlades (Number(dataSet.windowData.topWidth),
+			Number(dataSet.windowData.topWidth),
+			Number(dataSet.windowData.centreDistance),
+			//Marginhorizontal, MarginverticalAbove, MarginverticalBelow,
+			30,30,30,
+			Number(dataSet.windowData.eyeLevel),
+			dataSet.windowData.wiperType === "pantograph");
 	} else {
 		console.error ("Something went terribly wrong.");
 	}
@@ -321,7 +329,7 @@ function PendulumBladeLength (height, centreHeight, armLength) {
 }
 
 function PendulumWipeAngle (halfAngleAlpha) {
-	return Math.round(((2 * halfAngleAlpha) - 15) / 5) * 5
+	return Math.round(((2 * halfAngleAlpha) - 15) / 5) * 5;
 }
 
 function PendulumHorizontalMargin (width, wipeAngle, armLength, bladeLength) {
@@ -407,8 +415,300 @@ function SizeNotation (size) {
 	var dat = document.getElementById("units").value;
 	var isInch = dat === "inch";
 	if (isInch){ // inch
-		return (Number(size) / 25.4).toFixed(3) + " in"
+		return (Number(size) / 25.4).toFixed(3) + " in";
 	} else { // mm
 		return (Number(size).toFixed(2) + " mm");
 	}
 }
+
+//
+
+//
+
+//
+
+// --- //                                       // --- //
+
+// --- // NO EXCEL TRANSLATIONS PAST THIS POINT // --- //
+
+// --- //                                       // --- //
+
+//
+
+//
+
+//
+
+
+var maxDegreesPantograph = 120 * (Math.PI/180);
+
+
+// Get maximum blade length for given window and or eye level. 
+function getMaxBladeLength (width, height, eyeLevel){
+	height		= Number(height);
+	width		= Number(width);
+	eyeLevel 	= Number(eyeLevel);
+	
+	if(eyeLevel !== 0) {
+		return height - eyeLevel > eyeLevel ? eyeLevel : height - eyeLevel;
+	} else {
+		return height;
+	}
+}
+
+// vOffset must be margin adjusted!
+function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOffset) {
+	var retVar = maxDegreesPantograph;
+	if (isPantograph) {
+		// Horizontal check
+		var hLimit = Number.POSITIVE_INFINITY;
+		
+		// Prevent incorrect calculations, zero divisions etc.
+		if (armLength < (width / 2)) {
+			hLimit = Math.asin(armLength / (width/2));
+			hLimit = ((Math.PI/2) - hLimit) * 2;
+			if(isNaN(hLimit)){
+				console.error("h-nan");
+			}
+		}
+		
+		// Vertical check
+		var vLimit = Number.POSITIVE_INFINITY;
+		
+		if (-(bladeLength / 2) <= vOffset && (bladeLength/2) + vOffset < armLength) {
+			vLimit = Math.acos(((bladeLength/2) + vOffset)/armLength);
+			vLimit = ((Math.PI/2) - vLimit) * 2;
+			if(isNaN(vLimit)){
+				console.error("v-nan");
+			}
+		}
+		
+		// Returns
+		if (hLimit < retVar && hLimit <= maxDegreesPantograph){
+			retVar = hLimit;
+		}
+		if (vLimit < retVar && vLimit <= maxDegreesPantograph){
+			retVar = vLimit;
+		}
+		
+		return retVar;
+		
+	} else {
+				// Horizontal check
+		var hLimit = Number.POSITIVE_INFINITY;
+		
+		// Prevent incorrect calculations, zero divisions etc.
+		if (armLength + (bladeLength/2) < (width / 2)) {
+			hLimit = Math.acos((width/2) / armLength + (bladeLength/2));
+			hLimit = (90 - vLimit) * 2;
+		}
+		
+		// Vertical check
+		var vLimit = Number.POSITIVE_INFINITY;
+		
+		if (vOffset > 0) {
+			vLimit = Math.acos(vOffset / (armLength - (bladeLength/2)));
+			vLimit = vLimit * 2;
+		}
+		
+		// Returns
+		if (hLimit < retVar && hLimit <= maxDegreesPantograph){
+			retVar = hLimit;
+		}
+		if (vLimit < retVar && vLimit <= maxDegreesPantograph){
+			retVar = vLimit;
+		}
+		
+		return retVar;
+	}
+}
+
+var pollOffset = 0.25; // Amount of millimiters offset is used when determining wether results are descending or ascending. Keep it under 1mm.
+var pollCount = 50; // Amount of polls per sweep. More takes longer, but finishes in less sweeps.
+
+// Use searching algorithm to find optimal arm length. Dependend on pollCount and pollOffset.
+function getOptimalArmLength (isPantograph, bladeLength, angleLimit, width, height, vOffset) {
+	var maxArmLength = height - (bladeLength / 2) - vOffset;
+	var minArmLength = (bladeLength / 2) + (vOffset > 0 ? vOffset : 0);
+	
+	var results = [];
+	
+	var hasAscending = false;
+	var hasDescending = false;
+	
+	// 1. Get rough part within the range where the peak is.
+	
+	for (var i = 0; i < pollCount; i++){
+		var poll = {};
+		var progress = i / (pollCount - 1); // value between 0 and 1
+		
+		var value = fLerp(minArmLength + pollOffset, maxArmLength - pollOffset, progress);
+		
+		poll.value = value;
+		
+		var wipeAngle = getWipeAngle (isPantograph, width, height, value - pollOffset, bladeLength, vOffset);
+		poll.one = getWipePercentage(isPantograph, value - pollOffset, bladeLength, wipeAngle, width, height, vOffset)
+		
+		wipeAngle = getWipeAngle (isPantograph, width, height, value + pollOffset, bladeLength, vOffset);
+		poll.two = getWipePercentage(isPantograph, value + pollOffset, bladeLength, wipeAngle, width, height, vOffset)
+		
+		poll.ascending = poll.one < poll.two;
+		
+		if(poll.ascending){
+			hasAscending = true;
+		} else {
+			hasDescending = true;
+		}
+		
+		results.push(poll);
+	}
+	
+	var windowMin = 0, windowMax = 0;
+	
+	if(hasAscending && hasDescending) {
+	
+		for (var j = 0; j < results.length; j++){
+			if(j!== 0 && !results[j].ascending && results[j].value > windowMax){
+				windowMax = results[j].value;
+				windowMin = results[j-1].value;
+			}
+		}	
+	} else {
+		windowMin = minArmLength;
+		windowMax = maxArmLength;
+	}
+	
+	var resolution = windowMax - windowMin;
+	
+	// 2. Narrow down using simple polls until result is within one millimiter.
+	
+	while (resolution > 1) {
+		results = [];
+		for(var k = 0; k < pollCount; k++){
+			var p = {};
+			var val = fLerp(windowMin, windowMax, k / (pollCount - 1));
+			p.value = val;
+			
+			var wa = getWipeAngle (isPantograph, width, height, val, bladeLength, vOffset);
+			p.perc = getWipePercentage(isPantograph, val, bladeLength, wa, width, height, vOffset);
+			
+			results.push(p);
+		}
+		
+		var maxPerc = 0;
+		var secondMaxPerc = 0;
+		
+		//ToDo: ascending/descending only check
+		
+		for (var l = 1; l < results.length; l++){
+			if (results[l].perc > secondMaxPerc){
+				secondMaxPerc = results[l].perc;
+				windowMin = results[l].value;
+			}
+			if (results[l].perc > maxPerc){
+				windowMin = windowMax;
+				secondMaxPerc = maxPerc;
+				
+				windowMax = results[l].value;
+				maxPerc = results[l].perc;
+				
+			}
+		}
+		
+		if(windowMin > windowMax){
+			var temp = windowMin;
+			windowMin = windowMax;
+			windowMax = temp;
+		}
+		
+		resolution = windowMax - windowMin;
+	}
+	
+	return (windowMax + windowMin) / 2;
+	
+}
+
+function fLerp (min, max, f) {
+	return ((max - min) * f) + min;
+}
+
+function getBladeLengths (max, min) {
+	return database.blades.where(function (a) {
+		return a.length >= min && a.length <= max;
+	});
+}
+
+function processBlades (rWidth, rHeight, rCentreDistance, rHMargin, rVMarginT, rVMarginB, eyeLevel, isPantograph){
+	
+	var width = rWidth - rHMargin;
+	var height = rHeight - rVMarginB - rVMarginT;
+	var vOffset = rCentreDistance + rVMarginT;
+	
+	
+	var bl = getBladeLengths(getMaxBladeLength(width, height, eyeLevel), 0);
+	for(var i = 0; i < bl.length; i++){
+		bl[i].optimalArmLength = getOptimalArmLength (isPantograph, bl[i].length, Math.PI, width, height, vOffset);
+		bl[i].wipeAngle = getWipeAngle (isPantograph, width, height, bl[i].optimalArmLength, bl[i].length, vOffset);
+		bl[i].wipePercentage = getWipePercentage (isPantograph, bl[i].optimalArmLength, bl[i].length, bl[i].wipeAngle, width, height, vOffset);
+	}
+	
+	console.log("Done!");
+	return bl;
+}
+
+function getWipePercentage (isPantograph, armLength, bladeLength, wipeAngle, width, height, vOffset) {
+	if(isPantograph){
+		return (Math.sin(wipeAngle / 2) * armLength * (bladeLength/2) * 4) / (height * width);
+	} else {
+		return (Math.PI * armLength * (bladeLength / 2) * (wipeAngle / 2)) / (Math.PI/2 * height * width);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
