@@ -1,14 +1,32 @@
- 
+/*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: true, mootools: false, prototypejs: false*/
+/*jslint browser: true*/
+
 var sectionOne = 	function(){return document.getElementById("unitsSettings");};
 var sectionTwo  = 	function(){return document.getElementById("windowSettings");};
 var	sectionThree = 	function(){return document.getElementById("outputArea");};
-var sectionFour   = function(){return document.getElementById("printArea")};
+var sectionFour   = function(){return document.getElementById("printArea");};
 var data;
 
-/*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: true, mootools: false, prototypejs: false*/
-function fillTable (){
+
+function fillTable (armLength, bladeLength, wipeAngle){
 	// Calc data
 	data = computeWiperset();
+	
+	if(armLength){
+		data.armLenth = armLength;
+	}
+	if(bladeLength){
+		data.bladeLength = bladeLength;
+	}
+	if(wipeAngle){
+		data.maxWiperAngle = wipeAngle;
+			// fix;
+	data.marginBelow = 30;
+	data.marginAbove = 30;
+	data.marginHorizontal = 30;
+	}
+	
+
 	
 	// Fill out data
 	document.getElementById("armLength").textContent = SizeNotation(data.armLenth);
@@ -45,8 +63,10 @@ function fillTable (){
 				["armType", 	"lengthMin", 		"lengthMax", 	"bladeLengthMin", 	"bladeLengthMax", 	"bladeType",	"artNr"],
 				["Arm Type", 	"Arm Length Min", 	"Max", 			"Blade Length Min", "Max", 				"Blade Type", 	"Art. Nr."], "arms");
 	
-	buildTable (fBlades, ["bladeType", "length", "artNr", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Blade Type", "Length", "Art. Nr.", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,null,null, function (val) {return SizeNotation(Number(val));}, function(val){return Math.round((Number(Number(val) * 57.295780181884765625)) * 10) / 10 + "°";}, function(val){return (Math.round(Number(val) * 10000) / 100)+"%";}]);
+	var onBladesClick = function () {var md = this.myData; fillTable(md.optimalArmLength, md.length, md.wipeAngle * 57.295780181884765625);};
 	
+	buildTable (fBlades, ["bladeType", "length", "artNr", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Blade Type", "Length", "Art. Nr.", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,null,null, function (val) {return SizeNotation(Number(val));}, function(val){return Math.round((Number(Number(val) * 57.295780181884765625)) * 10) / 10 + "°";}, function(val){return (Math.round(Number(val) * 10000) / 100)+"%";}], onBladesClick);
+
 	buildTable (fMotors, ["armMax", "bladeMax", "armType", "bladeType", "name"], ["Arm Max", "Blade Max", "Arm Type", "Blade Type", "Name"], "motors");
 	
 	resizeCanvas(null);
@@ -57,7 +77,7 @@ function fillTable (){
 	});
 }
 
-function buildTable (data, headers, labels, tableID, functions) {
+function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 	var table;
 	if (typeof tableID === "string"){
 		table = document.getElementById(tableID);
@@ -68,6 +88,11 @@ function buildTable (data, headers, labels, tableID, functions) {
 	var thead = document.createElement("thead");
 	
 	var row = document.createElement("tr");
+	
+	if(radioButtons){
+		row.appendChild(document.createElement("th"));
+	}
+	
 	for (var k = 0; k < headers.length; k++) { // Iterate over columns
 		var label = document.createElement("th");
 		label.textContent = labels[k];
@@ -79,7 +104,21 @@ function buildTable (data, headers, labels, tableID, functions) {
 	var tbody = document.createElement("tbody");
 
 	for (var i = 0; i < data.length; i++){ // Iterate over rows
+		
+
+		
 		row = document.createElement("tr");
+		
+		if(radioButtons){
+			var rc = document.createElement("td");
+			var button = document.createElement("button");
+			button.type = "button";
+			button.myData = data[i];
+			button.onclick = radioButtons;
+			rc.appendChild(button);
+			row.appendChild(rc);
+		}
+		
 		for (var j = 0; j < headers.length; j++) { // Iterate over columns
 			var cell = document.createElement("td");
 			var dataRow = data[i];
@@ -93,6 +132,8 @@ function buildTable (data, headers, labels, tableID, functions) {
 		tbody.appendChild(row);
 	}
 	table.appendChild(tbody);
+	sorttable.makeSortable(table);
+
 }
 
 

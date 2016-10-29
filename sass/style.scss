@@ -9,6 +9,10 @@ $exalto_darkblue : #04141a;
 $font_body : "Arial", "Arial", "Gadget",sans-serif;
 $font_highlight :  "Arial Black", "Arial Bold", "Gadget",sans-serif;
 
+table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
+    content: " \25B4\25BE" 
+}
+
 body{
 	line-height: 120%;
 	padding: 0;
