@@ -96,6 +96,41 @@
     	            <!-- <label>Bulkhead Thickness</label>
     	            <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
     	        </form>
+					<div>
+						Determine the margins that must be used for this window.<br />
+					</div>
+					<form id="margins">
+					<div>
+						<label>Horizontal Margin</label>
+						<span><input type="number" name="marginH" id="marginH" value="60" /></span>
+    	            </div>
+					<p id="margin-h-error-small" style="display:none;" class="error">Horizontal is too small.</p>
+					<p id="margin-h-error-large" style="display:none;" class="error">Horizontal is too large.</p>
+					<div>
+						<label>Vertical Margin Top</label>
+						<span><input type="number" name="marginVT" id="marginVT" value="60" /></span>
+    	            </div>
+					<p id="margin-vt-error-small" style="display:none;" class="error">Top vertical margin is too small.</p>
+					<p id="margin-vt-error-large" style="display:none;" class="error">Top vertical margin is too large.</p>
+					<!-- <label>Window Bottom Width (B)</label>
+    	            <span><input type="number" name="windowBottomWidth" id="windowBottomWidth" /></span>-->
+					<div>
+    	            	<label>Vertical Margin Bottom</label>
+    	            	<span><input type="number" name="marginVB" id="marginVB" value="60" /></span>
+					</div>
+					<p id="margin-vb-error-small" style="display:none;" class="error">Bottom vertical margin is too small.</p>
+					<p id="margin-vb-error-large" style="display:none;" class="error">Bottom vertical margin is too large.</p>
+					<div>
+					</div>
+					<div>
+						<label>Centre Margin</label>
+						<span><input type="number"  name="marginC" id="marginC" value="60" /></span>
+					</div>
+						<p id="margin-c-error-small" style="display:none;" class="error">Centre margin is too small.</p>
+						<p id="margin-c-error-large" style="display:none;" class="error">Centre margin is too large.</p>
+    	            <!-- <label>Bulkhead Thickness</label>
+    	            <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
+    	        </form>
 			</div>
 				<span>
 					<button onclick="p2Previous()" class="button-sidebyside">previous</button>

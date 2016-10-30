@@ -1,6 +1,5 @@
 /*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: false, mootools: false, prototypejs: false*/
-/*globals Phaser*/
-
+/*globals Phaser, limits, baseData*/
 // phaser 2.6.1
 var game = new Phaser.Game((210 * 0.0393701) * 72, (148 * 0.0393701) * 72, Phaser.CANVAS, 'graphicsDisplay', { preload: preload, create: create, update: update });
 
@@ -454,10 +453,18 @@ function drawSheme (data) {
 	sprites = game.add.group();
 	// -- //
 	
-	var mmWidth = Number(data.inputData.windowData.topWidth);
-	var mmHeight = Number(data.inputData.windowData.height);
+	//var mmWidth = Number(data.inputData.windowData.topWidth);
+	//var mmHeight = Number(data.inputData.windowData.height);
 	
-	pixelSize = calculateScale(mmWidth, mmHeight + Math.abs(Number(data.inputData.windowData.centreDistance) * 2), millimeterMargin);
+	var mmWidth = Number(baseData.windowRaw.width);
+	var mmHeight = Number(baseData.windowRaw.height);
+	
+	
+	//pixelSize = calculateScale(mmWidth, mmHeight + Math.abs(Number(data.inputData.windowData.centreDistance) * 2), millimeterMargin);
+	
+	pixelSize = calculateScale(mmWidth, mmHeight + Math.abs(Number(baseData.windowRaw.centreDistance) * 2), millimeterMargin);
+
+	
 	
 	buildWindow (windowGraphic, mmWidth, mmHeight, windowPattern);
 	
@@ -474,28 +481,55 @@ function drawSheme (data) {
 	//drawMeasure (measurementGraphics, new Phaser.Point(500, 100), new Phaser.Point(500, 500));
 	//drawMeasure (measurementGraphics, new Phaser.Point(100, 100), new Phaser.Point(500, 100));
 	
-	var wiperOrigin = new Phaser.Point((game.width * pixelSize) / 2,(pointA.y * pixelSize) - data.inputData.windowData.centreDistance);
+	//var wiperOrigin = new Phaser.Point((game.width * pixelSize) / 2,(pointA.y * pixelSize) - data.inputData.windowData.centreDistance);
+	var wiperOrigin = new Phaser.Point((game.width * pixelSize) / 2,(pointA.y * pixelSize) - baseData.windowRaw.centreDistance);
 	//var wiperBladePoint = new Phaser.Point(,);
 	
+	var final = calcFinal();
 	
-	drawWipedArea(wiperMarkVisible, wiperMarkMask, data.inputData.windowData.wiperType, wiperOrigin, data.maxWiperAngle, data.bladeLength, 0, data.armLenth);
+	if(final !== null){
+		
+		
+		drawWipedArea(wiperMarkVisible, wiperMarkMask, baseData.windowRaw.wiperType, wiperOrigin, final.wipeAngle, final.length, 0, final.optimalArmLength);
+		
+		var bladeOriginX = Math.sin(game.math.degToRad(final.wipeAngle / 2)) * (final.optimalArmLength / pixelSize);
+		var bladeOriginY = Math.cos(game.math.degToRad(final.wipeAngle / 2)) * (final.optimalArmLength / pixelSize);
+		//drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, 0, data.armLenth , 0xdddddd, 0.3, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
 	
-	var bladeOriginX = Math.sin(game.math.degToRad(data.maxWiperAngle / 2)) * (data.armLenth / pixelSize);
-	var bladeOriginY = Math.cos(game.math.degToRad(data.maxWiperAngle / 2)) * (data.armLenth / pixelSize);
-	//drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, 0, data.armLenth , 0xdddddd, 0.3, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
-
-	drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, data.maxWiperAngle/2, data.armLenth , 0xdddddd, 0.7, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
-	drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, -data.maxWiperAngle/2, data.armLenth , 0xffffff, 1, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
+		drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, final.wipeAngle/2, final.optimalArmLength , 0xdddddd, 0.7, bladeSprites, final.length, baseData.windowRaw.wiperType === "pantograph");
+		drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, -final.wipeAngle/2, final.optimalArmLength , 0xffffff, 1, bladeSprites, final.length, baseData.windowRaw.wiperType === "pantograph");
+		
+    		//top measure
+    	var pointTopMeasure = new Phaser.Point(pointB.x, wiperOrigin.y / pixelSize);
+    	
+    	drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
+    	measurementGraphics.moveTo(pointTopMeasure.x, pointTopMeasure.y);
+    	measurementGraphics.lineTo(wiperOrigin.x / pixelSize, wiperOrigin.y / pixelSize);
+		
+	}
 	
-    	//top measure
-    var pointTopMeasure = new Phaser.Point(pointB.x, wiperOrigin.y / pixelSize);
-    
-    drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
-    measurementGraphics.moveTo(pointTopMeasure.x, pointTopMeasure.y);
-    measurementGraphics.lineTo(wiperOrigin.x / pixelSize, wiperOrigin.y / pixelSize);
-    
+	
+	/*
+			
+		drawWipedArea(wiperMarkVisible, wiperMarkMask, data.inputData.windowData.wiperType, wiperOrigin, data.maxWiperAngle, data.bladeLength, 0, data.armLenth);
+		
+		var bladeOriginX = Math.sin(game.math.degToRad(data.maxWiperAngle / 2)) * (data.armLenth / pixelSize);
+		var bladeOriginY = Math.cos(game.math.degToRad(data.maxWiperAngle / 2)) * (data.armLenth / pixelSize);
+		//drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, 0, data.armLenth , 0xdddddd, 0.3, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
+	
+		drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, data.maxWiperAngle/2, data.armLenth , 0xdddddd, 0.7, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
+		drawWiperArm(wiperGraphic, wiperOrigin.x, wiperOrigin.y, -data.maxWiperAngle/2, data.armLenth , 0xffffff, 1, bladeSprites, data.bladeLength, data.inputData.windowData.wiperType === "pantograph");
+		
+    		//top measure
+    	var pointTopMeasure = new Phaser.Point(pointB.x, wiperOrigin.y / pixelSize);
+    	
+    	drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
+    	measurementGraphics.moveTo(pointTopMeasure.x, pointTopMeasure.y);
+    	measurementGraphics.lineTo(wiperOrigin.x / pixelSize, wiperOrigin.y / pixelSize);
+		
+	*/
 	drawDone = true;
-	drawCount = 0;	
+	drawCount = 0;
 }
 
 function buildWindow(graphics, width, height, patternSprite) {

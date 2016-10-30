@@ -1,6 +1,31 @@
 /*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: false, mootools: false, prototypejs: false*/
 var formData;
 
+var baseData = {
+	"windowRaw":{
+		"width":null,
+		"height":null,
+		"centreDistance":null,
+		"marginH":null,
+		"marginVT":null,
+		"marginVB":null,
+		"marginC":null,
+		"wiperType":null,
+		"eyeLevel":null
+	},
+	"window":{
+		"width":null,
+		"height":null,
+		"centreDistance":null,
+		"marginC":null,
+		"isPantograph":null,
+		"eyeLevel":null
+	},
+	"meta":{
+		"isInches":null
+	}
+};
+
 // GLOBAL LIMITS REGISTER //
 var limits = {
 	"window":{
@@ -39,22 +64,22 @@ var limits = {
 		// BLADE
 		// min
 		retVar.bladeMin = this.database.bladeMin;
-		if(retVar.bladeMin <= this.window.bladeMin){
+		if(retVar.bladeMin <= this.window.bladeMin && isFinite(this.window.armMin)){
 			retVar.bladeMin = this.window.bladeMin;
 		}
-		if(retVar.bladeMin < this.arm.bladeMin){
+		if(retVar.bladeMin < this.arm.bladeMin && isFinite(this.arm.bladeMin)){
 			retVar.bladeMin = this.arm.bladeMin;
 		}
 		
 		// max
 		retVar.bladeMax = this.database.bladeMax;
-		if(retVar.bladeMax >= this.window.bladeMax){
+		if(retVar.bladeMax >= this.window.bladeMax && isFinite(this.window.bladeMax)){
 			retVar.bladeMax = this.window.bladeMax;
 		}
-		if(retVar.bladeMax >= this.arm.bladeMax){
+		if(retVar.bladeMax >= this.arm.bladeMax && isFinite(this.arm.bladeMax)){
 			retVar.bladeMax = this.arm.bladeMax;
 		}
-		if(retVar.bladeMax >= this.motor.bladeMax){
+		if(retVar.bladeMax >= this.motor.bladeMax && isFinite(this.motor.bladeMax)){
 			retVar.bladeMax = this.motor.bladeMax;
 		}
 		
@@ -65,35 +90,35 @@ var limits = {
 		// ARM
 		// min
 		retVar.armMin = this.database.armMin;
-		if(retVar.armMin <= this.window.armMin){
+		if(retVar.armMin <= this.window.armMin && isFinite(this.window.armMin)){
 			retVar.armMin = this.window.armMin;
 		}
-		if(retVar.armMin <= this.arm.armMin){
+		if(retVar.armMin <= this.arm.armMin && isFinite(this.arm.armMin)){
 			retVar.armMin = this.arm.armMin;
 		}
 		
 		// max
 		retVar.armMax = this.database.armMax;
-		if(retVar.armMax >= this.window.armMax){
+		if(retVar.armMax >= this.window.armMax && isFinite(this.window.armMax)){
 			retVar.armMax = this.window.armMax;
 		}
-		if(retVar.armMax >= this.arm.armMax){
+		if(retVar.armMax >= this.arm.armMax && isFinite(this.arm.armMax)){
 			retVar.armMax = this.arm.armMax;
 		}
-		if(retVar.armMax >= this.motor.armMax){
+		if(retVar.armMax >= this.motor.armMax && isFinite(this.motor.armMax)){
 			retVar.armMax = this.motor.armMax;
 		}
 		
 		// ANGLE
 		// min
 		retVar.angleMin = this.database.angleMin;
-		if(retVar.angleMin <= this.motor.angleMin){
+		if(retVar.angleMin <= this.motor.angleMin && isFinite(this.motor.angleMin)){
 			retVar.angleMin = this.motor.angleMin;
 		}
 		
 		// max
 		retVar.angleMax = this.database.angleMin;
-		if(retVar.angleMax >= this.motor.angleMax){
+		if(retVar.angleMax >= this.motor.angleMax && isFinite(this.motor.angleMax)){
 			retVar.angleMax = this.motor.angleMax;
 		}
 		
@@ -278,14 +303,16 @@ function computeWiperset () {
 		
 		results = new Results (armLength, bladeLength, maxWipeAngle, Marginhorizontal, MarginverticalBelow, MarginverticalAbove, MarginverticalMovement, dataSet);
 		
+		results.blades = processBlades ();
+		
 		// ToDo: fix margins
-		results.blades = processBlades (Number(dataSet.windowData.topWidth),
+		/*results.blades = processBlades (Number(dataSet.windowData.topWidth),
 			Number(dataSet.windowData.height),
 			Number(dataSet.windowData.centreDistance),
 			//Marginhorizontal, MarginverticalAbove, MarginverticalBelow,
 			30,30,30,
 			Number(dataSet.windowData.eyeLevel),
-			dataSet.windowData.wiperType === "pantograph");
+			dataSet.windowData.wiperType === "pantograph");*/
 	} else {
 		console.error ("Something went terribly wrong.");
 	}
@@ -642,6 +669,18 @@ function getOptimalArmLength (isPantograph, bladeLength, angleLimit, width, heig
 	var maxArmLength = height - (bladeLength / 2) + vOffset;
 	var minArmLength = (bladeLength / 2) + (vOffset > 0 ? vOffset : 0);
 	
+	if (processLimits.armMax < maxArmLength){
+		maxArmLength = processLimits.armMax;
+	}
+	
+	if (processLimits.armMin > minArmLength){
+		minArmLength = processLimits.armMin;
+	}
+	
+	//var processLimits = limits.definiteList;
+	//var maxArmLength = processLimits.armMax;
+	//var minArmLength = processLimits.armMin;
+	
 	var results = [];
 	
 	var samples = Math.floor(maxArmLength) - Math.ceil(minArmLength);
@@ -678,22 +717,55 @@ function getBladeLengths (max, min) {
 	});
 }
 
-function processBlades (rWidth, rHeight, rCentreDistance, rHMargin, rVMarginT, rVMarginB, eyeLevel, isPantograph){
+var processLimits;
+
+//function processBlades (rWidth, rHeight, rCentreDistance, rHMargin, rVMarginT, rVMarginB, eyeLevel, isPantograph){
 	
-	var width = rWidth - rHMargin;
-	var height = rHeight - rVMarginB - rVMarginT;
-	var vOffset = rCentreDistance + rVMarginT;
+	//var width = rWidth - rHMargin;
+	//var height = rHeight - rVMarginB - rVMarginT;
+	//var vOffset = rCentreDistance + rVMarginT;
 	
+function processBlades (){
+	processLimits = limits.definiteList();
+	var width = baseData.window.width;
+	var height = baseData.window.height
+	var vOffset = baseData.window.centreDistance;
+	var bl = getBladeLengths(processLimits.bladeMax, processLimits.bladeMin);
 	
-	var bl = getBladeLengths(getMaxBladeLength(width, height, eyeLevel), 0);
+	var out = [];
+	
 	for(var i = 0; i < bl.length; i++){
-		bl[i].optimalArmLength = getOptimalArmLength (isPantograph, bl[i].length, Math.PI, width, height, vOffset);
-		bl[i].wipeAngle = getWipeAngle (isPantograph, width, height, bl[i].optimalArmLength, bl[i].length, vOffset);
-		bl[i].wipePercentage = getWipePercentage (isPantograph, bl[i].optimalArmLength, bl[i].length, bl[i].wipeAngle, width, height, vOffset);
+		bl[i].optimalArmLength = getOptimalArmLength (baseData.window.isPantograph, bl[i].length, Math.PI, width, height, vOffset);
+		bl[i].wipeAngle = getWipeAngle (baseData.window.isPantograph, width, height, bl[i].optimalArmLength, bl[i].length, vOffset);
+		bl[i].wipePercentage = getWipePercentage (baseData.window.isPantograph, bl[i].optimalArmLength, bl[i].length, bl[i].wipeAngle, width, height, vOffset);
+		
+		if(bl[i].wipePercentage > 0.001 && bl[i].wipeAngle > 0.001){
+			out.push(bl[i]);
+		}
 	}
 	
 	console.log("Done!");
 	return bl;
+}
+
+function calcFinal (){
+	if (isFinite(limits.blade.bladeLength) && limits.blade.bladeLength > 0){
+		processLimits = limits.definiteList();
+		var width = baseData.window.width;
+		var height = baseData.window.height
+		var vOffset = baseData.window.centreDistance;
+		var bl = {"length":limits.blade.bladeLength};
+		bl.optimalArmLength = getOptimalArmLength (baseData.window.isPantograph, bl.length, Math.PI, width, height, vOffset);
+		bl.wipeAngle = getWipeAngle (baseData.window.isPantograph, width, height, bl.optimalArmLength, bl.length, vOffset);
+		bl.wipePercentage = getWipePercentage (baseData.window.isPantograph, bl.optimalArmLength, bl.length, bl.wipeAngle, width, height, vOffset);
+		
+		bl.wipeAngle *= 57.295780181884765625;
+		
+		console.log("Done!");
+		return bl;
+	} else {
+		return null;
+	}
 }
 
 function getWipePercentage (isPantograph, armLength, bladeLength, wipeAngle, width, height, vOffset) {

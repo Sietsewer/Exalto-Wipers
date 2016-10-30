@@ -40,6 +40,23 @@ function init() {
 
 function databaseLoaded(){
 	
+	// Assign UID's
+	var uid = 1;
+	
+	for(var i = 0; i < database.motors.length;i++){
+		database.motors[i].uid = uid;
+		uid++;
+	}
+	for(var j = 0; j < database.arms.length;j++){
+		database.arms[j].uid = uid;
+		uid++;
+	}
+	for(var k = 0; k < database.blades.length;k++){
+		database.blades[k].uid = uid;
+		uid++;
+	}
+	
+	
 	var motorArmMax = Number.NEGATIVE_INFINITY;
 	var motorBladeMax = Number.NEGATIVE_INFINITY;
 	database.motors.forEach(function(element){

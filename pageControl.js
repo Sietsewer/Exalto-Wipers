@@ -1,5 +1,6 @@
 /*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: true, mootools: false, prototypejs: false*/
 /*jslint browser: true*/
+/*globals limits, baseData*/
 
 var sectionOne = 	function(){return document.getElementById("unitsSettings");};
 var sectionTwo  = 	function(){return document.getElementById("windowSettings");};
@@ -7,25 +8,69 @@ var	sectionThree = 	function(){return document.getElementById("outputArea");};
 var sectionFour   = function(){return document.getElementById("printArea");};
 var data;
 
+function getWindowData () {
+	var wiperType = (document.getElementById("wiperType") || "").value;
+	var height = Number((document.getElementById("windowHeight") || "").value);
+	var width = Number((document.getElementById("windowTopWidth") || "").value);
+	var centreDistance = Number((document.getElementById("windowCentreDistance") || "").value);
+	var eyeLevel = Number((document.getElementById("windowEyeLevel") || "").value);
+	
+	var marginH  = Number((document.getElementById("marginH")  || "").value);
+	var marginVT = Number((document.getElementById("marginVT") || "").value);
+	var marginVB = Number((document.getElementById("marginVB") || "").value);
+	var marginC  = Number((document.getElementById("marginC")  || "").value);
+	
+	var units = (document.getElementById("windowBulkheadThickness") || "").value;
+	
+	var isInches = (units === "inch");
+	
+	if(isInches){
+		height /= 25.4;
+		width /= 25.4;
+		centreDistance /= 25.4;
+		eyeLevel /= 25.4;
+	
+		marginH /= 25.4;
+		marginVT /= 25.4;
+		marginVB /= 25.4;
+		marginC /= 25.4;
+	}
+	
+	baseData.windowRaw.width = width;
+	baseData.windowRaw.height = height
+	baseData.windowRaw.centreDistance = centreDistance;
+	baseData.windowRaw.marginH = marginH;
+	baseData.windowRaw.marginVT = marginVT;
+	baseData.windowRaw.marginVB = marginVB;
+	baseData.windowRaw.marginC = marginC;
+	baseData.windowRaw.wiperType = wiperType;
+	baseData.windowRaw.eyeLevel = eyeLevel;
+	
+	var aWidth = width - (marginH*2);
+	var aHeight = height - marginVB - marginVT;
+	var aCentreDistance = centreDistance + marginVT;
+	var aMarginC = marginC;
+	var isPantograph = wiperType === "pantograph";
+	var aEyeLevel = eyeLevel - marginVT;
+	
+	baseData.window.width = aWidth;
+	baseData.window.height = aHeight;
+	baseData.window.centreDistance = aCentreDistance;
+	baseData.window.marginC = aMarginC;
+	baseData.window.isPantograph = isPantograph;
+	baseData.window.eyeLevel = aEyeLevel;
+	
+	baseData.meta.isInches = isInches;
+}
 
 function fillTable (armLength, bladeLength, wipeAngle){
+	
+	getWindowData ();
+	
+	setWindowLimits();
+	
 	// Calc data
 	data = computeWiperset();
-	
-	if(armLength){
-		data.armLenth = armLength;
-	}
-	if(bladeLength){
-		data.bladeLength = bladeLength;
-	}
-	if(wipeAngle){
-		data.maxWiperAngle = wipeAngle;
-			// fix;
-	data.marginBelow = 30;
-	data.marginAbove = 30;
-	data.marginHorizontal = 30;
-	}
-	
 
 	
 	// Fill out data
@@ -37,9 +82,49 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	document.getElementById("marginAbove").textContent = SizeNotation(data.marginAbove);
 	document.getElementById("marginVerticalMovements").textContent = SizeNotation(data.marginVerticalMovement);
 	
+	var myLimits = limits.definiteList();
+	
+	var fArms = database.arms.where(function (a) {
+		var fitType = a.applType === ( !baseData.window.isPantograph ? "enkel" : "parallel");
+		var fitWindow =
+			((limits.window.armMax > a.lengthMin) &&
+			(limits.window.armMin < a.lengthMax) &&
+			(limits.window.bladeMax > a.bladeLengthMin) &&
+			(limits.window.bladeMin < a.bladeLengthMax));
+		
+		var fitMotor =!isFinite(limits.motor.armMax) || !isFinite(limits.motor.bladeMax) ||
+			(a.lengthMin < limits.motor.armMax && a.bladeLengthMin < limits.motor.bladeMax);
+		
+		var fitBlade = !isFinite(limits.blade.bladeLength) ||
+			(a.bladeLengthMin <= limits.blade.bladeLength <= a.bladeLengthMax);
+		
+		return fitWindow && fitMotor && fitBlade && fitType;
+
+	});
+	var fBlades = processBlades ();
+	
+	var fMotors = database.motors.where(function (a) {
+		
+		var fitType = baseData.window.isPantograph && a.hoh > 0;
+		
+		var fitWindow = ((limits.window.bladeMin < a.bladeMax) &&
+			(limits.window.bladeMin < a.bladeMax));
+		
+		var fitArm = !isFinite(limits.arm.armMin) || !isFinite(limits.arm.bladeMin) ||
+			(a.armMax > limits.arm.armMin && a.bladeMax > limits.arm.bladeMin);
+		
+		var fitBlade = !isFinite(limits.blade.bladeLength) || limits.blade.bladeLength < a.bladeMax;
+		
+		return fitType && fitWindow && fitArm && fitBlade;
+		/*
+		if(myLimits.bladeLength){
+			return a.bladeMax <= myLimits.bladeLength;
+		}
+		return myLimits.armMin < a.bladeMax;*/
+	});
 	
 	// Filter tables based on data
-	var fArms = database.arms.where(function (a) {
+	/*var fArms = database.arms.where(function (a) {
 		return a.lengthMax >= data.armLenth &&
 			a.lengthMin <= data.armLenth &&
 			a.bladeLengthMax >= data.bladeLength &&
@@ -51,23 +136,55 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	//});
 	var fMotors = database.motors.where(function (a) {
 		return a.armMax >= data.armLenth && a.bladeMax >= data.bladeLength;
-	});
+	});*/
 	
 	// Clear table
 	document.getElementById("arms").innerHTML   = "";
 	document.getElementById("blades").innerHTML = "";
 	document.getElementById("motors").innerHTML = "";
 
-	// Recreate tables
-	buildTable (fArms,
-				["armType", 	"lengthMin", 		"lengthMax", 	"bladeLengthMin", 	"bladeLengthMax", 	"bladeType",	"artNr"],
-				["Arm Type", 	"Arm Length Min", 	"Max", 			"Blade Length Min", "Max", 				"Blade Type", 	"Art. Nr."], "arms");
+	var onBladesClick = function(cont) {
+		if(cont.value === "0"){
+			limits.blade.bladeLength = NaN;
+		} else {
+			limits.blade.bladeLength = cont.myData.length;
+		}
+		
+		//var md = cont.myData;
+		//fillTable(md.optimalArmLength, md.length, md.wipeAngle * 57.295780181884765625);
+	};
 	
-	var onBladesClick = function () {var md = this.myData; fillTable(md.optimalArmLength, md.length, md.wipeAngle * 57.295780181884765625);};
+	var onArmsClick = function(cont) {
+		if(cont.value === "0"){
+			limits.arm.armMax = NaN;
+			limits.arm.armMin = NaN;
+			limits.arm.bladeMax = NaN;
+			limits.arm.bladeMin = NaN;
+		} else {
+			limits.arm.armMax = cont.myData.lengthMax;
+			limits.arm.armMin = cont.myData.lengthMin;
+			limits.arm.bladeMax = cont.myData.bladeLengthMax;
+			limits.arm.bladeMin = cont.myData.bladeLengthMin;
+		}
+	}
+	
+	var onMotorClick = function(cont) {
+		if(cont.value === "0"){
+			limits.motor.armMax = NaN;
+			limits.motor.bladeMax = NaN;
+		} else {
+			limits.motor.armMax = cont.myData.armMax;
+			limits.motor.bladeMax = cont.myData.bladeMax;
+		}
+	}
+	
+	// Recreate tables
+	buildTable (fArms, ["armType", "lengthMin", "lengthMax", "bladeLengthMin", "bladeLengthMax", "bladeType","artNr"], ["Arm Type", "Arm Length Min", "Max", "Blade Length Min", "Max", "Blade Type", "Art. Nr."], "arms", null, onArmsClick);
+	
 	
 	buildTable (fBlades, ["bladeType", "length", "artNr", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Blade Type", "Length", "Art. Nr.", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,null,null, function (val) {return SizeNotation(Number(val));}, function(val){return Math.round((Number(Number(val) * 57.295780181884765625)) * 10) / 10 + "°";}, function(val){return (Math.round(Number(val) * 10000) / 100)+"%";}], onBladesClick);
 
-	buildTable (fMotors, ["armMax", "bladeMax", "armType", "bladeType", "name"], ["Arm Max", "Blade Max", "Arm Type", "Blade Type", "Name"], "motors");
+	buildTable (fMotors, ["armMax", "bladeMax", "armType", "bladeType", "name"], ["Arm Max", "Blade Max", "Arm Type", "Blade Type", "Name"], "motors", null, onMotorClick);
 	
 	resizeCanvas(null);
 	drawSheme (data);
@@ -76,6 +193,37 @@ function fillTable (armLength, bladeLength, wipeAngle){
 		setPreviewImage(game.canvas.toDataURL());
 	});
 }
+
+function setWindowLimits () {
+	var maxBladeLength;
+	if (baseData.window.centreDistance - baseData.window.marginC < 0){
+		maxBladeLength = baseData.window.height + (baseData.window.centreDistance - baseData.window.marginC);
+	} else {
+		maxBladeLength = baseData.window.height;
+	}
+	
+	var minBladeLength = limits.database.bladeMin;
+	
+	var maxArmLength = baseData.window.height - (minBladeLength/2) + baseData.window.centreDistance;
+	
+	var minArmLength; 
+	if(baseData.window.centreDistance < baseData.window.marginC){
+		minArmLength = (minBladeLength/2) + baseData.window.marginC;
+	} else {
+		minArmLength = (minBladeLength/2) + baseData.window.centreDistance;
+	}
+	
+	limits.window.armMax = maxArmLength;
+	limits.window.armMin = minArmLength;
+	limits.window.bladeMax = maxBladeLength;
+	limits.window.bladeMin = minBladeLength;
+}
+
+function changedChoices () {
+	fillTable();
+}
+
+var selectedRadioInTables = {};
 
 function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 	var table;
@@ -89,8 +237,26 @@ function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 	
 	var row = document.createElement("tr");
 	
-	if(radioButtons){
-		row.appendChild(document.createElement("th"));
+	if(radioButtons){		
+		var radioHead = document.createElement("th");
+		var headButton = document.createElement("input");
+		headButton.type = "radio";
+		headButton.name = tableID;
+		headButton.value = 0;
+		headButton.myData = null;
+		headButton.onclick = function(){
+				selectedRadioInTables[this.name] = this.value;
+				radioButtons(this);
+				changedChoices ();
+			};
+		
+		if(selectedRadioInTables[tableID] === undefined || selectedRadioInTables[tableID] === 0){
+			headButton.checked = true;
+			selectedRadioInTables[tableID] = 0;
+		}
+		
+		radioHead.appendChild(headButton);
+		row.appendChild(radioHead);
 	}
 	
 	for (var k = 0; k < headers.length; k++) { // Iterate over columns
@@ -105,16 +271,25 @@ function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 
 	for (var i = 0; i < data.length; i++){ // Iterate over rows
 		
-
 		
 		row = document.createElement("tr");
 		
 		if(radioButtons){
+			
 			var rc = document.createElement("td");
-			var button = document.createElement("button");
-			button.type = "button";
+			var button = document.createElement("input");
+			button.type = "radio";
+			button.name = tableID;
+			button.value = data[i].uid;
 			button.myData = data[i];
-			button.onclick = radioButtons;
+			button.onclick = function(){
+				selectedRadioInTables[this.name] = this.value;
+				radioButtons(this);
+				changedChoices ();
+			};
+			if(selectedRadioInTables[tableID] === button.value){
+				button.checked = true;
+			}
 			rc.appendChild(button);
 			row.appendChild(rc);
 		}
@@ -135,7 +310,6 @@ function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 	sorttable.makeSortable(table);
 
 }
-
 
 function calculateSize (paperSize, dpi){
 	var paperHeight = 0;
