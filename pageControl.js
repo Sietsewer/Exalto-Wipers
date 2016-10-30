@@ -95,8 +95,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 		var fitMotor =!isFinite(limits.motor.armMax) || !isFinite(limits.motor.bladeMax) ||
 			(a.lengthMin < limits.motor.armMax && a.bladeLengthMin < limits.motor.bladeMax);
 		
-		var fitBlade = !isFinite(limits.blade.bladeLength) ||
-			(a.bladeLengthMin <= limits.blade.bladeLength <= a.bladeLengthMax);
+		var fitBlade = !isFinite(limits.blade.bladeLength) || ((a.bladeLengthMin <= limits.blade.bladeLength) && (limits.blade.bladeLength <= a.bladeLengthMax));
 		
 		return fitWindow && fitMotor && fitBlade && fitType;
 
@@ -113,7 +112,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 		var fitArm = !isFinite(limits.arm.armMin) || !isFinite(limits.arm.bladeMin) ||
 			(a.armMax > limits.arm.armMin && a.bladeMax > limits.arm.bladeMin);
 		
-		var fitBlade = !isFinite(limits.blade.bladeLength) || limits.blade.bladeLength < a.bladeMax;
+		var fitBlade = !isFinite(limits.blade.bladeLength) || limits.blade.bladeLength <= a.bladeMax;
 		
 		return fitType && fitWindow && fitArm && fitBlade;
 		/*
