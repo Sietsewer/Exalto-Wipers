@@ -190,7 +190,7 @@
       "isPantograph": false,
       "centreMounted": false,
       "artNr": null,
-      "name": "S-2745",
+      "name": "2103",
       "comment": null,
       "range": "KW"
     },
@@ -206,7 +206,7 @@
       "isPantograph": false,
       "centreMounted": false,
       "artNr": null,
-      "name": "S-4560",
+      "name": "2106",
       "comment": null,
       "range": "KW"
     },
@@ -222,7 +222,7 @@
       "isPantograph": false,
       "centreMounted": false,
       "artNr": null,
-      "name": "S-6575",
+      "name": "2109",
       "comment": null,
       "range": "KW"
     },
@@ -238,7 +238,7 @@
       "isPantograph": false,
       "centreMounted": false,
       "artNr": null,
-      "name": "I.M.W. Wiperarm single",
+      "name": "2107",
       "comment": null,
       "range": "LD"
     },
@@ -254,7 +254,7 @@
       "isPantograph": true,
       "centreMounted": false,
       "artNr": null,
-      "name": "I.M.W. Wiperarm 610mm",
+      "name": "2108",
       "comment": null,
       "range": "LD"
     },
@@ -270,7 +270,7 @@
       "isPantograph": false,
       "centreMounted": false,
       "artNr": null,
-      "name": "SS304 single 450mm",
+      "name": "21581118",
       "comment": null,
       "range": "LD"
     },
@@ -286,7 +286,7 @@
       "isPantograph": false,
       "centreMounted": false,
       "artNr": null,
-      "name": "SS304 single 600mm",
+      "name": "21581124",
       "comment": null,
       "range": "LD"
     },
@@ -302,7 +302,7 @@
       "isPantograph": true,
       "centreMounted": false,
       "artNr": null,
-      "name": "SS304 double 450mm",
+      "name": "21581318",
       "comment": null,
       "range": "LD"
     },
@@ -318,7 +318,7 @@
       "isPantograph": true,
       "centreMounted": false,
       "artNr": null,
-      "name": "SS304 double 600mm",
+      "name": "21581324",
       "comment": null,
       "range": "LD"
     },
@@ -359,22 +359,6 @@
       "lengthMin": 750.0,
       "lengthMax": 1000.0,
       "hoh": 60.0,
-      "bladeLengthMin": 900.0,
-      "bladeLengthMax": 1200.0,
-      "bladeType": null,
-      "applType": null,
-      "isPantograph": true,
-      "centreMounted": false,
-      "artNr": null,
-      "name": "2142.BP",
-      "comment": null,
-      "range": "HD1"
-    },
-    {
-      "armType": "P10",
-      "lengthMin": 750.0,
-      "lengthMax": 1000.0,
-      "hoh": 60.0,
       "bladeLengthMin": 300.0,
       "bladeLengthMax": 800.0,
       "bladeType": null,
@@ -399,22 +383,6 @@
       "centreMounted": false,
       "artNr": null,
       "name": "2142.SAS",
-      "comment": null,
-      "range": "HD1"
-    },
-    {
-      "armType": "P10",
-      "lengthMin": 750.0,
-      "lengthMax": 1000.0,
-      "hoh": 60.0,
-      "bladeLengthMin": 300.0,
-      "bladeLengthMax": 800.0,
-      "bladeType": null,
-      "applType": null,
-      "isPantograph": true,
-      "centreMounted": false,
-      "artNr": null,
-      "name": "2142.SP",
       "comment": null,
       "range": "HD1"
     },

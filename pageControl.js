@@ -85,7 +85,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	var myLimits = limits.definiteList();
 	
 	var fArms = database.arms.where(function (a) {
-		var fitType = baseData.window.isPantograph && a.isPantograph;
+		var fitType = baseData.window.isPantograph === a.isPantograph;
 		var fitWindow =
 			((limits.window.armMax > a.lengthMin) &&
 			(limits.window.armMin < a.lengthMax) &&
@@ -104,7 +104,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	
 	var fMotors = database.motors.where(function (a) {
 		
-		var fitType = baseData.window.isPantograph && a.hoh > 0;
+		var fitType = (baseData.window.isPantograph && a.isPantograph) || (!baseData.window.isPantograph && a.isPendulum);
 		
 		var fitWindow = ((limits.window.bladeMin < a.bladeMax) &&
 			(limits.window.bladeMin < a.bladeMax));
