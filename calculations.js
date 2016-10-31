@@ -38,17 +38,22 @@ var limits = {
 		"bladeMin":Number.POSITIVE_INFINITY,
 		"bladeMax":Number.NEGATIVE_INFINITY,
 		"armMin":Number.POSITIVE_INFINITY,
-		"armMax":Number.NEGATIVE_INFINITY
+		"armMax":Number.NEGATIVE_INFINITY,
+		"hoh":null,
+		"centreMounted":null
 	},
 	"blade":{
-		"bladeLength":null
+		"bladeLength":NaN,
+		"maxArmLength":NaN,
+		"minArmLength":NaN
 	},
 	"motor":{
 		"angleMin":Number.POSITIVE_INFINITY,
 		"angleMax":Number.NEGATIVE_INFINITY,
 		"angleStages":null,
 		"armMax":Number.NEGATIVE_INFINITY,
-		"bladeMax":Number.NEGATIVE_INFINITY
+		"bladeMax":Number.NEGATIVE_INFINITY,
+		"hoh":null
 	},
 	"database":{
 		"bladeMin":Number.POSITIVE_INFINITY,
@@ -117,7 +122,7 @@ var limits = {
 		}
 		
 		// max
-		retVar.angleMax = this.database.angleMin;
+		retVar.angleMax = this.database.angleMax;
 		if(retVar.angleMax >= this.motor.angleMax && isFinite(this.motor.angleMax)){
 			retVar.angleMax = this.motor.angleMax;
 		}
@@ -176,6 +181,8 @@ function gatherData () {
 	formData = data;
 	return data;
 }
+
+
 
 function convertToMM (data) {
 	data.windowData.height = inchToMM(data.windowData.height);
@@ -626,6 +633,31 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 		if(!isFinite(retVar)){
 			return 0;
 		}
+		
+		if(isFinite(processLimits.angleMax) && isFinite(processLimits.angleMin)){
+			if(retVar > (processLimits.angleMax * (Math.PI/180))){
+				return processLimits.angleMax * (Math.PI/180);
+			}else if (retVar < (processLimits.angleMin * (Math.PI/180))){
+				return 0;
+			}
+			
+			if(isFinite(processLimits.angleStages) && (processLimits.angleStages > 0)){
+				
+				retVar *= 180/Math.PI;								
+				var stage = processLimits.angleStages;
+				var min = processLimits.angleMin;
+				var max = processLimits.angleMax;
+				retVar -= min;
+				retVar /= stage;
+				retVar = Math.round(retVar);
+				retVar *= stage;
+				retVar += min;
+				retVar *= Math.PI/180;
+			}
+		}
+		
+		
+		
 		return retVar;
 		
 	} else {
@@ -657,6 +689,31 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 		if(!isFinite(retVar)){
 			return 0;
 		}
+		
+		if(isFinite(processLimits.angleMax) && isFinite(processLimits.angleMin)){
+			if(retVar > (processLimits.angleMax * (Math.PI/180))){
+				return processLimits.angleMax * (Math.PI/180);
+			}else if (retVar < (processLimits.angleMin * (Math.PI/180))){
+				return 0;
+			}
+			
+			if(isFinite(processLimits.angleStages) && (processLimits.angleStages > 0)){
+				
+				retVar *= 180/Math.PI;								
+				var stage = processLimits.angleStages;
+				var min = processLimits.angleMin;
+				var max = processLimits.angleMax;
+				retVar -= min;
+				retVar /= stage;
+				retVar = Math.round(retVar);
+				retVar *= stage;
+				retVar += min;
+				retVar *= Math.PI/180;
+			}
+		}
+		
+		
+		
 		return retVar;
 	}
 }
@@ -713,7 +770,18 @@ function fLerp (min, max, f) {
 
 function getBladeLengths (max, min) {
 	return database.blades.where(function (a) {
-		return a.length >= min && a.length <= max;
+		var maxArmLength = baseData.window.height - (a.length / 2) + baseData.window.centreDistance;
+		var minArmLength = (a.length / 2) + (baseData.window.centreDistance > 0 ? baseData.window.centreDistance : 0);
+		
+		if (processLimits.armMax < maxArmLength){
+			maxArmLength = processLimits.armMax;
+		}
+	
+		if (processLimits.armMin > minArmLength){
+			minArmLength = processLimits.armMin;
+		}
+		
+		return a.length >= min && a.length <= max && (maxArmLength > minArmLength);
 	});
 }
 
@@ -739,7 +807,7 @@ function processBlades (){
 		bl[i].wipeAngle = getWipeAngle (baseData.window.isPantograph, width, height, bl[i].optimalArmLength, bl[i].length, vOffset);
 		bl[i].wipePercentage = getWipePercentage (baseData.window.isPantograph, bl[i].optimalArmLength, bl[i].length, bl[i].wipeAngle, width, height, vOffset);
 		
-		if(bl[i].wipePercentage > 0.001 && bl[i].wipeAngle > 0.001){
+		if((bl[i].wipePercentage > 0.001) && (bl[i].wipeAngle > 0.001)){
 			out.push(bl[i]);
 		}
 	}

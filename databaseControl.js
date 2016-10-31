@@ -59,6 +59,11 @@ function databaseLoaded(){
 	
 	var motorArmMax = Number.NEGATIVE_INFINITY;
 	var motorBladeMax = Number.NEGATIVE_INFINITY;
+	
+	var motorAngleMax = Number.NEGATIVE_INFINITY;
+	var motorAngleMin = Number.POSITIVE_INFINITY;
+	var motorAngleStages = 0;
+	
 	database.motors.forEach(function(element){
 		if(motorArmMax <= element.armMax){
 			motorArmMax = element.armMax;
@@ -66,8 +71,14 @@ function databaseLoaded(){
 		if(motorBladeMax <= element.bladeMax){
 			motorBladeMax = element.bladeMax;
 		}
-		// Implement angle min max
-	});
+		
+		if(element.angleMax > motorAngleMax){
+			motorAngleMax = element.angleMax;
+		}
+		if(element.angleMin < motorAngleMax){
+			motorAngleMin = element.angleMin;
+		}
+		});
 	
 	var armBladeMin = Number.POSITIVE_INFINITY;
 	var armBladeMax = Number.NEGATIVE_INFINITY;
@@ -112,6 +123,9 @@ function databaseLoaded(){
 	if(armBladeMax < limits.database.bladeMax){
 		limits.database.bladeMax = armBladeMax;
 	}
+	
+	limits.database.angleMax = motorAngleMax;
+	limits.database.angleMin = motorAngleMin;
 }
 
 function getWithinColumns(collection, lableMin, lableMax, value) {
