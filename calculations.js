@@ -134,6 +134,43 @@ var limits = {
 	}
 };
 
+function resetLimits () {
+	limits.window = {
+		"bladeMin":Number.POSITIVE_INFINITY,
+		"bladeMax":Number.NEGATIVE_INFINITY,
+		"armMin":Number.POSITIVE_INFINITY,
+		"armMax":Number.NEGATIVE_INFINITY
+	};
+	limits.arm = {
+		"bladeMin":Number.POSITIVE_INFINITY,
+		"bladeMax":Number.NEGATIVE_INFINITY,
+		"armMin":Number.POSITIVE_INFINITY,
+		"armMax":Number.NEGATIVE_INFINITY,
+		"hoh":null,
+		"centreMounted":null
+	}
+	limits.blade = {
+		"bladeLength":NaN,
+		"maxArmLength":NaN,
+		"minArmLength":NaN
+	};
+	limits.motor={
+		"angleMin":Number.POSITIVE_INFINITY,
+		"angleMax":Number.NEGATIVE_INFINITY,
+		"angleStages":null,
+		"armMax":Number.NEGATIVE_INFINITY,
+		"bladeMax":Number.NEGATIVE_INFINITY,
+		"hoh":null
+	};
+	limits.database={
+		"bladeMin":Number.POSITIVE_INFINITY,
+		"bladeMax":Number.NEGATIVE_INFINITY,
+		"armMin":Number.POSITIVE_INFINITY,
+		"armMax":Number.NEGATIVE_INFINITY,
+		"angleMin":Number.POSITIVE_INFINITY,
+		"angleMax":Number.NEGATIVE_INFINITY
+	};
+}
 function gatherData () {
 	var data = new DataSet (
 		new Contact (
@@ -781,7 +818,7 @@ function getBladeLengths (max, min) {
 			minArmLength = processLimits.armMin;
 		}
 		
-		return a.length >= min && a.length <= max && (maxArmLength > minArmLength);
+		return a.length >= min && a.length <= max && (maxArmLength >= minArmLength);
 	});
 }
 

@@ -192,12 +192,12 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	}
 	
 	// Recreate tables
-	buildTable (fArms, ["armType", "lengthMin", "lengthMax", "bladeLengthMin", "bladeLengthMax", "bladeType","artNr"], ["Arm Type", "Arm Length Min", "Max", "Blade Length Min", "Max", "Blade Type", "Art. Nr."], "arms", null, onArmsClick);
+	buildTable (fArms, ["range", "name", "lengthMin", "lengthMax", "bladeLengthMin", "bladeLengthMax", "hoh"], ["Range", "Art. Nr.", "Arm Min.", "Arm Max.", "Blade Min.", "Blade Max.", "Centre Distance"], "arms", null, onArmsClick);
 	
 	
-	buildTable (fBlades, ["bladeType", "length", "artNr", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Blade Type", "Length", "Art. Nr.", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,null,null, function (val) {return SizeNotation(Number(val));}, function(val){return Math.round((Number(Number(val) * 57.295780181884765625)) * 10) / 10 + "°";}, function(val){return (Math.round(Number(val) * 10000) / 100)+"%";}], onBladesClick);
+	buildTable (fBlades, ["range", "artNr", "length", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Range", "Art. Nr.", "Length", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,null,null, function (val) {return SizeNotation(Number(val));}, function(val){return Math.round((Number(Number(val) * 57.295780181884765625)) * 10) / 10 + "°";}, function(val){return (Math.round(Number(val) * 10000) / 100)+"%";}], onBladesClick);
 
-	buildTable (fMotors, ["armMax", "bladeMax", "armType", "bladeType", "name"], ["Arm Max", "Blade Max", "Arm Type", "Blade Type", "Name"], "motors", null, onMotorClick);
+	buildTable (fMotors, ["range", "name", "hoh", "armMax", "bladeMax", "angleMin", "angleMax", "angleStep"], ["Range", "Art. Nr.", "Centre Distance", "Arm Max", "Blade Max", "Min. Angle", "Max. Angle", "Angle Step"], "motors", null, onMotorClick);
 	
 	resizeCanvas(null);
 	drawSheme (data);
@@ -558,6 +558,7 @@ function p3Previous(){
 	sectionTwo().style.display = "block";
 	sectionThree().style.display = "none";
 	sectionFour().style.display = "none";
+	selectedRadioInTables ={};
 }
 
 function p3Next(){
