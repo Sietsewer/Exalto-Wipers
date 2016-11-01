@@ -93,6 +93,8 @@
 					</div>
 						<p id="window-eyelevel-error-small" style="display:none;" class="error">Eye Level is incorrect.</p>
 						<p id="window-eyelevel-error-large" style="display:none;" class="error">Eye Level is incorrect.</p>
+					<div><i>For zero or empty, no Eye Level is considered</i></div>
+
     	            <!-- <label>Bulkhead Thickness</label>
     	            <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
     	        </form>
@@ -130,7 +132,15 @@
 						<p id="margin-c-error-large" style="display:none;" class="error">Centre margin is too large.</p>
     	            <!-- <label>Bulkhead Thickness</label>
     	            <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
-    	        </form>
+    	        	<div>
+						<label>Eye Level Margin (%)</label>
+						<span><input type="number"  name="marginC" id="marginEyeLevel" value="33" /></span>
+					</div>
+						<p id="margin-eyelevel-error-small" style="display:none;" class="error">Eye level margin is too small.</p>
+						<p id="margin-eyelevel-error-large" style="display:none;" class="error">Eye level margin is too large.</p>
+						
+						<div><i>The percentage of Blade Length the Arm Length may diverge from the Eye Level.</i></div>
+					</form>
 			</div>
 				<span>
 					<button onclick="p2Previous()" class="button-sidebyside">previous</button>

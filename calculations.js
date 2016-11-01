@@ -11,7 +11,8 @@ var baseData = {
 		"marginVB":null,
 		"marginC":null,
 		"wiperType":null,
-		"eyeLevel":null
+		"eyeLevel":null,
+		"eyeLevelMargin":null
 	},
 	"window":{
 		"width":null,
@@ -19,7 +20,8 @@ var baseData = {
 		"centreDistance":null,
 		"marginC":null,
 		"isPantograph":null,
-		"eyeLevel":null
+		"eyeLevel":null,
+		"eyeLevelMargin":null
 	},
 	"meta":{
 		"isInches":null
@@ -771,6 +773,14 @@ function getOptimalArmLength (isPantograph, bladeLength, angleLimit, width, heig
 		minArmLength = processLimits.armMin;
 	}
 	
+	var maxArmEL = baseData.window.eyeLevel + (((baseData.window.eyeLevelMargin/100) * bladeLength)/2) + baseData.window.centreDistance;
+	
+	var minArmEL = baseData.window.eyeLevel - (((baseData.window.eyeLevelMargin/100) * bladeLength)/2) + baseData.window.centreDistance;
+	
+	maxArmLength = maxArmLength > maxArmEL ? maxArmEL : maxArmLength;
+	minArmLength = minArmLength < minArmEL ? minArmEL : minArmLength;
+	
+	
 	//var processLimits = limits.definiteList;
 	//var maxArmLength = processLimits.armMax;
 	//var minArmLength = processLimits.armMin;
@@ -850,7 +860,7 @@ function processBlades (){
 	}
 	
 	console.log("Done!");
-	return bl;
+	return out;
 }
 
 function calcFinal (){

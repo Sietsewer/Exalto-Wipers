@@ -13,12 +13,13 @@ function getWindowData () {
 	var height = Number((document.getElementById("windowHeight") || "").value);
 	var width = Number((document.getElementById("windowTopWidth") || "").value);
 	var centreDistance = Number((document.getElementById("windowCentreDistance") || "").value);
-	var eyeLevel = Number((document.getElementById("windowEyeLevel") || "").value);
+	var eyeLevel = document.getElementById("windowEyeLevel").value;
 	
 	var marginH  = Number((document.getElementById("marginH")  || "").value);
 	var marginVT = Number((document.getElementById("marginVT") || "").value);
 	var marginVB = Number((document.getElementById("marginVB") || "").value);
 	var marginC  = Number((document.getElementById("marginC")  || "").value);
+	var marginEyeLevel = Number((document.getElementById("marginEyeLevel") || "").value);
 	
 	var units = (document.getElementById("windowBulkheadThickness") || "").value;
 	
@@ -45,6 +46,7 @@ function getWindowData () {
 	baseData.windowRaw.marginC = marginC;
 	baseData.windowRaw.wiperType = wiperType;
 	baseData.windowRaw.eyeLevel = eyeLevel;
+	baseData.windowRaw.eyeLevelMargin = marginEyeLevel;
 	
 	var aWidth = width - (marginH*2);
 	var aHeight = height - marginVB - marginVT;
@@ -53,15 +55,29 @@ function getWindowData () {
 	var isPantograph = wiperType === "pantograph";
 	var aEyeLevel = eyeLevel - marginVT;
 	
+	if (!isFinite(eyeLevel) || (0 === Number(eyeLevel))){
+		aEyeLevel = NaN;
+	} else {
+		if(aEyeLevel > aHeight){
+			aEyeLevel = aHeight;
+		} else if (aEyeLevel < 0){
+			aEyeLevel = 0;
+		}
+	}
+	
 	baseData.window.width = aWidth;
 	baseData.window.height = aHeight;
 	baseData.window.centreDistance = aCentreDistance;
 	baseData.window.marginC = aMarginC;
 	baseData.window.isPantograph = isPantograph;
 	baseData.window.eyeLevel = aEyeLevel;
+	baseData.window.eyeLevelMargin = marginEyeLevel;
 	
 	baseData.meta.isInches = isInches;
 }
+
+	var filteredBladesMax = 0;
+
 
 function fillTable (armLength, bladeLength, wipeAngle){
 	
@@ -84,24 +100,6 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	
 	var myLimits = limits.definiteList();
 	
-	var fArms = database.arms.where(function (a) {
-		var fitType = baseData.window.isPantograph === a.isPantograph;
-		var fitWindow =
-			((limits.window.armMax > a.lengthMin) &&
-			(limits.window.armMin < a.lengthMax) &&
-			(limits.window.bladeMax > a.bladeLengthMin) &&
-			(limits.window.bladeMin < a.bladeLengthMax));
-		
-		var fitMotor =!isFinite(limits.motor.armMax) || !isFinite(limits.motor.bladeMax) || !isFinite(limits.motor.hoh) ||
-			(a.lengthMin < limits.motor.armMax && a.bladeLengthMin < limits.motor.bladeMax && a.hoh === limits.motor.hoh);
-		
-		var fitBlade = !isFinite(limits.blade.bladeLength) || !isFinite(limits.blade.maxArmLength) || !isFinite(limits.blade.minArmLength) || ((a.bladeLengthMin <= limits.blade.bladeLength) && (limits.blade.bladeLength <= a.bladeLengthMax) && (a.lengthMin <= limits.blade.maxArmLength) && a.lengthMax > limits.blade.minArmLength);
-		
-		return fitWindow && fitMotor && fitBlade && fitType;
-
-	});
-	var fBlades = processBlades ();
-	
 	var fMotors = database.motors.where(function (a) {
 		
 		var fitType = (baseData.window.isPantograph && a.isPantograph) || (!baseData.window.isPantograph && a.isPendulum);
@@ -121,6 +119,34 @@ function fillTable (armLength, bladeLength, wipeAngle){
 		}
 		return myLimits.armMin < a.bladeMax;*/
 	});
+	
+	var fBlades = processBlades ();
+	
+	
+	fBlades.forEach(function (e) {
+		if (e.length > filteredBladesMax){
+			filteredBladesMax = e.length;
+		}
+	});
+	
+	var fArms = database.arms.where(function (a) {
+		var fitType = baseData.window.isPantograph === a.isPantograph;
+		var fitWindow =
+			((limits.window.armMax > a.lengthMin) &&
+			(limits.window.armMin < a.lengthMax) &&
+			(limits.window.bladeMax > a.bladeLengthMin) &&
+			(limits.window.bladeMin < a.bladeLengthMax));
+		
+		var fitMotor =!isFinite(limits.motor.armMax) || !isFinite(limits.motor.bladeMax) || !isFinite(limits.motor.hoh) ||
+			(a.lengthMin < limits.motor.armMax && a.bladeLengthMin < limits.motor.bladeMax && a.hoh === limits.motor.hoh);
+		
+		var fitBlade = !isFinite(limits.blade.bladeLength) || !isFinite(limits.blade.maxArmLength) || !isFinite(limits.blade.minArmLength) || ((a.bladeLengthMin <= limits.blade.bladeLength) && (limits.blade.bladeLength <= a.bladeLengthMax) && (a.lengthMin <= limits.blade.maxArmLength) && a.lengthMax > limits.blade.minArmLength);
+		
+		return fitWindow && fitMotor && fitBlade && fitType && (filteredBladesMax > a.bladeLengthMin);
+
+	});
+	
+	
 	
 	// Filter tables based on data
 	/*var fArms = database.arms.where(function (a) {
@@ -151,6 +177,16 @@ function fillTable (armLength, bladeLength, wipeAngle){
 			limits.blade.bladeLength = cont.myData.length;
 			limits.blade.maxArmLength = maxArmForBlade(cont.myData.length);
 			limits.blade.minArmLength = minArmForBlade(cont.myData.length);
+			
+			var maxArmEL = baseData.window.eyeLevel + (((baseData.window.eyeLevelMargin/100) * cont.myData.length)/2) + baseData.window.centreDistance;
+	
+			var minArmEL = baseData.window.eyeLevel - (((baseData.window.eyeLevelMargin/100) * cont.myData.length)/2) + baseData.window.centreDistance;
+	
+			limits.blade.maxArmLength = limits.blade.maxArmLength > maxArmEL ? maxArmEL : limits.blade.maxArmLength;
+			limits.blade.minArmLength = limits.blade.minArmLength < minArmEL ? minArmEL : limits.blade.minArmLength;
+
+			
+			
 		}
 		
 		//var md = cont.myData;
@@ -164,12 +200,14 @@ function fillTable (armLength, bladeLength, wipeAngle){
 			limits.arm.bladeMax = NaN;
 			limits.arm.bladeMin = NaN;
 			limits.arm.hoh = NaN;
+			limits.arm.centreMounted = null;
 		} else {
 			limits.arm.armMax = cont.myData.lengthMax;
 			limits.arm.armMin = cont.myData.lengthMin;
 			limits.arm.bladeMax = cont.myData.bladeLengthMax;
 			limits.arm.bladeMin = cont.myData.bladeLengthMin;
 			limits.arm.hoh = cont.myData.hoh;
+			limits.arm.centreMounted = cont.myData.centreMounted;
 		}
 	}
 	
@@ -225,6 +263,16 @@ function setWindowLimits () {
 	} else {
 		minArmLength = (minBladeLength/2) + baseData.window.centreDistance;
 	}
+	
+	// for eyeLevel
+	
+	var maxArmEL = baseData.window.eyeLevel + (((baseData.window.eyeLevelMargin/100) * limits.database.bladeMax)/2) + baseData.window.centreDistance;
+	
+	var minArmEL = baseData.window.eyeLevel - (((baseData.window.eyeLevelMargin/100) * limits.database.bladeMax)/2) + baseData.window.centreDistance;
+	
+	maxArmLength = maxArmLength > maxArmEL ? maxArmEL : maxArmLength;
+	minArmLength = minArmLength < minArmEL ? minArmEL : minArmLength;
+	
 	
 	limits.window.armMax = maxArmLength;
 	limits.window.armMin = minArmLength;
@@ -487,7 +535,7 @@ function inputError () {
 	if(wh <= 200){
 		showError(errHeightSmall);
 		errored = true;
-	} else if (wh >= 10000) {
+	} else if (wh >= 2*(limits.database.armMax + (limits.database.bladeMax/2))) {
 		showError(errHeightLarge);
 		errored = true;
 	}
@@ -517,10 +565,10 @@ function inputError () {
 	// eyelevel
 	var we = isMM ? Number(document.getElementById("windowEyeLevel").value) : Number(document.getElementById("windowEyeLevel").value * 25.4);
 	
-	if (we !== 0 && we < wh / 2){
+	if ((we !== 0) && (we < limits.database.bladeMin)){
 		showError(errEyelevelSmall);
 		errored = true;
-	} else if (we !== 0 && we > wh * 0.95) {
+	} else if ((we !== 0) && we > wh - limits.database.bladeMin) {
 		showError(errEyeLevelLarge);
 		errored = true;
 	}

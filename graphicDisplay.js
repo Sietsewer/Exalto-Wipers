@@ -161,6 +161,7 @@ function loadAssets (){
 	game.load.bitmapFont('arial', 'assets/arial.png', 'assets/arial.fnt');
 	game.load.image('arm_sprite','assets/wiperSprite_arm_top.png');
 	game.load.image('arm_fixture','assets/wiperSprite_blade_pantograph_fixture.png');
+	game.load.image('arm_fixture_centred','assets/wiperSprite_blade_pantograph_fixture_centred.png');
 	game.load.image('blade','assets/wiperSprite_blade_base.png');
 	
 }
@@ -290,8 +291,8 @@ function drawWipedArea (visGraphics, maskGraphics, wiperType, point, angle, blad
 		
 		visGraphics.beginFill(0xffffff);
 		visGraphics.arc(xPos + (hOffset / pixelSize), bottomHeight, distance / pixelSize, game.math.degToRad(90 - (angle / 2)),game.math.degToRad(90 + (angle / 2)));
-		visGraphics.lineTo(pointAx, pointAy);
-		visGraphics.lineTo(pointBx, pointBy);
+		visGraphics.lineTo(pointAx, pointAy + ((bladeLength/2) / pixelSize));
+		visGraphics.lineTo(pointBx, pointBy + ((bladeLength/2) / pixelSize));
 		visGraphics.endFill();
 	}
 }
@@ -301,6 +302,11 @@ function drawWiperArm (graphics, PstartX, PstartY, angle, length, fillColor, alp
 	
 	var startX = PstartX / pixelSize;
 	var startY = PstartY / pixelSize;
+	
+	var armOffset = 0;
+	if(limits.arm.centreMounted){
+		armOffset = (limits.arm.hoh/2)/pixelSize;
+	}
 	
 	var endX = (Math.sin(game.math.degToRad(-angle)) * (length / pixelSize)) + startX;
 	var endY = (Math.cos(game.math.degToRad(-angle)) * (length / pixelSize)) + startY;
@@ -317,21 +323,31 @@ function drawWiperArm (graphics, PstartX, PstartY, angle, length, fillColor, alp
 	bladeSpriteGroup.add(bladeSprite);
 	bladeSprite.anchor.x = 0.5;
 	bladeSprite.anchor.y = 0.5;
+
+	
+	var armScale = (0.5/475) * (limits.arm.armMin / pixelSize);
+	
+	if (limits.arm.armMax === limits.arm.armMin) {
+		var armScale = (0.5/475) * ((limits.arm.armMin/3) / pixelSize);
+	}
+	
+	var armThickness = armScale * 24;
 	
 	if(isPantograph){
+		
 		bladeSprite.angle = 90;
 		
-		var dist = Number(parallelDistance) / pixelSize;
+		var dist = Number(limits.arm.hoh) / pixelSize;
 		
-		var fixtureSprite = game.add.sprite(endX, endY, "arm_fixture");
+		var fixtureSprite = game.add.sprite(endX+armOffset, endY, limits.arm.centreMounted ? "arm_fixture_centred" : "arm_fixture");
 		fixtureSprite.scale.setTo((1/160) * (dist),(1/160) * (dist));
 		fixtureSprite.anchor.x = 0.75;
 		fixtureSprite.anchor.y = 0.5;
 		bladeSpriteGroup.add(fixtureSprite);
 		// Second arm
 		
-		var pArmSprite = game.add.sprite(startX - dist, startY, "arm_sprite");
-		pArmSprite.scale.setTo(1/pixelSize * 1, 1/pixelSize * 1);
+		var pArmSprite = game.add.sprite(startX - dist+armOffset, startY, "arm_sprite");
+		pArmSprite.scale.setTo(armScale, armScale);
 		if(fillColor !== null){
 			pArmSprite.tint = fillColor;
 		}
@@ -346,27 +362,27 @@ function drawWiperArm (graphics, PstartX, PstartY, angle, length, fillColor, alp
 		pArmSprite.angle = angle + 90;
 		
 		graphics.beginFill(lineColor);
-		graphics.drawCircle(endX-dist, endY, (1/pixelSize) * 20);
+		graphics.drawCircle(endX-dist+armOffset, endY, armThickness + ((1/pixelSize) * 2));//(1/pixelSize) * 20);
 		//graphics.endFill();
 	
-		graphics.moveTo(startX-dist, startY);
-		graphics.lineStyle((1/pixelSize) * 20, lineColor);
-		graphics.lineTo(endX-dist, endY);
+		graphics.moveTo(startX-dist+armOffset, startY);
+		graphics.lineStyle(armThickness + ((1/pixelSize) * 2), lineColor);
+		graphics.lineTo(endX-dist+armOffset, endY);
 	
-		graphics.moveTo(startX-dist, startY);
-		graphics.lineStyle((1/pixelSize) * 18, fillColor);
-		graphics.lineTo(endX-dist, endY);
+		graphics.moveTo(startX-dist+armOffset, startY);
+		graphics.lineStyle(armThickness, fillColor);
+		graphics.lineTo(endX-dist+armOffset, endY);
 	
 		graphics.lineStyle(0);
 	
 		graphics.beginFill(fillColor);
-		graphics.drawCircle(endX-dist, endY, (1/pixelSize) * 18);
+		graphics.drawCircle(endX-dist+armOffset, endY, armThickness );
 	}else{
 		bladeSprite.angle = angle + 90;
 	}
 	
-	var armSprite = game.add.sprite(startX, startY, "arm_sprite");
-	armSprite.scale.setTo(1/pixelSize * 1, 1/pixelSize * 1);
+	var armSprite = game.add.sprite(startX+armOffset, startY, "arm_sprite");
+	armSprite.scale.setTo(armScale, armScale);
 	if(fillColor !== null){
 		armSprite.tint = fillColor;
 	}
@@ -381,21 +397,21 @@ function drawWiperArm (graphics, PstartX, PstartY, angle, length, fillColor, alp
 	armSprite.angle = angle + 90;
 		
 	graphics.beginFill(lineColor);
-	graphics.drawCircle(endX, endY, (1/pixelSize) * 20);
+	graphics.drawCircle(endX+armOffset, endY,  armThickness + ((1/pixelSize) * 2));
 	//graphics.endFill();
 	
-	graphics.moveTo(startX, startY);
-	graphics.lineStyle((1/pixelSize) * 20, lineColor);
-	graphics.lineTo(endX, endY);
+	graphics.moveTo(startX+armOffset, startY);
+	graphics.lineStyle( armThickness + ((1/pixelSize) * 2), lineColor);
+	graphics.lineTo(endX+armOffset, endY);
 	
-	graphics.moveTo(startX, startY);
-	graphics.lineStyle((1/pixelSize) * 18, fillColor);
-	graphics.lineTo(endX, endY);
+	graphics.moveTo(startX+armOffset, startY);
+	graphics.lineStyle(armThickness, fillColor);
+	graphics.lineTo(endX+armOffset, endY);
 	
 	graphics.lineStyle(0);
 	
 	graphics.beginFill(fillColor);
-	graphics.drawCircle(endX, endY, (1/pixelSize) * 18);
+	graphics.drawCircle(endX+armOffset, endY, armThickness);
 	//graphics.endFill();
 	
 	//graphics.beginFill(fillColor2);
@@ -487,7 +503,9 @@ function drawSheme (data) {
 	
 	var final = calcFinal();
 	
-	if(final !== null){
+	var hasHoH = isFinite(limits.arm.hoh) && (limits.arm.hoh > 0);
+	
+	if(final !== null && (hasHoH || !(baseData.window.isPantograph))){
 		
 		
 		drawWipedArea(wiperMarkVisible, wiperMarkMask, baseData.windowRaw.wiperType, wiperOrigin, final.wipeAngle, final.length, 0, final.optimalArmLength);
