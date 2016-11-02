@@ -228,15 +228,37 @@
 			</div>
 			
 			<div id="printArea" class="inputForm" style="display: none;">
+				
+				<div>
+					<h2>
+						Project information
+					</h2>
+					<form id="project">
+						<div>
+							<label>Date</label>
+							<span><input type="date" id="pDate" name="pDate" /></span>
+						</div>
+						<div>
+							<label>Project Reference</label>
+							<span><input type="text" id="pReference" name="pReference" /></span>
+						</div>
+						<div>
+							<label>Client Name</label>
+							<span><input type="text" id="pName" name="pName" /></span>
+						</div>
+					</form>
+				</div>				
 				<h2>Print settings</h2>
 				<form id="canvasSettings">
-					
+					<div>
 					<select id="paperDpi">		
-						<option value="72">Web (72)</option>
-						<option selected value="200">Printer (200)</option>
-						<option value="300">Printer (300)</option>
+						<option value="72">Web (72 DPI)</option>
+						<option selected value="200">Printer (200 DPI)</option>
+						<option value="300">Printer (300 DPI)</option>
 						<!--<option value="600">Printer (600)</option>-->
 					</select>
+					</div>
+					<div>
 					<select id="paperSize">
 						<option value="841x1189mm">ISO A0</option>
 						<option value="594x841mm">ISO A1</option>
@@ -296,6 +318,7 @@
 						<option value="430x560mm">CAN P2</option>
 						<option value="560x860mm">CAN P1</option>
 					</select>
+					</div>
 					<div>
 					<span><input type="checkbox" id="pdf-include-table" name="includeTable" value="table" /><label>Include possible part table</label></span>
 						</div>

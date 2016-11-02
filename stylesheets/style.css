@@ -5,6 +5,13 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 }
 
 /* line 16, ../sass/style.scss */
+i {
+  font-style: italic;
+  float: none;
+  display: inline-block;
+}
+
+/* line 22, ../sass/style.scss */
 body {
   line-height: 120%;
   padding: 0;
@@ -12,16 +19,16 @@ body {
   font-size: 16px;
   font-family: "Arial", "Arial", "Gadget", sans-serif;
 }
-/* line 21, ../sass/style.scss */
+/* line 27, ../sass/style.scss */
 body input {
   font-size: 16px;
 }
-/* line 30, ../sass/style.scss */
+/* line 36, ../sass/style.scss */
 body .header img {
   display: block;
   margin: 15px auto 25px;
 }
-/* line 34, ../sass/style.scss */
+/* line 40, ../sass/style.scss */
 body .header .linkbar {
   font-family: "Arial Black", "Arial Bold", "Gadget", sans-serif;
   color: white;
@@ -31,7 +38,7 @@ body .header .linkbar {
   margin: 0 0 0 0;
   text-align: center;
 }
-/* line 45, ../sass/style.scss */
+/* line 51, ../sass/style.scss */
 body .header .linkbar a:link, body .header .linkbar a:visited {
   background-color: #d00032;
   color: white;
@@ -41,23 +48,23 @@ body .header .linkbar a:link, body .header .linkbar a:visited {
   display: inline-block;
   text-shadow: 2px 2px 2px #870004;
 }
-/* line 56, ../sass/style.scss */
+/* line 62, ../sass/style.scss */
 body .header .linkbar a:hover, body .header .linkbar a:active {
   background-color: #810000;
 }
-/* line 63, ../sass/style.scss */
+/* line 69, ../sass/style.scss */
 body span .button-sidebyside {
   width: 50%;
   float: left;
 }
-/* line 70, ../sass/style.scss */
+/* line 76, ../sass/style.scss */
 body .wrapper h2 {
   font-family: "Arial Black", "Arial Bold", "Gadget", sans-serif;
   color: #082833;
   font-size: 120%;
   padding: 5px 5px 5px 5px;
 }
-/* line 76, ../sass/style.scss */
+/* line 82, ../sass/style.scss */
 body .wrapper button {
   background-color: #082833;
   color: white;
@@ -67,24 +74,24 @@ body .wrapper button {
   height: 2em;
   padding: 5px 5px 5px 5px;
 }
-/* line 85, ../sass/style.scss */
+/* line 91, ../sass/style.scss */
 body .wrapper button:hover {
   background-color: #04141a;
 }
 @media only screen and (min-width: 600px) {
-  /* line 69, ../sass/style.scss */
+  /* line 75, ../sass/style.scss */
   body .wrapper {
     width: 600px;
     margin: 0 auto;
   }
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-  /* line 69, ../sass/style.scss */
+  /* line 75, ../sass/style.scss */
   body .wrapper {
     width: 100%;
   }
 }
-/* line 98, ../sass/style.scss */
+/* line 104, ../sass/style.scss */
 body .wrapper .inputForm .scrollable {
   width: 100%;
   overflow-x: auto;
@@ -92,45 +99,46 @@ body .wrapper .inputForm .scrollable {
   padding: 5px 5px 5px 5px;
   margin: 5px 5px 5px 5px;
 }
-/* line 106, ../sass/style.scss */
+/* line 112, ../sass/style.scss */
 body .wrapper .inputForm div {
   padding: 5px 5px 5px 5px;
   margin: 5px 5px 5px 5px;
 }
-/* line 111, ../sass/style.scss */
+/* line 117, ../sass/style.scss */
 body .wrapper .inputForm .meta {
   padding: 5px 5px 5px 5px;
   margin: 5px 5px 5px 5px;
 }
-/* line 116, ../sass/style.scss */
+/* line 122, ../sass/style.scss */
 body .wrapper .inputForm form, body .wrapper .inputForm table {
   color: #082833;
   background: #f5f5f5;
 }
-/* line 121, ../sass/style.scss */
+/* line 127, ../sass/style.scss */
 body .wrapper .inputForm form div, body .wrapper .inputForm table div {
-  height: 25px;
+  height: auto;
+  display: block;
 }
-/* line 129, ../sass/style.scss */
+/* line 145, ../sass/style.scss */
 body .wrapper .inputForm table {
   border-collapse: collapse;
 }
-/* line 133, ../sass/style.scss */
+/* line 149, ../sass/style.scss */
 body .wrapper .inputForm table, body .wrapper .inputForm th, body .wrapper .inputForm td {
   border: 1px solid #082833;
   padding: 3px 3px 3px 3px;
 }
-/* line 138, ../sass/style.scss */
+/* line 154, ../sass/style.scss */
 body .wrapper .inputForm td {
   background-color: white;
   text-align: center;
 }
-/* line 143, ../sass/style.scss */
+/* line 159, ../sass/style.scss */
 body .wrapper .inputForm .align-left {
   text-align: left;
   width: 200px;
 }
-/* line 148, ../sass/style.scss */
+/* line 164, ../sass/style.scss */
 body .wrapper .inputForm canvas {
   position: absolute;
   display: none;
@@ -139,7 +147,7 @@ body .wrapper .inputForm canvas {
   height: 0;
   left: -999em;
 }
-/* line 158, ../sass/style.scss */
+/* line 174, ../sass/style.scss */
 body .wrapper .inputForm label {
   display: block;
   width: 200px;
@@ -147,18 +155,18 @@ body .wrapper .inputForm label {
   clear: both;
   height: 1em;
 }
-/* line 166, ../sass/style.scss */
+/* line 182, ../sass/style.scss */
 body .wrapper .inputForm input[type="text"], body .wrapper .inputForm input[type="email"], body .wrapper .inputForm input[type="tel"], body .wrapper .inputForm input[type="number"], body .wrapper .inputForm select {
   font-size: 16px;
   width: 100%;
   height: auto;
 }
-/* line 172, ../sass/style.scss */
+/* line 188, ../sass/style.scss */
 body .wrapper .inputForm span {
   overflow: hidden;
   display: block;
 }
-/* line 179, ../sass/style.scss */
+/* line 195, ../sass/style.scss */
 body .graphicsDisplay {
   position: absolute;
   display: none;
@@ -167,13 +175,13 @@ body .graphicsDisplay {
   height: 0;
   left: -999em;
 }
-/* line 188, ../sass/style.scss */
+/* line 204, ../sass/style.scss */
 body .previewImage {
   display: block;
   margin-right: auto;
   margin-left: auto;
 }
-/* line 194, ../sass/style.scss */
+/* line 210, ../sass/style.scss */
 body .error {
   color: #d00032;
   text-align: center;

@@ -747,7 +747,9 @@ function drawSheme (data) {
 		
 		
 		var percentageLable = game.add.bitmapText(percentX, percentY, 'arial', percentage , 60 / pixelSize);
-	
+		
+		percentageLable.alpha = 0.5;
+		
 		percentageLable.anchor.setTo(0.5); 
 		
 		if (document.getElementById("location").value === "bottom") {
@@ -859,11 +861,31 @@ function drawSheme (data) {
 			
 			var headerText = "Arm Length: \t\t" + SizeNotation(final.optimalArmLength) + "\nBlade Length: \t" + SizeNotation(final.length) + "\nWipe Angle: \t\t" + SizeNotation(final.wipeAngle);
 			
-			var headerLable = game.add.bitmapText(((pixelMargin/3)*2) + (((1/946) * (pixelMargin/3)) * 2927), pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', headerText , 30 / pixelSize);
+			var headerLable = game.add.bitmapText(((pixelMargin/3)*2) + (((1/946) * (pixelMargin/3)) * 2927), pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', headerText , 25 / pixelSize);
 	
+			var partText = "Arm: \t\t" + selectedParts.arm.name + "\nMotor: \t\t" + selectedParts.motor.name + "\nBlade: \t\t" + selectedParts.blade.artNr;
+			
+			var headerParts = game.add.bitmapText(((pixelMargin/3)*2.5) + (((1/946) * (pixelMargin/3)) * 2927) + headerLable.textWidth, pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', partText , 25 / pixelSize);
+			
+			var projectText = "Client: \t\t" + document.getElementById("pName").value + "\nProject: \t\t" + document.getElementById("pReference").value + "\nDate: \t\t" + document.getElementById("pDate").value;
+			
+			var headerProject = game.add.bitmapText(((pixelMargin/3)*3) + (((1/946) * (pixelMargin/3)) * 2927) + headerLable.textWidth + headerParts.textWidth, pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', projectText , 25 / pixelSize);
+			
+			var maxPWidth = game.width - ((pixelMargin/3)*4) + (((1/946) * (pixelMargin/3)) * 2927) + headerLable.textWidth;
+			
+			headerProject.maxWidth = maxPWidth;
+			
+			headerParts.anchor.setTo(0,0.5);
+			
 			headerLable.anchor.setTo(0,0.5); 
-	
+			
+			headerProject.anchor.setTo(0,0.5);
+			
+			staticElements.add(headerParts);
+			
 			staticElements.add(headerLable);
+			
+			staticElements.add(headerProject);
 		}
 		
 		//lineLable.angle = textAngle;

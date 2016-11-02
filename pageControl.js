@@ -8,6 +8,8 @@ var	sectionThree = 	function(){return document.getElementById("outputArea");};
 var sectionFour   = function(){return document.getElementById("printArea");};
 var data;
 
+var selectedParts = {arm:null, blade:null, motor:null};
+
 function getWindowData () {
 	var wiperType = (document.getElementById("wiperType") || "").value;
 	var height = Number((document.getElementById("windowHeight") || "").value);
@@ -173,10 +175,12 @@ function fillTable (armLength, bladeLength, wipeAngle){
 
 	var onBladesClick = function(cont) {
 		if(cont.value === "0"){
+			selectedParts.blade = null;
 			limits.blade.bladeLength = NaN;
 			limits.blade.maxArmLength = NaN;
 			limits.blade.minArmLength = NaN;
 		} else {
+			selectedParts.blade = cont.myData;
 			limits.blade.bladeLength = cont.myData.length;
 			limits.blade.maxArmLength = maxArmForBlade(cont.myData.length);
 			limits.blade.minArmLength = minArmForBlade(cont.myData.length);
@@ -198,6 +202,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	
 	var onArmsClick = function(cont) {
 		if(cont.value === "0"){
+			selectedParts.arm = null;
 			limits.arm.armMax = Number.NEGATIVE_INFINITY;
 			limits.arm.armMin = Number.POSITIVE_INFINITY;
 			limits.arm.bladeMax = Number.NEGATIVE_INFINITY;
@@ -205,6 +210,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 			limits.arm.hoh = null;
 			limits.arm.centreMounted = null;
 		} else {
+			selectedParts.arm = cont.myData;
 			limits.arm.armMax = cont.myData.lengthMax;
 			limits.arm.armMin = cont.myData.lengthMin;
 			limits.arm.bladeMax = cont.myData.bladeLengthMax;
@@ -216,6 +222,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	
 	var onMotorClick = function(cont) {
 		if(cont.value === "0"){
+			selectedParts.motor = null;
 			limits.motor.armMax = Number.NEGATIVE_INFINITY;
 			limits.motor.bladeMax = Number.NEGATIVE_INFINITY;
 			limits.motor.angleMax = Number.NEGATIVE_INFINITY;
@@ -223,6 +230,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 			limits.motor.angleStages = null;
 			limits.motor.hoh = null;
 		} else {
+			selectedParts.motor = cont.myData;
 			limits.motor.armMax = cont.myData.armMax;
 			limits.motor.bladeMax = cont.myData.bladeMax;
 			limits.motor.angleMax = cont.myData.angleMax;

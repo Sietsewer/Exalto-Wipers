@@ -13,6 +13,12 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
     content: " \25B4\25BE" 
 }
 
+i {
+	font-style: italic;
+	float: none;
+	display: inline-block;
+}
+
 body{
 	line-height: 120%;
 	padding: 0;
@@ -119,7 +125,17 @@ span{
     			//padding: 5px 5px 5px 5px;
 				//margin: 5px 5px 5px 5px;
 				div{
-					height: 25px;
+					// !!
+					//											!!!
+					// !!
+					
+					
+					height: auto;
+					display: block;
+					
+					
+					
+					
 				}
 				
 				//padding: 5px 5px 5px 5px;
