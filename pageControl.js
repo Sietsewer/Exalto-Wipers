@@ -412,7 +412,7 @@ function resizeCanvas (data) {
 		var size = calculateSize(document.getElementById("paperSize").value, document.getElementById("paperDpi").value);
 		resize(size[0], size[1], data);
 	} else {
-		resize(700, 700);
+		resize(600, 600);
 	}
 }
 
@@ -444,6 +444,7 @@ function makePDF () {
 		
 		doc.addImage(game.canvas, 'JPEG', 0 ,0 ,paperWidth ,paperHeight);
 		
+		if(document.getElementById('pdf-include-table').checked){
 		doc.addPage([paperWidth, paperHeight], 'portrait');
 		
 		var res1 = doc.autoTableHtmlToJson(document.getElementById("arms"));
@@ -498,7 +499,7 @@ function makePDF () {
 				textColor: [255,255,255]
 			}
 		});
-		
+		}
 		doc.save('wiper.pdf');
 	});
 }

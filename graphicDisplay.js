@@ -725,6 +725,38 @@ function drawSheme (data) {
 			}
 		}
 		
+		var percentX = wiperOrigin.x;
+		var percentY = wiperOrigin.y + final.optimalArmLength;
+		
+		percentX /= pixelSize;
+		percentY /= pixelSize;
+		
+		var percentage = Math.round(final.wipePercentage * 100);
+		percentage = percentage + "%";
+		
+		
+		var percentageLable = game.add.bitmapText(percentX, percentY, 'arial', percentage , 60 / pixelSize);
+	
+		percentageLable.anchor.setTo(0.5); 
+	
+		textGroup.add(percentageLable);
+
+		if(!isPreview){
+			//var logoSprite = game.add.sprite(pixelMargin/3, pixelMargin/3, "logo");
+			//logoSprite.scale.setTo((1/946) * (pixelMargin/3), (1/946) * (pixelMargin/3));
+			//sprites.add(logoSprite);
+			
+			var headerText = "Arm Length: \t\t" + SizeNotation(final.optimalArmLength) + "\nBlade Length: \t" + SizeNotation(final.length) + "\nWipe Angle: \t\t" + SizeNotation(final.wipeAngle);
+			
+			var headerLable = game.add.bitmapText(((pixelMargin/3)*2) + (((1/946) * (pixelMargin/3)) * 2927), pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', headerText , 30 / pixelSize);
+	
+			headerLable.anchor.setTo(0,0.5); 
+	
+			textGroup.add(headerLable);
+		}
+		
+		//lineLable.angle = textAngle;
+		
 		
     	//drawMeasure(measurementGraphics, pointTopMeasure, pointB, textGroup);
     	//measurementGraphics.moveTo(pointTopMeasureL.x, pointTopMeasureL.y);
