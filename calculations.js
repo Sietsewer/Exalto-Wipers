@@ -583,9 +583,9 @@ function SizeNotation (size) {
 	var dat = document.getElementById("units").value;
 	var isInch = dat === "inch";
 	if (isInch){ // inch
-		return (Number(size) / 25.4).toFixed(3) + " in";
+		return (Number(size) / 25.4).toFixed(2) + " in";
 	} else { // mm
-		return (Number(size).toFixed(2) + " mm");
+		return (Number(size).toFixed(0) + " mm");
 	}
 }
 

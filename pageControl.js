@@ -233,12 +233,35 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	}
 	
 	// Recreate tables
-	buildTable (fArms, ["range", "name", "lengthMin", "lengthMax", "bladeLengthMin", "bladeLengthMax", "hoh"], ["Range", "Art. Nr.", "Arm Min.", "Arm Max.", "Blade Min.", "Blade Max.", "Centre Distance"], "arms", null, onArmsClick);
+	buildTable (fArms, ["range", "name", "lengthMin", "lengthMax", "bladeLengthMin", "bladeLengthMax", "hoh"], ["Range", "Art. Nr.", "Arm Min.", "Arm Max.", "Blade Min.", "Blade Max.", "Centre Distance"], "arms",
+	[null,
+	null,
+	function (val) {return SizeNotation(Number(val));},
+	function (val) {return SizeNotation(Number(val));},
+	function (val) {return SizeNotation(Number(val));},
+	function (val) {return SizeNotation(Number(val));},
+	function (val) {return SizeNotation(Number(val));}], onArmsClick);
 	
 	
-	buildTable (fBlades, ["range", "artNr", "length", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Range", "Art. Nr.", "Length", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,null,null, function (val) {return SizeNotation(Number(val));}, function(val){return Math.round((Number(Number(val) * 57.295780181884765625)) * 10) / 10 + "°";}, function(val){return (Math.round(Number(val) * 10000) / 100)+"%";}], onBladesClick);
+	buildTable (fBlades, ["range", "artNr", "length", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Range", "Art. Nr.", "Length", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,
+	null,
+	function (val) {
+		return SizeNotation(Number(val));
+	}, function (val) {
+		return SizeNotation(Number(val));
+	}, function(val){
+		return Math.round((Number(Number(val) * 57.295780181884765625)) * 10) / 10 + "°";
+	}, function(val){
+		return (Math.round(Number(val) * 10000) / 100)+"%";
+	}], onBladesClick);
 
-	buildTable (fMotors, ["range", "name", "hoh", "armMax", "bladeMax", "angleMin", "angleMax", "angleStep"], ["Range", "Art. Nr.", "Centre Distance", "Arm Max", "Blade Max", "Min. Angle", "Max. Angle", "Angle Step"], "motors", null, onMotorClick);
+	buildTable (fMotors, ["range", "name", "hoh", "armMax", "bladeMax", "angleMin", "angleMax", "angleStep"], ["Range", "Art. Nr.", "Centre Distance", "Arm Max", "Blade Max", "Min. Angle", "Max. Angle", "Angle Step"], "motors", [null,null,function (val) {return SizeNotation(Number(val));}, function (val) {return SizeNotation(Number(val));},function (val) {return SizeNotation(Number(val));},function(val){
+		return val + "°";
+	},function(val){
+		return val + "°";
+	},function(val){
+		return val + "°";
+	}], onMotorClick);
 	
 	resizeCanvas(null);
 	drawSheme (data);

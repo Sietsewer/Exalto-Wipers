@@ -26,6 +26,8 @@ var fillColor2	= 0x999999;
 
 var parallelDistance = 80;
 
+var staticElements;
+
 function preload() {
 	loadAssets();
 	game.state.onRenderCallback = renderDone;
@@ -77,6 +79,8 @@ function create() {
 	sprites = game.add.group();
 	
 	textGroup = game.add.group();
+	
+	staticElements = game.add.group();
 
 	// Render order
 	
@@ -180,6 +184,10 @@ function drawMeasure (graphics, startPoint, endPoint, group, lableAngle, anchor)
 	var lineLable = game.add.bitmapText(textPos.x, textPos.y, 'arial', SizeNotation(Math.round(distance * pixelSize)), 25 / pixelSize);
 	
 	lineLable.anchor.setTo(anchor); 
+	
+	if (document.getElementById("location").value === "bottom") {
+		textAngle += 180;
+	}
 	
 	lineLable.angle = textAngle;
 	
@@ -540,6 +548,9 @@ function drawSheme (data) {
 	
 	sprites.destroy();
 	sprites = game.add.group();
+	
+	staticElements.destroy();
+	staticElements = game.add.group();
 	// -- //
 	
 	//var mmWidth = Number(data.inputData.windowData.topWidth);
@@ -560,7 +571,7 @@ function drawSheme (data) {
 	if(!isPreview){
 	var logoSprite = game.add.sprite(pixelMargin/3, pixelMargin/3, "logo");
 	logoSprite.scale.setTo((1/946) * (pixelMargin/3), (1/946) * (pixelMargin/3));
-	sprites.add(logoSprite);
+	staticElements.add(logoSprite);
 	}
 	
 	
@@ -738,9 +749,109 @@ function drawSheme (data) {
 		var percentageLable = game.add.bitmapText(percentX, percentY, 'arial', percentage , 60 / pixelSize);
 	
 		percentageLable.anchor.setTo(0.5); 
+		
+		if (document.getElementById("location").value === "bottom") {
+			percentageLable.angle = 180;
+		}
 	
 		textGroup.add(percentageLable);
-
+		
+		// rotation magic
+		
+		
+		//windowPattern.width = game.width;
+		//windowPattern.height = game.height;
+	
+		if (document.getElementById("location").value === "bottom") {
+		
+		windowGraphic.angle = 180;
+		measurementGraphics.angle = 180;
+	
+		textGroup.angle = 180;
+		
+		wiperMarkMask.angle = 180;
+		wiperMarkVisible.angle = 180;
+	
+		bladeSprites.angle = 180;
+	
+		wiperGraphic.angle = 180;
+	
+		sprites.angle = 180;
+		
+		windowGraphic.x = game.width;
+		measurementGraphics.x = game.width;
+	
+		textGroup.x = game.width;
+		
+		wiperMarkMask.x = game.width;
+		wiperMarkVisible.x = game.width;
+	
+		bladeSprites.x = game.width;
+	
+		wiperGraphic.x = game.width;
+	
+		sprites.x = game.width;
+		
+		windowGraphic.y = game.height;
+		measurementGraphics.y = game.height;
+	
+		textGroup.y = game.height;
+		
+		wiperMarkMask.y = game.height;
+		wiperMarkVisible.y = game.height;
+	
+		bladeSprites.y = game.height;
+	
+		wiperGraphic.y = game.height;
+	
+		sprites.y = game.height;
+		} else {
+			
+		windowGraphic.angle = 0;
+		measurementGraphics.angle = 0;
+	
+		textGroup.angle = 0;
+		
+		wiperMarkMask.angle = 0;
+		wiperMarkVisible.angle = 0;
+	
+		bladeSprites.angle = 0;
+	
+		wiperGraphic.angle = 0;
+	
+		sprites.angle = 0;
+		
+		windowGraphic.x = 0;
+		measurementGraphics.x = 0;
+	
+		textGroup.x = 0;
+		
+		wiperMarkMask.x = 0;
+		wiperMarkVisible.x = 0;
+	
+		bladeSprites.x = 0;
+	
+		wiperGraphic.x = 0;
+	
+		sprites.x = 0;
+		
+		windowGraphic.y = 0;
+		measurementGraphics.y = 0;
+	
+		textGroup.y = 0;
+		
+		wiperMarkMask.y = 0;
+		wiperMarkVisible.y = 0;
+	
+		bladeSprites.y = 0;
+	
+		wiperGraphic.y = 0;
+	
+		sprites.y = 0;
+		}
+		
+		// end magic
+		
 		if(!isPreview){
 			//var logoSprite = game.add.sprite(pixelMargin/3, pixelMargin/3, "logo");
 			//logoSprite.scale.setTo((1/946) * (pixelMargin/3), (1/946) * (pixelMargin/3));
@@ -752,7 +863,7 @@ function drawSheme (data) {
 	
 			headerLable.anchor.setTo(0,0.5); 
 	
-			textGroup.add(headerLable);
+			staticElements.add(headerLable);
 		}
 		
 		//lineLable.angle = textAngle;
