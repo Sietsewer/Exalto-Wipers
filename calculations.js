@@ -156,21 +156,13 @@ function resetLimits () {
 		"maxArmLength":NaN,
 		"minArmLength":NaN
 	};
-	limits.motor={
+	limits.motor = {
 		"angleMin":Number.POSITIVE_INFINITY,
 		"angleMax":Number.NEGATIVE_INFINITY,
 		"angleStages":null,
 		"armMax":Number.NEGATIVE_INFINITY,
 		"bladeMax":Number.NEGATIVE_INFINITY,
 		"hoh":null
-	};
-	limits.database={
-		"bladeMin":Number.POSITIVE_INFINITY,
-		"bladeMax":Number.NEGATIVE_INFINITY,
-		"armMin":Number.POSITIVE_INFINITY,
-		"armMax":Number.NEGATIVE_INFINITY,
-		"angleMin":Number.POSITIVE_INFINITY,
-		"angleMax":Number.NEGATIVE_INFINITY
 	};
 }
 function gatherData () {
@@ -662,10 +654,10 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 		}
 		
 		// Returns
-		if (hLimit < retVar && hLimit < maxDegreesPantograph){
+		if (hLimit < retVar/* && hLimit < maxDegreesPantograph*/){
 			retVar = hLimit;
 		}
-		if (vLimit < retVar && vLimit < maxDegreesPantograph){
+		if (vLimit < retVar/* && vLimit < maxDegreesPantograph*/){
 			retVar = vLimit;
 		}
 		
@@ -792,7 +784,7 @@ function getOptimalArmLength (isPantograph, bladeLength, angleLimit, width, heig
 	var maxPerc = 0;
 	var maxVal = minArmLength;
 	
-	for(var i = 0; i < samples; i++){
+	for(var i = 0; i < samples+1; i++){
 		var p = {};
 		var val = i + minArmLength;
 		p.value = val;

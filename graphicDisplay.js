@@ -4,7 +4,7 @@
 var game = new Phaser.Game((210 * 0.0393701) * 72, (148 * 0.0393701) * 72, Phaser.CANVAS, 'graphicsDisplay', { preload: preload, create: create, update: update });
 
 var pixelSize = 0;
-var millimeterMargin = 100;
+var millimeterMargin = 300;
 
 var windowPattern;
 var windowGraphic;
@@ -64,7 +64,6 @@ function create() {
 	
 	windowPattern.mask = windowGraphic;
 	
-	textGroup = game.add.group();
 	
 	wiperMarkVisible = game.add.graphics(0,0);
 	wiperMarkMask = game.add.graphics(0,0);
@@ -77,6 +76,7 @@ function create() {
 
 	sprites = game.add.group();
 	
+	textGroup = game.add.group();
 
 	// Render order
 	
@@ -97,14 +97,20 @@ function create() {
 }
 
 // Measurements are always on the right side.
-function drawMeasure (graphics, startPoint, endPoint, group){
+function drawMeasure (graphics, startPoint, endPoint, group, lableAngle, anchor){
 	graphics.lineStyle(2, lineColor);
+	
+	if((anchor === null) || (anchor === undefined)){
+		anchor = 0.5;
+	}
 	
 	var boundLength = 30 / pixelSize;
 	var lineDistance = 20 / pixelSize;
 	var direction = new Phaser.Point(endPoint.x - startPoint.x, endPoint.y - startPoint.y).normalize();
 	var distance = startPoint.distance(endPoint);
 	var normalDirection = new Phaser.Point(direction.y, -direction.x);
+	
+	var textOffset = 10 / pixelSize;
 	
 	// Draw bounds
 	
@@ -129,9 +135,35 @@ function drawMeasure (graphics, startPoint, endPoint, group){
 	graphics.moveTo(startPoint.x + (normalDirection.x * lineDistance), startPoint.y + (normalDirection.y * lineDistance));
 	graphics.lineTo(endPoint.x + (normalDirection.x * lineDistance), endPoint.y + (normalDirection.y * lineDistance));
 	
+	// Draw arrows
+	
+	var arrow1 = game.add.sprite(startPoint.x + (normalDirection.x * lineDistance), startPoint.y + (normalDirection.y * lineDistance), "arrow");
+	var arrow2 = game.add.sprite(endPoint.x + (normalDirection.x * lineDistance), endPoint.y + (normalDirection.y * lineDistance), "arrow");
+
+	arrow1.scale.setTo(0.25/pixelSize, 0.4/pixelSize);
+	arrow2.scale.setTo(0.25/pixelSize, 0.4/pixelSize);
+	
+	arrow1.anchor.x = (0);
+	arrow1.anchor.y = (0.5);
+
+	arrow2.anchor.x = (0);
+	arrow2.anchor.y = (0.5);
+	
+	arrow1.tint = lineColor;
+	arrow2.tint = lineColor;
+	
+		
+	group.add(arrow1);
+	group.add(arrow2);
+	
+	var angle = Math.atan2(direction.y, direction.x) * 57.2958;
+	
+	arrow1.angle = angle;
+	arrow2.angle = angle + 180;
+	
 	var textPos = lerpPoint(
-		new Phaser.Point(startPointOffsetX, startPointOffsetY),
-		new Phaser.Point(endPointOffsetX, endPointOffsetY),
+		new Phaser.Point(startPointOffsetX + (normalDirection.x * textOffset), startPointOffsetY + (normalDirection.y * textOffset)),
+		new Phaser.Point(endPointOffsetX + (normalDirection.x * textOffset), endPointOffsetY + (normalDirection.y * textOffset)),
 		0.5);
 	
 	var textAngle = Math.atan2(direction.y, direction.x) * 57.2958;
@@ -141,10 +173,17 @@ function drawMeasure (graphics, startPoint, endPoint, group){
 	}
 	
 	
+	if(!(lableAngle === undefined || lableAngle === null)){
+		textAngle = lableAngle;
+	}
+	
 	var lineLable = game.add.bitmapText(textPos.x, textPos.y, 'arial', SizeNotation(Math.round(distance * pixelSize)), 25 / pixelSize);
+	
+	lineLable.anchor.setTo(anchor); 
+	
 	lineLable.angle = textAngle;
 	
-	lineLable.anchor.setTo(0.5); 
+
 	
 	if(group !== null){
 		group.add(lineLable);
@@ -163,7 +202,8 @@ function loadAssets (){
 	game.load.image('arm_fixture','assets/wiperSprite_blade_pantograph_fixture.png');
 	game.load.image('arm_fixture_centred','assets/wiperSprite_blade_pantograph_fixture_centred.png');
 	game.load.image('blade','assets/wiperSprite_blade_base.png');
-	
+	game.load.image('arrow','assets/arrow.png');
+	game.load.image('logo','assets/exalto_logo_2927x924.png');
 }
 
 function drawWipedArea (visGraphics, maskGraphics, wiperType, point, angle, bladeLength, hOffset, distance) 
@@ -254,7 +294,27 @@ function drawWipedArea (visGraphics, maskGraphics, wiperType, point, angle, blad
 		maskGraphics.beginFill(0xffffff);
 		maskGraphics.drawCircle(xPos + (hOffset / pixelSize), yPos, (areaEnd / pixelSize) * 2);
 		maskGraphics.endFill();
-
+		
+		var a = new Phaser.Point(Math.sin(radsAngle / 2) * ((distance + (bladeLength/2)) / pixelSize), Math.cos(radsAngle / 2) * ((distance + (bladeLength/2)) / pixelSize));
+		
+		var pointL = new Phaser.Point(xPos - a.x, a.y + yPos);
+		var pointR = new Phaser.Point(a.x + xPos, a.y + yPos);
+		var pointLL = new Phaser.Point(pointL.x, ((distance + (bladeLength/2)) / pixelSize) + yPos);
+		var pointRL = new Phaser.Point(pointR.x, pointLL.y);
+		
+		
+		
+		//var measureL = new Phaser.Point(pointAx, yPos + (hOffset/pixelSize) + (distance/pixelSize) + ((bladeLength/2) / pixelSize));
+		//var measureR = new Phaser.Point(pointBx, measureL.y);
+		
+		drawMeasure (measurementGraphics, pointRL, pointLL, textGroup);
+		
+		measurementGraphics.moveTo(pointL.x,pointL.y);		
+    	measurementGraphics.lineTo(pointLL.x, pointLL.y);
+				
+		measurementGraphics.moveTo(pointRL.x, pointRL.y);
+    	measurementGraphics.lineTo(pointR.x, pointR.y);
+		
 	} else if (wiperType === "pantograph") {
 		visGraphics.mask = null;
 		// Calc local positions
@@ -282,8 +342,8 @@ function drawWipedArea (visGraphics, maskGraphics, wiperType, point, angle, blad
 		
 		visGraphics.beginFill(0xffffff);
 		visGraphics.arc(xPos + (hOffset / pixelSize), topHeight, distance / pixelSize, game.math.degToRad(90 - (angle / 2)),game.math.degToRad(90 + (angle / 2)));
-		visGraphics.lineTo(pointAx, pointAy);
-		visGraphics.lineTo(pointBx, pointBy);
+		visGraphics.lineTo(pointAx, pointAy + (bladeLength/2) / pixelSize);
+		visGraphics.lineTo(pointBx, pointBy + (bladeLength/2) / pixelSize);
 		visGraphics.endFill();
 		
 		visGraphics.lineStyle(2, 0xffffff, 1);
@@ -294,6 +354,17 @@ function drawWipedArea (visGraphics, maskGraphics, wiperType, point, angle, blad
 		visGraphics.lineTo(pointAx, pointAy + ((bladeLength/2) / pixelSize));
 		visGraphics.lineTo(pointBx, pointBy + ((bladeLength/2) / pixelSize));
 		visGraphics.endFill();
+		
+		var measureL = new Phaser.Point(pointAx, yPos + (hOffset/pixelSize) + (distance/pixelSize) + ((bladeLength/2) / pixelSize));
+		var measureR = new Phaser.Point(pointBx, measureL.y);
+		
+		drawMeasure (measurementGraphics, measureR, measureL, textGroup);
+		
+		measurementGraphics.moveTo(measureR.x,measureR.y);		
+    	measurementGraphics.lineTo(pointBx, pointBy + ((bladeLength/2) / pixelSize));
+				
+		measurementGraphics.moveTo(measureL.x, measureL.y);
+    	measurementGraphics.lineTo(pointAx, pointAy + ((bladeLength/2) / pixelSize));
 	}
 }
 
@@ -340,6 +411,8 @@ function drawWiperArm (graphics, PstartX, PstartY, angle, length, fillColor, alp
 		var dist = Number(limits.arm.hoh) / pixelSize;
 		
 		var fixtureSprite = game.add.sprite(endX+armOffset, endY, limits.arm.centreMounted ? "arm_fixture_centred" : "arm_fixture");
+		fixtureSprite.tint = fillColor;
+		fixtureSprite.alpha = alpha;
 		fixtureSprite.scale.setTo((1/160) * (dist),(1/160) * (dist));
 		fixtureSprite.anchor.x = 0.75;
 		fixtureSprite.anchor.y = 0.5;
@@ -475,25 +548,37 @@ function drawSheme (data) {
 	var mmWidth = Number(baseData.windowRaw.width);
 	var mmHeight = Number(baseData.windowRaw.height);
 	
+	var vOffsetMargin = baseData.windowRaw.centreDistance;
+	if(vOffsetMargin < 0){
+		vOffsetMargin = 0;
+	}
+	
+	
+	pixelSize = calculateScale(mmWidth, mmHeight + vOffsetMargin, millimeterMargin);
+	var pixelMargin = millimeterMargin / pixelSize;
+
+	if(!isPreview){
+	var logoSprite = game.add.sprite(pixelMargin/3, pixelMargin/3, "logo");
+	logoSprite.scale.setTo((1/946) * (pixelMargin/3), (1/946) * (pixelMargin/3));
+	sprites.add(logoSprite);
+	}
+	
 	
 	//pixelSize = calculateScale(mmWidth, mmHeight + Math.abs(Number(data.inputData.windowData.centreDistance) * 2), millimeterMargin);
 	
-	pixelSize = calculateScale(mmWidth, mmHeight + Math.abs(Number(baseData.windowRaw.centreDistance) * 2), millimeterMargin);
 
 	
-	
-	buildWindow (windowGraphic, mmWidth, mmHeight, windowPattern);
+	buildWindow (windowGraphic, mmWidth, mmHeight, windowPattern, pixelMargin);
 	
 	var pixelWidth = mmWidth / pixelSize;
 	var pixelHeight = mmHeight / pixelSize;
 	
-	var pointA = new Phaser.Point((game.width - pixelWidth) / 2,				(game.height - pixelHeight) / 2);
-	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),(game.height - pixelHeight) / 2);
-	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), game.height - ((game.height - pixelHeight) / 2));
-	var pointD = new Phaser.Point((game.width - pixelWidth) / 2,				 game.height - ((game.height - pixelHeight) / 2));
+	var pointA = new Phaser.Point((game.width - pixelWidth) / 2,				((game.height - pixelHeight) / 2) + (baseData.windowRaw.centreDistance/pixelSize));
+	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),((game.height - pixelHeight) / 2) + (baseData.windowRaw.centreDistance/pixelSize));
+	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), (game.height - ((game.height - pixelHeight) / 2)) + (baseData.windowRaw.centreDistance/pixelSize));
+	var pointD = new Phaser.Point((game.width - pixelWidth) / 2,				 (game.height - ((game.height - pixelHeight) / 2)) + (baseData.windowRaw.centreDistance/pixelSize));
 	
-	drawMeasure (measurementGraphics, pointC, pointD, textGroup);
-	drawMeasure (measurementGraphics, pointB, pointC, textGroup);
+
 	//drawMeasure (measurementGraphics, new Phaser.Point(500, 100), new Phaser.Point(500, 500));
 	//drawMeasure (measurementGraphics, new Phaser.Point(100, 100), new Phaser.Point(500, 100));
 	
@@ -505,8 +590,7 @@ function drawSheme (data) {
 	
 	var hasHoH = isFinite(limits.arm.hoh) && (limits.arm.hoh > 0);
 	
-	if(final !== null && (hasHoH || !(baseData.window.isPantograph))){
-		
+	if(final !== null && (hasHoH || !(baseData.window.isPantograph) && (isFinite(limits.arm.armMax) && isFinite(limits.blade.bladeLength) && isFinite(limits.motor.angleMax)))){
 		
 		drawWipedArea(wiperMarkVisible, wiperMarkMask, baseData.windowRaw.wiperType, wiperOrigin, final.wipeAngle, final.length, 0, final.optimalArmLength);
 		
@@ -519,10 +603,132 @@ function drawSheme (data) {
 		
     		//top measure
     	var pointTopMeasure = new Phaser.Point(pointB.x, wiperOrigin.y / pixelSize);
-    	
-    	drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
-    	measurementGraphics.moveTo(pointTopMeasure.x, pointTopMeasure.y);
-    	measurementGraphics.lineTo(wiperOrigin.x / pixelSize, wiperOrigin.y / pixelSize);
+		var pointTopMeasureL = new Phaser.Point(pointA.x, wiperOrigin.y / pixelSize);
+		
+		if(baseData.window.isPantograph){
+			var armOffset = 0;
+			if(limits.arm.centreMounted){
+				armOffset = (limits.arm.hoh/2)/pixelSize;
+			}
+			
+			var armOrigX = (wiperOrigin.x / pixelSize) + armOffset;
+			var armOrigY = (wiperOrigin.y / pixelSize);
+			
+			var armOrig = new Phaser.Point(armOrigX, armOrigY);
+			
+			var armOrig2 = new Phaser.Point(armOrigX - (limits.arm.hoh)/pixelSize, armOrigY);
+			
+			
+			
+			if (baseData.windowRaw.centreDistance > 0){
+				drawMeasure (measurementGraphics, pointC, pointD, textGroup);
+				drawMeasure (measurementGraphics, pointB, pointC, textGroup);
+				
+				drawMeasure (measurementGraphics, pointTopMeasureL, armOrig2, textGroup);
+				drawMeasure (measurementGraphics, armOrig2, armOrig, textGroup);
+				drawMeasure (measurementGraphics, armOrig, pointTopMeasure, textGroup);
+				
+				drawMeasure(measurementGraphics, pointTopMeasure, pointB, textGroup);
+    			measurementGraphics.moveTo(pointTopMeasureL.x, pointTopMeasureL.y);
+    			measurementGraphics.lineTo(pointA.x, pointB.y);
+				
+				
+			} else if (baseData.windowRaw.centreDistance < 0) {
+				
+				var armOrigTop = new Phaser.Point(armOrig.x, pointA.y);
+				var armOrig2Top = new Phaser.Point(armOrig2.x, pointA.y);
+				
+				drawMeasure (measurementGraphics, pointC, pointD, textGroup);
+				drawMeasure (measurementGraphics, pointTopMeasure, pointC, textGroup);
+				
+				drawMeasure (measurementGraphics, pointA, armOrig2Top, textGroup);
+				drawMeasure (measurementGraphics, armOrig2Top, armOrigTop, textGroup);
+				drawMeasure (measurementGraphics, armOrigTop, pointB, textGroup);
+				
+				drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
+				
+    			measurementGraphics.moveTo(armOrig.x, armOrig.y);
+    			measurementGraphics.lineTo(armOrigTop.x, armOrigTop.y);
+				
+				measurementGraphics.moveTo(armOrig2.x, armOrig2.y);
+    			measurementGraphics.lineTo(armOrig2Top.x, armOrig2Top.y);
+			} else { // zero
+				var armOrigTop = new Phaser.Point(armOrig.x, pointA.y);
+				var armOrig2Top = new Phaser.Point(armOrig2.x, pointA.y);
+				
+				drawMeasure (measurementGraphics, pointC, pointD, textGroup);
+				drawMeasure (measurementGraphics, pointTopMeasure, pointC, textGroup);
+				
+				drawMeasure (measurementGraphics, pointA, armOrig2Top, textGroup);
+				drawMeasure (measurementGraphics, armOrig2Top, armOrigTop, textGroup);
+				drawMeasure (measurementGraphics, armOrigTop, pointB, textGroup);
+				
+				drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
+				
+    			measurementGraphics.moveTo(armOrig.x, armOrig.y);
+    			measurementGraphics.lineTo(armOrigTop.x, armOrigTop.y);
+				
+				measurementGraphics.moveTo(armOrig2.x, armOrig2.y);
+    			measurementGraphics.lineTo(armOrig2Top.x, armOrig2Top.y);
+			}
+		} else {
+			
+			var armOrigX = (wiperOrigin.x / pixelSize);
+			var armOrigY = (wiperOrigin.y / pixelSize);
+			
+			var armOrig = new Phaser.Point(armOrigX, armOrigY);
+			
+			var armOrig2 = new Phaser.Point(armOrigX - (limits.arm.hoh)/pixelSize, armOrigY);
+			
+			
+			if (baseData.windowRaw.centreDistance > 0){
+				drawMeasure (measurementGraphics, pointC, pointD, textGroup);
+				drawMeasure (measurementGraphics, pointB, pointC, textGroup);
+				
+				drawMeasure (measurementGraphics, pointTopMeasureL, armOrig, textGroup);
+				drawMeasure (measurementGraphics, armOrig, pointTopMeasure, textGroup);
+				
+				drawMeasure(measurementGraphics, pointTopMeasure, pointB, textGroup);
+    			measurementGraphics.moveTo(pointTopMeasureL.x, pointTopMeasureL.y);
+    			measurementGraphics.lineTo(pointA.x, pointB.y);
+				
+				
+			} else if (baseData.windowRaw.centreDistance < 0) {
+				
+				var armOrigTop = new Phaser.Point(armOrig.x, pointA.y);
+				//var armOrig2Top = new Phaser.Point(armOrig2.x, pointA.y);
+				
+				drawMeasure (measurementGraphics, pointC, pointD, textGroup);
+				drawMeasure (measurementGraphics, pointTopMeasure, pointC, textGroup);
+				
+				drawMeasure (measurementGraphics, pointA, armOrigTop, textGroup);
+				drawMeasure (measurementGraphics, armOrigTop, pointB, textGroup);
+				
+				drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
+				
+    			measurementGraphics.moveTo(armOrig.x, armOrig.y);
+    			measurementGraphics.lineTo(armOrigTop.x, armOrigTop.y);
+				
+			} else { // zero
+				var armOrigTop = new Phaser.Point(armOrig.x, pointA.y);
+				
+				drawMeasure (measurementGraphics, pointC, pointD, textGroup);
+				drawMeasure (measurementGraphics, pointTopMeasure, pointC, textGroup);
+				
+				drawMeasure (measurementGraphics, pointA, armOrigTop, textGroup);
+				drawMeasure (measurementGraphics, armOrigTop, pointB, textGroup);
+				
+				drawMeasure(measurementGraphics, pointB, pointTopMeasure, textGroup);
+				
+    			measurementGraphics.moveTo(armOrig.x, armOrig.y);
+    			measurementGraphics.lineTo(armOrigTop.x, armOrigTop.y);
+			}
+		}
+		
+		
+    	//drawMeasure(measurementGraphics, pointTopMeasure, pointB, textGroup);
+    	//measurementGraphics.moveTo(pointTopMeasureL.x, pointTopMeasureL.y);
+    	//measurementGraphics.lineTo(pointA.x, pointB.y);
 		
 	}
 	
@@ -550,16 +756,18 @@ function drawSheme (data) {
 	drawCount = 0;
 }
 
-function buildWindow(graphics, width, height, patternSprite) {
+function buildWindow(graphics, width, height, patternSprite, pixelMargin) {
 	// Assume starting from top-left, when drawing.
 	var onscreenWidth = width / pixelSize;
 	var onscreenHeight = height / pixelSize;
-	graphics.lineStyle(2, 0xAAAAAA, 1);
 	
-	var pointA = new Phaser.Point((game.width - onscreenWidth) / 2,				(game.height - onscreenHeight) / 2);
-	var pointB = new Phaser.Point( game.width - ((game.width - onscreenWidth) / 2),(game.height - onscreenHeight) / 2);
-	var pointC = new Phaser.Point( game.width - ((game.width - onscreenWidth) / 2), game.height - ((game.height - onscreenHeight) / 2));
-	var pointD = new Phaser.Point((game.width - onscreenWidth) / 2,				 game.height - ((game.height - onscreenHeight) / 2));
+	var offset = (baseData.windowRaw.centreDistance > 0 ? baseData.windowRaw.centreDistance : 0 + millimeterMargin) / pixelSize;
+	graphics.lineStyle(2, 0xffffff, 1);
+	
+	var pointA = new Phaser.Point((game.width - onscreenWidth) / 2,				((game.height - onscreenHeight) / 2) + offset);
+	var pointB = new Phaser.Point( game.width - ((game.width - onscreenWidth) / 2),((game.height - onscreenHeight) / 2) + offset);
+	var pointC = new Phaser.Point( game.width - ((game.width - onscreenWidth) / 2), (game.height - ((game.height - onscreenHeight) / 2)) + offset);
+	var pointD = new Phaser.Point((game.width - onscreenWidth) / 2,				 (game.height - ((game.height - onscreenHeight) / 2)) + offset);
 	
 	graphics.moveTo(pointA.x, pointA.y);
 	
@@ -574,25 +782,34 @@ function buildWindow(graphics, width, height, patternSprite) {
 
 // Calculate millimeter size of one pixel.
 function calculateScale (width, height, margin){
+	
+	if(isPreview){
+		margin /= 2;
+	}
+	
 	var outerRatio = game.width / game.height;
-	var innerRatio = (width + margin) / (height + margin);
+	var innerRatio = (width + margin + margin) / (height + margin + margin);
 	var scale = 0;
 	if (outerRatio > innerRatio){
 		// use height
-		scale = (height + margin) / game.height;
+		scale = (height + (2* margin)) / game.height;
 	} else {
 		// use width
-		scale = (width + margin) / game.width;
+		scale = (width + (2* margin)) / game.width;
 	}
 	return scale;
 }
+
+var isPreview = false;
 
 function resize (width, height,data) {
 	
 	if (data === null || data === undefined){
 		game.scale.setGameSize(width, height);
+		isPreview = true;
 		return;
 	}
+	isPreview = false;
 	
 	var maxVal = 0;
 	var minVal = 0;
@@ -605,11 +822,14 @@ function resize (width, height,data) {
 		minVal = width;
 	}
 	
-	if (Number(data.inputData.windowData.height) + Number(data.inputData.windowData.centreDistance) > Number(data.inputData.windowData.width)){
-		game.scale.setGameSize(minVal,maxVal);
-	} else {
+	//if (Number(data.inputData.windowData.height) + Number(data.inputData.windowData.centreDistance) < Number(data.inputData.windowData.topWidth)){
+	//	game.scale.setGameSize(minVal,maxVal);
+	//} else {
 		game.scale.setGameSize(maxVal,minVal);
-	}
+	//}
+	
+	pixelSize = calculateScale(Number(data.inputData.windowData.topWidth), Number(data.inputData.windowData.height), millimeterMargin);
+	
 	/*game.width = width;
 	game.height = height;
 	

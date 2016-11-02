@@ -110,9 +110,12 @@ function fillTable (armLength, bladeLength, wipeAngle){
 		var fitArm = !isFinite(limits.arm.armMin) || !isFinite(limits.arm.bladeMin) ||
 			(a.armMax > limits.arm.armMin && a.bladeMax > limits.arm.bladeMin);
 		
+		var fitArmThickness = baseData.window.isPantograph ? ((limits.arm.hoh === 0) || (limits.arm.hoh === null) || (!isFinite(limits.arm.hoh)) || (limits.arm.hoh === a.hoh)) : true;
+			
+			
 		var fitBlade = !isFinite(limits.blade.bladeLength) || limits.blade.bladeLength <= a.bladeMax;
 		
-		return fitType && fitWindow && fitArm && fitBlade;
+		return fitType && fitWindow && fitArm && fitBlade && fitArmThickness;
 		/*
 		if(myLimits.bladeLength){
 			return a.bladeMax <= myLimits.bladeLength;
@@ -195,11 +198,11 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	
 	var onArmsClick = function(cont) {
 		if(cont.value === "0"){
-			limits.arm.armMax = NaN;
-			limits.arm.armMin = NaN;
-			limits.arm.bladeMax = NaN;
-			limits.arm.bladeMin = NaN;
-			limits.arm.hoh = NaN;
+			limits.arm.armMax = Number.NEGATIVE_INFINITY;
+			limits.arm.armMin = Number.POSITIVE_INFINITY;
+			limits.arm.bladeMax = Number.NEGATIVE_INFINITY;
+			limits.arm.bladeMin = Number.POSITIVE_INFINITY;
+			limits.arm.hoh = null;
 			limits.arm.centreMounted = null;
 		} else {
 			limits.arm.armMax = cont.myData.lengthMax;
@@ -213,12 +216,12 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	
 	var onMotorClick = function(cont) {
 		if(cont.value === "0"){
-			limits.motor.armMax = NaN;
-			limits.motor.bladeMax = NaN;
-			limits.motor.angleMax = NaN;
-			limits.motor.angleMin = NaN;
-			limits.motor.angleStages = NaN;
-			limits.motor.hoh = NaN;
+			limits.motor.armMax = Number.NEGATIVE_INFINITY;
+			limits.motor.bladeMax = Number.NEGATIVE_INFINITY;
+			limits.motor.angleMax = Number.NEGATIVE_INFINITY;
+			limits.motor.angleMin = Number.POSITIVE_INFINITY;
+			limits.motor.angleStages = null;
+			limits.motor.hoh = null;
 		} else {
 			limits.motor.armMax = cont.myData.armMax;
 			limits.motor.bladeMax = cont.myData.bladeMax;
@@ -315,7 +318,7 @@ function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 		var headButton = document.createElement("input");
 		headButton.type = "radio";
 		headButton.name = tableID;
-		headButton.value = 0;
+		headButton.value = "0";
 		headButton.myData = null;
 		headButton.onclick = function(){
 				selectedRadioInTables[this.name] = this.value;
@@ -323,9 +326,9 @@ function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 				changedChoices ();
 			};
 		
-		if(selectedRadioInTables[tableID] === undefined || selectedRadioInTables[tableID] === 0){
+		if(selectedRadioInTables[tableID] === undefined || selectedRadioInTables[tableID] === "0"){
 			headButton.checked = true;
-			selectedRadioInTables[tableID] = 0;
+			selectedRadioInTables[tableID] = "0";
 		}
 		
 		radioHead.appendChild(headButton);
@@ -409,7 +412,7 @@ function resizeCanvas (data) {
 		var size = calculateSize(document.getElementById("paperSize").value, document.getElementById("paperDpi").value);
 		resize(size[0], size[1], data);
 	} else {
-		resize(500, 500);
+		resize(700, 700);
 	}
 }
 
@@ -606,7 +609,9 @@ function p3Previous(){
 	sectionTwo().style.display = "block";
 	sectionThree().style.display = "none";
 	sectionFour().style.display = "none";
+	resetLimits();
 	selectedRadioInTables ={};
+	resetLimits();
 }
 
 function p3Next(){
@@ -628,6 +633,9 @@ function p4Next(){
 	sectionTwo().style.display = "none";
 	sectionThree().style.display = "none";
 	sectionFour().style.display = "none";
+	resetLimits();
+	selectedRadioInTables ={};
+	resetLimits();
 }
 
 function setPreviewImage(source){
