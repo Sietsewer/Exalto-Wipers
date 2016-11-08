@@ -26,7 +26,7 @@
     <body>
 		<div class="header">
 			<a href="http://www.exalto.com/">
-				<img class="imgLogo" src="http://www.exalto.com/content/files/images/Exalto%20logo's%20header/Exalto_logo_web_+vakhandelkreet_300x82.png" alt="Logo image" style="border-width:0px;">
+				<img class="imgLogo" src="assets/logo_wiper_technologies.png" alt="Logo image" style="border-width:0px;">
 			</a>
 			<div class="linkbar">
 				<a href="http://www.exalto.com/">HOME</a>
@@ -65,10 +65,28 @@
 						</select></span>
 					</div>
 					<div>
+						<script type="text/javascript">
+							function locationChanged () {
+								var e = document.getElementById("location");
+								
+								
+								var t = document.getElementById("labelVMarginTop"); // Vertical Margin Top
+								var b = document.getElementById("labelVMarginBottom"); // Vertical Margin Bottom
+								
+								if(e.value === "top"){
+									t.innerHTML = "Vertical Margin Top";
+									b.innerHTML = "Vertical Margin Bottom";
+								} else {
+									t.innerHTML = "Vertical Margin Bottom";
+									b.innerHTML = "Vertical Margin Top  ";
+								}
+							}
+						</script>
+						
 						<label>Location</label>
-						<span><select id="location" name="location">
-                            <option value="top">Top</option>
-							<option value="bottom">Bottom</option>
+						<span><select id="location" name="location" onchange="locationChanged()">
+                            <option id="locTop" value="top">Top</option>
+							<option id="locBottom" value="bottom">Bottom</option>
 						</select></span>
 					</div>
 					<div>
@@ -111,29 +129,29 @@
 					<form id="margins">
 					<div>
 						<label>Horizontal Margin</label>
-						<span><input type="number" name="marginH" id="marginH" value="60" /></span>
+						<span><input type="number" name="marginH" id="marginH" value="35" /></span>
     	            </div>
 					<p id="margin-h-error-small" style="display:none;" class="error">Horizontal is too small.</p>
 					<p id="margin-h-error-large" style="display:none;" class="error">Horizontal is too large.</p>
 					<div>
-						<label>Vertical Margin Top</label>
-						<span><input type="number" name="marginVT" id="marginVT" value="60" /></span>
+						<label id="labelVMarginTop">Vertical Margin Top</label>
+						<span><input type="number" name="marginVT" id="marginVT" value="35" /></span>
     	            </div>
 					<p id="margin-vt-error-small" style="display:none;" class="error">Top vertical margin is too small.</p>
 					<p id="margin-vt-error-large" style="display:none;" class="error">Top vertical margin is too large.</p>
 					<!-- <label>Window Bottom Width (B)</label>
     	            <span><input type="number" name="windowBottomWidth" id="windowBottomWidth" /></span>-->
 					<div>
-    	            	<label>Vertical Margin Bottom</label>
-    	            	<span><input type="number" name="marginVB" id="marginVB" value="60" /></span>
+    	            	<label id="labelVMarginBottom">Vertical Margin Bottom</label>
+    	            	<span><input type="number" name="marginVB" id="marginVB" value="35" /></span>
 					</div>
 					<p id="margin-vb-error-small" style="display:none;" class="error">Bottom vertical margin is too small.</p>
 					<p id="margin-vb-error-large" style="display:none;" class="error">Bottom vertical margin is too large.</p>
 					<div>
 					</div>
 					<div>
-						<label>Centre Margin</label>
-						<span><input type="number"  name="marginC" id="marginC" value="60" /></span>
+						<label>Centre to Centre</label>
+						<span><input type="number"  name="marginC" id="marginC" value="50" /></span>
 					</div>
 						<p id="margin-c-error-small" style="display:none;" class="error">Centre margin is too small.</p>
 						<p id="margin-c-error-large" style="display:none;" class="error">Centre margin is too large.</p>
@@ -192,13 +210,6 @@
 				</div>
 					<div id="pdfAble">
 						
-				<h2>Motors</h2>
-				<div id="motorsList" class="scrollable">
-					<form name="motorsForm">
-					<table id="motors" class="inputForm sortable"  style="width:100%">
-					</table>
-					</form>
-				</div>
 				<h2>Blades</h2>
 				<div id="bladesList" class="scrollable">
 					<form name="bladesForm">
@@ -213,7 +224,13 @@
 					</table>
 					</form>
 				</div>
-				
+				<h2>Motors</h2>
+				<div id="motorsList" class="scrollable">
+					<form name="motorsForm">
+					<table id="motors" class="inputForm sortable"  style="width:100%">
+					</table>
+					</form>
+				</div>
 					</div>
 				<img id="preview-image" class="previewImage">
 					

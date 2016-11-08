@@ -859,7 +859,7 @@ function drawSheme (data) {
 			//logoSprite.scale.setTo((1/946) * (pixelMargin/3), (1/946) * (pixelMargin/3));
 			//sprites.add(logoSprite);
 			
-			var headerText = "Arm Length: \t\t" + SizeNotation(final.optimalArmLength) + "\nBlade Length: \t" + SizeNotation(final.length) + "\nWipe Angle: \t\t" + SizeNotation(final.wipeAngle);
+			var headerText = "Arm Length: \t\t" + SizeNotation(final.optimalArmLength) + "\nBlade Length: \t" + SizeNotation(final.length) + "\nWipe Angle: \t\t" + final.wipeAngle + "°";
 			
 			var headerLable = game.add.bitmapText(((pixelMargin/3)*2) + (((1/946) * (pixelMargin/3)) * 2927), pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', headerText , 25 / pixelSize);
 	
@@ -886,6 +886,37 @@ function drawSheme (data) {
 			staticElements.add(headerLable);
 			
 			staticElements.add(headerProject);
+		
+			// Now for the bottom
+			
+			var bottom1 = "Exalto B.V.\nP.O. Box 40";
+			var bottom2 = "3370 AA Hardinxveld-Giessendam\nThe Netherlands";
+			var bottom3 = "T:\t\t+31 (0)184 615 800\nF:\t\t+31 (0)184 614 045";
+			var bottom4 = "I:\t\twww.exalto.com\nE:\t\tsales@exalto.com";
+			
+			var m = pixelMargin/3;
+			var bottomX = m;
+			var bottomY = game.height - m;
+			
+			var bottom1Lable = game.add.bitmapText(bottomX,
+												   bottomY, 'arial', bottom1, 25/pixelSize);
+			var bottom2Lable = game.add.bitmapText(bottomX + bottom1Lable.width + (m * 1),
+												   bottomY, 'arial', bottom2, 25/pixelSize);
+			var bottom3Lable = game.add.bitmapText(bottomX + bottom1Lable.width + bottom2Lable.width + (m * 2),
+												   bottomY, 'arial', bottom3, 25/pixelSize);
+			var bottom4Lable = game.add.bitmapText(bottomX + bottom1Lable.width + bottom2Lable.width + bottom3Lable.width + (m * 3),
+												   bottomY, 'arial', bottom4, 25/pixelSize);
+			
+			bottom1Lable.anchor.setTo(0,0.5);
+			bottom2Lable.anchor.setTo(0,0.5);
+			bottom3Lable.anchor.setTo(0,0.5);
+			bottom4Lable.anchor.setTo(0,0.5);
+			
+			staticElements.add(bottom1Lable);
+			staticElements.add(bottom2Lable);
+			staticElements.add(bottom3Lable);
+			staticElements.add(bottom4Lable);
+
 		}
 		
 		//lineLable.angle = textAngle;
