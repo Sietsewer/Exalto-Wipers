@@ -529,7 +529,7 @@ function makePDF () {
 			
 		res1 = filterTable(res1, selectedParts.arm.name, 2);
 			
-		doc.addImage(logoDataURL, 'JPG', 100, 5, 0, 0);
+		doc.addImage(logoDataURL, 'JPG', 100, 20, 171, 68.5);
 		
 		doc.autoTable (res1.columns, res1.data,
 		{

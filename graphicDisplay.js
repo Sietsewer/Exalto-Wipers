@@ -570,7 +570,7 @@ function drawSheme (data) {
 
 	if(!isPreview){
 	var logoSprite = game.add.sprite(pixelMargin/3, pixelMargin/3, "logo");
-	logoSprite.scale.setTo((1/946) * (pixelMargin/3), (1/946) * (pixelMargin/3));
+	logoSprite.scale.setTo((1/1324) * (pixelMargin/3), (1/1324) * (pixelMargin/3));
 	staticElements.add(logoSprite);
 	}
 	
@@ -861,17 +861,17 @@ function drawSheme (data) {
 			
 			var headerText = "Arm Length: \t\t" + SizeNotation(final.optimalArmLength) + "\nBlade Length: \t" + SizeNotation(final.length) + "\nWipe Angle: \t\t" + final.wipeAngle + "°";
 			
-			var headerLable = game.add.bitmapText(((pixelMargin/3)*2) + (((1/946) * (pixelMargin/3)) * 2927), pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', headerText , 25 / pixelSize);
+			var headerLable = game.add.bitmapText(((pixelMargin/3)*2) + (((1/1324) * (pixelMargin/3)) * 3380), pixelMargin/3 + (((1/1324) * (pixelMargin/3)) * (1324/2)), 'arial', headerText , 25 / pixelSize);
 	
 			var partText = "Arm: \t\t" + selectedParts.arm.name + "\nMotor: \t\t" + selectedParts.motor.name + "\nBlade: \t\t" + selectedParts.blade.artNr;
 			
-			var headerParts = game.add.bitmapText(((pixelMargin/3)*2.5) + (((1/946) * (pixelMargin/3)) * 2927) + headerLable.textWidth, pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', partText , 25 / pixelSize);
+			var headerParts = game.add.bitmapText(((pixelMargin/3)*2.5) + (((1/1324) * (pixelMargin/3)) * 3380) + headerLable.textWidth, pixelMargin/3 + (((1/1324) * (pixelMargin/3)) * (1324/2)), 'arial', partText , 25 / pixelSize);
 			
 			var projectText = "Client: \t\t" + document.getElementById("pName").value + "\nProject: \t\t" + document.getElementById("pReference").value + "\nDate: \t\t" + document.getElementById("pDate").value;
 			
-			var headerProject = game.add.bitmapText(((pixelMargin/3)*3) + (((1/946) * (pixelMargin/3)) * 2927) + headerLable.textWidth + headerParts.textWidth, pixelMargin/3 + (((1/946) * (pixelMargin/3)) * (946/2)), 'arial', projectText , 25 / pixelSize);
+			var headerProject = game.add.bitmapText(((pixelMargin/3)*3) + (((1/1324) * (pixelMargin/3)) * 3380) + headerLable.textWidth + headerParts.textWidth, pixelMargin/3 + (((1/1324) * (pixelMargin/3)) * (1324/2)), 'arial', projectText , 25 / pixelSize);
 			
-			var maxPWidth = game.width - ((pixelMargin/3)*4) + (((1/946) * (pixelMargin/3)) * 2927) + headerLable.textWidth;
+			var maxPWidth = game.width - ((pixelMargin/3)*4) + (((1/1324) * (pixelMargin/3)) * 3380) + headerLable.textWidth;
 			
 			headerProject.maxWidth = maxPWidth;
 			
