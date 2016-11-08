@@ -859,7 +859,7 @@ function drawSheme (data) {
 			//logoSprite.scale.setTo((1/946) * (pixelMargin/3), (1/946) * (pixelMargin/3));
 			//sprites.add(logoSprite);
 			
-			var headerText = "Arm Length: \t\t" + SizeNotation(final.optimalArmLength) + "\nBlade Length: \t" + SizeNotation(final.length) + "\nWipe Angle: \t\t" + final.wipeAngle + "°";
+			var headerText = "Arm Length: \t\t" + SizeNotation(final.optimalArmLength) + "\nBlade Length: \t" + SizeNotation(final.length) + "\nWipe Angle: \t\t" + Math.round((Number(final.wipeAngle)) * 10) / 10 + "°";
 			
 			var headerLable = game.add.bitmapText(((pixelMargin/3)*2) + (((1/1324) * (pixelMargin/3)) * 3380), pixelMargin/3 + (((1/1324) * (pixelMargin/3)) * (1324/2)), 'arial', headerText , 25 / pixelSize);
 	
