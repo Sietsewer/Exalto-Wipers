@@ -960,10 +960,18 @@ function buildWindow(graphics, width, height, patternSprite, pixelMargin) {
 	var offset = (baseData.windowRaw.centreDistance > 0 ? baseData.windowRaw.centreDistance : 0 + millimeterMargin) / pixelSize;
 	graphics.lineStyle(2, 0xffffff, 1);
 	
-	var pointA = new Phaser.Point((game.width - onscreenWidth) / 2,				((game.height - onscreenHeight) / 2) + offset);
-	var pointB = new Phaser.Point( game.width - ((game.width - onscreenWidth) / 2),((game.height - onscreenHeight) / 2) + offset);
-	var pointC = new Phaser.Point( game.width - ((game.width - onscreenWidth) / 2), (game.height - ((game.height - onscreenHeight) / 2)) + offset);
-	var pointD = new Phaser.Point((game.width - onscreenWidth) / 2,				 (game.height - ((game.height - onscreenHeight) / 2)) + offset);
+	//var pointA = new Phaser.Point((game.width - onscreenWidth) / 2,				((game.height - onscreenHeight) / 2) + offset);
+	//var pointB = new Phaser.Point( game.width - ((game.width - onscreenWidth) / 2),((game.height - onscreenHeight) / 2) + offset);
+	//var pointC = new Phaser.Point( game.width - ((game.width - onscreenWidth) / 2), (game.height - ((game.height - onscreenHeight) / 2)) + offset);
+	//var pointD = new Phaser.Point((game.width - onscreenWidth) / 2,				 (game.height - ((game.height - onscreenHeight) / 2)) + offset);
+	
+	var pixelWidth = width / pixelSize;
+	var pixelHeight = height / pixelSize;
+	
+	var pointA = new Phaser.Point((game.width - pixelWidth) / 2,				((game.height - pixelHeight) / 2) + (baseData.windowRaw.centreDistance/pixelSize));
+	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),((game.height - pixelHeight) / 2) + (baseData.windowRaw.centreDistance/pixelSize));
+	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), (game.height - ((game.height - pixelHeight) / 2)) + (baseData.windowRaw.centreDistance/pixelSize));
+	var pointD = new Phaser.Point((game.width - pixelWidth) / 2,				 (game.height - ((game.height - pixelHeight) / 2)) + (baseData.windowRaw.centreDistance/pixelSize));
 	
 	graphics.moveTo(pointA.x, pointA.y);
 	

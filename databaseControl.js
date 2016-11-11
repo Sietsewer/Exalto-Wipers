@@ -56,6 +56,30 @@ function databaseLoaded(){
 		uid++;
 	}
 	
+	var filterLD;
+	
+	var filterLDNotLoaded = (document.getElementById("allowLDParts") === undefined) || (document.getElementById("allowLDParts") === null);
+	if (!filterLDNotLoaded){
+		filterLD = document.getElementById("allowLDParts").checked;
+	} else {
+		filterLD = true;
+	}
+	
+	if (filterLD){
+		
+		database.blades = database.blades.where(function (e){
+			return e.range !== "LD"
+		});
+		
+		database.arms = database.arms.where(function (e){
+			return e.range !== "LD"
+		});
+		
+		database.motors = database.motors.where(function (e){
+			return e.range !== "LD"
+		});
+	}
+	
 	
 	var motorArmMax = Number.NEGATIVE_INFINITY;
 	var motorBladeMax = Number.NEGATIVE_INFINITY;

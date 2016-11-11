@@ -28,7 +28,7 @@
       "isPendulum": false,
       "isPantograph": true,
       "artNr": null,
-      "name": "223BD",
+      "name": "223BD.o",
       "comment": null,
       "range": "MD1"
     },
@@ -76,7 +76,7 @@
       "isPendulum": true,
       "isPantograph": true,
       "artNr": null,
-      "name": "223KG",
+      "name": "223KG.c",
       "comment": null,
       "range": "MD1"
     },
@@ -108,7 +108,7 @@
       "isPendulum": true,
       "isPantograph": true,
       "artNr": null,
-      "name": "233BD",
+      "name": "233BD.c",
       "comment": null,
       "range": "MD1"
     },

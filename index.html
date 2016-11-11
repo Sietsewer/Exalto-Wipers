@@ -122,6 +122,21 @@
 						<p id="window-eyelevel-error-large" style="display:none;" class="error">Eye Level is incorrect.</p>
 					<div><i>For zero or empty, no Eye Level is considered</i></div>
 
+					<div>
+					<span>
+						<label>Show LD range parts.</label><input type="checkbox" id="allowLDParts" name="allowLDParts" value="LDParts" onchange="onAllowLDPartsChanged()" />
+					</span>
+					</div>
+					<script type="text/javascript">
+						var allowLDParts = document.getElementById("allowLDParts").checked;
+						
+						function onAllowLDPartsChanged () {
+							allowLDParts = document.getElementById("allowLDParts").checked;
+							databaseLoaded(); // reload database to filter out LD
+						}
+					
+					</script>
+					
     	            <!-- <label>Bulkhead Thickness</label>
     	            <span><input type="number" name="windowBulkheadThickness" id="windowBulkheadThickness" /></span> -->
     	        </form>
@@ -179,6 +194,31 @@
     	    </div>
     	    <!-- Output -->
     	    <div id="outputArea" class="inputForm" style="display: none;">
+				<div>
+    	        <form id="outputSettings" class="meta">
+					<div>
+    	            <span>
+						<label>Manually select all parts.</label><input type="checkbox" id="outputAllParts" name="outputAllParts" value="allParts" onchange="onShowAllPartsChanged()" />
+					</span>
+						</div>
+					<script type="text/javascript">
+						var showAllParts = document.getElementById("outputAllParts").checked;
+						
+						function onShowAllPartsChanged () {
+							showAllParts = document.getElementById("outputAllParts").checked;
+							resetLimits();
+							selectedRadioInTables ={};
+							resetLimits();
+							fillTable();
+							if (!showAllParts){
+								selectAllFirst();
+							}
+						}
+					
+					</script>
+    	        </form>
+				</div>
+				
 				<div>
 				<div id="wiperSpecs" class="scrollable" style="display: none;">
     	        	<table id="generalOutput" style="width:100%">

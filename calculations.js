@@ -807,6 +807,10 @@ function fLerp (min, max, f) {
 	return ((max - min) * f) + min;
 }
 
+function calcCombo (combination){
+	
+}
+
 function getBladeLengths (max, min) {
 	return database.blades.where(function (a) {
 		var maxArmLength = baseData.window.height - (a.length / 2) + baseData.window.centreDistance;
