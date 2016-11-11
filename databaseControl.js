@@ -1,6 +1,7 @@
 /*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: false, mootools: false, prototypejs: false*/
 /*globals limits*/
 var database;
+var databaseRaw;
 var databaseIsLoaded = false;
 
 init();
@@ -32,13 +33,38 @@ function init() {
 
 		
         // Parse JSON string into object
-		database = JSON.parse(response);
+		databaseRaw = JSON.parse(response);
+		
+		database = {};
+		
+		database.arms = databaseRaw.arms.slice(0);
+		database.blades = databaseRaw.blades.slice(0);
+		database.motors = databaseRaw.motors.slice(0);
+		
 		databaseIsLoaded = true;
 		databaseLoaded();
     });
 }
 
 function databaseLoaded(){
+	database.arms = databaseRaw.arms.slice(0);
+	database.blades = databaseRaw.blades.slice(0);
+	database.motors = databaseRaw.motors.slice(0);
+	
+	if (!allowLDParts){
+		
+		database.blades = databaseRaw.blades.where(function (e){
+			return e.range !== "LD";
+		});
+		
+		database.arms = databaseRaw.arms.where(function (e){
+			return e.range !== "LD";
+		});
+		
+		database.motors = databaseRaw.motors.where(function (e){
+			return e.range !== "LD";
+		});
+	}
 	
 	// Assign UID's
 	var uid = 1;
@@ -56,29 +82,14 @@ function databaseLoaded(){
 		uid++;
 	}
 	
-	var filterLD;
+	/*var filterLD;
 	
 	var filterLDNotLoaded = (document.getElementById("allowLDParts") === undefined) || (document.getElementById("allowLDParts") === null);
 	if (!filterLDNotLoaded){
 		filterLD = document.getElementById("allowLDParts").checked;
 	} else {
 		filterLD = true;
-	}
-	
-	if (filterLD){
-		
-		database.blades = database.blades.where(function (e){
-			return e.range !== "LD";
-		});
-		
-		database.arms = database.arms.where(function (e){
-			return e.range !== "LD";
-		});
-		
-		database.motors = database.motors.where(function (e){
-			return e.range !== "LD";
-		});
-	}
+	}*/
 	
 	
 	var motorArmMax = Number.NEGATIVE_INFINITY;

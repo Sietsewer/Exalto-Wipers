@@ -18,7 +18,7 @@ function onAllowLDPartsChanged () {
 }
 
 
-var showAllParts = false;//document.getElementById("outputAllParts").checked;
+var showAllParts = false; //document.getElementById("outputAllParts").checked;
 						
 function onShowAllPartsChanged () {
 	showAllParts = document.getElementById("outputAllParts").checked;
