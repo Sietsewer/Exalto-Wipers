@@ -1,9 +1,6 @@
-@charset "UTF-8";
-/* line 12, ../sass/style.scss */
-table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
-  content: " ▴▾";
-}
-
+/*table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
+    content: " \25B4\25BE" 
+}*/
 /* line 16, ../sass/style.scss */
 i {
   font-style: italic;

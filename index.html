@@ -13,9 +13,10 @@
 				<script src="sorttable.js"></script>
 
 		
-        <script type="text/javascript" src="databaseControl.js"></script>
 		<script type="text/javascript" src="calculations.js"></script>
 		<script type="text/javascript" src="pageControl.js"></script>
+		<script type="text/javascript" src="databaseControl.js"></script>
+
 		<!-- Import Phaser -->
 		<script src="phaser.min.js"></script>
 		<!-- Import jsPDF -->
@@ -67,23 +68,6 @@
 						</select></span>
 					</div>
 					<div>
-						<script type="text/javascript">
-							function locationChanged () {
-								var e = document.getElementById("location");
-								
-								
-								var t = document.getElementById("labelVMarginTop"); // Vertical Margin Top
-								var b = document.getElementById("labelVMarginBottom"); // Vertical Margin Bottom
-								
-								if(e.value === "top"){
-									t.innerHTML = "Vertical Margin Top";
-									b.innerHTML = "Vertical Margin Bottom";
-								} else {
-									t.innerHTML = "Vertical Margin Bottom";
-									b.innerHTML = "Vertical Margin Top  ";
-								}
-							}
-						</script>
 						
 						<label>Location</label>
 						<span><select id="location" name="location" onchange="locationChanged()">
@@ -106,7 +90,7 @@
 					<!-- <label>Window Bottom Width (B)</label>
     	            <span><input type="number" name="windowBottomWidth" id="windowBottomWidth" /></span>-->
 					<div>
-    	            	<label>Centre Distance</label>
+    	            	<label>Centre Distance *</label>
     	            	<span><input type="number" name="windowCentreDistance" id="windowCentreDistance" /></span>
 					</div>
 					<p id="window-offset-error-small" style="display:none;" class="error">Centre Distance is too small.</p>
@@ -127,15 +111,6 @@
 						<label>Show LD range parts.</label><input type="checkbox" id="allowLDParts" name="allowLDParts" value="LDParts" onchange="onAllowLDPartsChanged()" />
 					</span>
 					</div>
-					<script type="text/javascript">
-						var allowLDParts = document.getElementById("allowLDParts").checked;
-						
-						function onAllowLDPartsChanged () {
-							allowLDParts = document.getElementById("allowLDParts").checked;
-							databaseLoaded(); // reload database to filter out LD
-						}
-					
-					</script>
 
 					
     	            <!-- <label>Bulkhead Thickness</label>
@@ -207,21 +182,6 @@
 						<label>Manually select all parts.</label><input type="checkbox" id="outputAllParts" name="outputAllParts" value="allParts" onchange="onShowAllPartsChanged()" />
 					</span>
 						</div>
-					<script type="text/javascript">
-						var showAllParts = document.getElementById("outputAllParts").checked;
-						
-						function onShowAllPartsChanged () {
-							showAllParts = document.getElementById("outputAllParts").checked;
-							resetLimits();
-							selectedRadioInTables ={};
-							resetLimits();
-							fillTable();
-							if (!showAllParts){
-								selectAllFirst();
-							}
-						}
-					
-					</script>
     	        </form>
 				</div>
 				

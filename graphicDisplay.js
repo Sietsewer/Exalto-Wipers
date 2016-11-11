@@ -97,7 +97,7 @@ function create() {
 	windowGraphic.z = 16;
 	windowPattern.z = 15;
 	
-	sprites.z = 14
+	sprites.z = 14;
 }
 
 // Measurements are always on the right side.

@@ -150,7 +150,7 @@ function resetLimits () {
 		"armMax":Number.NEGATIVE_INFINITY,
 		"hoh":null,
 		"centreMounted":null
-	}
+	};
 	limits.blade = {
 		"bladeLength":NaN,
 		"maxArmLength":NaN,
@@ -695,14 +695,14 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 			if(combination.motor.angleStep > 0){
 				
 				retVar *= 180/Math.PI;								
-				var stage = combination.motor.angleStep;
-				var min = combination.motor.angleMin;
-				var max = combination.motor.angleMax;
-				retVar -= min;
-				retVar /= stage;
+				var stage2 = combination.motor.angleStep;
+				var min2 = combination.motor.angleMin;
+				var max2 = combination.motor.angleMax;
+				retVar -= min2;
+				retVar /= stage2;
 				retVar = Math.round(retVar);
-				retVar *= stage;
-				retVar += min;
+				retVar *= stage2;
+				retVar += min2;
 				retVar *= Math.PI/180;
 			}
 		}
@@ -864,7 +864,7 @@ function fLerp (min, max, f) {
 
 function calcCombo (combination){
 	var width = baseData.window.width;
-	var height = baseData.window.height
+	var height = baseData.window.height;
 	var vOffset = baseData.window.centreDistance;
 	
 	var optimalLength = getOptimalArmLength (baseData.window.isPantograph, combination.blade.length, Math.PI, width, height, vOffset, combination);
@@ -909,7 +909,7 @@ var processLimits;
 function processBlades (){
 	processLimits = limits.definiteList();
 	var width = baseData.window.width;
-	var height = baseData.window.height
+	var height = baseData.window.height;
 	var vOffset = baseData.window.centreDistance;
 	var bl = getBladeLengths(processLimits.bladeMax, processLimits.bladeMin);
 	
@@ -933,7 +933,7 @@ function calcFinal (){
 	if (isFinite(limits.blade.bladeLength) && limits.blade.bladeLength > 0){
 		processLimits = limits.definiteList();
 		var width = baseData.window.width;
-		var height = baseData.window.height
+		var height = baseData.window.height;
 		var vOffset = baseData.window.centreDistance;
 		var bl = {"length":limits.blade.bladeLength};
 		bl.optimalArmLength = getOptimalArmLength (baseData.window.isPantograph, bl.length, Math.PI, width, height, vOffset);

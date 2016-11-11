@@ -1,6 +1,6 @@
 /*jshint unused: vars, browser: true, couch: false, devel: false, worker: false, node: false, nonstandard: false, phantom: false, rhino: false, wsh: false, yui: false, browserify: false, shelljs: false, jasmine: false, mocha: false, qunit: false, typed: false, dojo: false, jquery: true, mootools: false, prototypejs: false*/
 /*jslint browser: true*/
-/*globals limits, baseData*/
+/*globals limits, baseData, database, resetLimits, SizeNotation, databaseLoaded, computeWiperset,calcCombo, processBlades,drawSheme, inUpdate, game, sorttable, resize, jsPDF*/
 
 var sectionOne = 	function(){return document.getElementById("unitsSettings");};
 var sectionTwo  = 	function(){return document.getElementById("windowSettings");};
@@ -9,6 +9,54 @@ var sectionFour   = function(){return document.getElementById("printArea");};
 var data;
 
 var selectedParts = {arm:null, blade:null, motor:null};
+
+var allowLDParts = false;//document.getElementById("allowLDParts").checked;
+						
+function onAllowLDPartsChanged () {
+	allowLDParts = document.getElementById("allowLDParts").checked;
+	databaseLoaded(); // reload database to filter out LD
+}
+
+
+var showAllParts = false;//document.getElementById("outputAllParts").checked;
+						
+function onShowAllPartsChanged () {
+	showAllParts = document.getElementById("outputAllParts").checked;
+	resetLimits();
+	selectedRadioInTables ={};
+	resetLimits();
+	fillTable();
+	if (!showAllParts){
+	selectAllFirst();
+	}
+}
+
+
+function locationChanged () {
+	var e = document.getElementById("location");
+	
+								
+	var t = document.getElementById("labelVMarginTop"); // Vertical Margin Top
+	var b = document.getElementById("labelVMarginBottom"); // Vertical Margin Bottom
+	
+	if(e.value === "top"){
+		t.innerHTML = "Vertical Margin Top";
+		b.innerHTML = "Vertical Margin Bottom";
+	} else {
+		t.innerHTML = "Vertical Margin Bottom";
+		b.innerHTML = "Vertical Margin Top  ";
+	}
+}
+
+
+
+
+
+
+
+
+
+
 
 function getWindowData () {
 	var wiperType = (document.getElementById("wiperType") || "").value;
@@ -40,7 +88,7 @@ function getWindowData () {
 	}
 	
 	baseData.windowRaw.width = width;
-	baseData.windowRaw.height = height
+	baseData.windowRaw.height = height;
 	baseData.windowRaw.centreDistance = centreDistance;
 	baseData.windowRaw.marginH = marginH;
 	baseData.windowRaw.marginVT = marginVT;
@@ -116,7 +164,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 				return ((limits.window.armMax > a.lengthMin) &&
 			(limits.window.armMin < a.lengthMax) &&
 			(limits.window.bladeMax > a.bladeLengthMin) &&
-			(limits.window.bladeMin < a.bladeLengthMax)) && (a.isPantograph === baseData.window.isPantograph)
+			(limits.window.bladeMin < a.bladeLengthMax)) && (a.isPantograph === baseData.window.isPantograph);
 			});
 		var blades = database.blades.where(
 			function (e) {
@@ -137,7 +185,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 					var motor = motors[m];
 					var enter = true;
 					
-					var fitHoh = (!baseData.window.isPantograph ||( motor.hoh === arm.hoh))
+					var fitHoh = (!baseData.window.isPantograph ||( motor.hoh === arm.hoh));
 					
 					var fitWindowMax = (arm.lengthMin + (blade.length/2)) <= baseData.window.height + baseData.window.centreDistance;
 					if(!fitWindowMax || !fitHoh){
@@ -376,7 +424,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 			limits.arm.hoh = cont.myData.hoh;
 			limits.arm.centreMounted = cont.myData.centreMounted;
 		}
-	}
+	};
 	
 	var onMotorClick = function(cont) {
 		if(cont.value === "0"){
@@ -396,7 +444,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 			limits.motor.angleStages = cont.myData.angleStep;
 			limits.motor.hoh = cont.myData.hoh;
 		}
-	}
+	};
 	
 	// Recreate tables
 	buildTable (fArms, ["range", "name", "lengthMin", "lengthMax", "bladeLengthMin", "bladeLengthMax", "hoh"], ["Range", "Art. Nr.", "Arm Min.", "Arm Max.", "Blade Min.", "Blade Max.", "Centre Distance"], "arms",
@@ -423,7 +471,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 			return content;
 		}var deviation = 0;
 		if (maxPercentage > 0.15){
-			deviation = 0.1
+			deviation = 0.1;
 		}
 		var element = "";
 		if (val >(maxPercentage - deviation)){
@@ -550,6 +598,12 @@ function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 	
 	var tbody = document.createElement("tbody");
 
+	var func = function(){
+				selectedRadioInTables[this.name] = this.value;
+				radioButtons(this);
+				changedChoices ();
+			};
+	
 	for (var i = 0; i < data.length; i++){ // Iterate over rows
 		
 		
@@ -565,11 +619,7 @@ function buildTable (data, headers, labels, tableID, functions, radioButtons) {
 			button.myData = data[i];
 			button.id = data[i].uid;
 			tables[tableID].push(button.id);
-			button.onclick = function(){
-				selectedRadioInTables[this.name] = this.value;
-				radioButtons(this);
-				changedChoices ();
-			};
+			button.onclick = func;
 			if(selectedRadioInTables[tableID] === button.value){
 				button.checked = true;
 			}

@@ -68,15 +68,15 @@ function databaseLoaded(){
 	if (filterLD){
 		
 		database.blades = database.blades.where(function (e){
-			return e.range !== "LD"
+			return e.range !== "LD";
 		});
 		
 		database.arms = database.arms.where(function (e){
-			return e.range !== "LD"
+			return e.range !== "LD";
 		});
 		
 		database.motors = database.motors.where(function (e){
-			return e.range !== "LD"
+			return e.range !== "LD";
 		});
 	}
 	
