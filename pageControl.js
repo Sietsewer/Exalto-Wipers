@@ -108,7 +108,8 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	var myLimits = limits.definiteList();
 	
 	var combinations = [];
-	
+	var maxPercentile = [];
+	var maxComboPercentage = 0;
 	if(!showAllParts){
 		var arms = database.arms.where(
 			function (a){
@@ -138,12 +139,12 @@ function fillTable (armLength, bladeLength, wipeAngle){
 					
 					var fitHoh = (!baseData.window.isPantograph ||( motor.hoh === arm.hoh))
 					
-					var fitWindowMax = (arm.lengthMin + (blade.length/2)) <= baseData.window.height;
+					var fitWindowMax = (arm.lengthMin + (blade.length/2)) <= baseData.window.height + baseData.window.centreDistance;
 					if(!fitWindowMax || !fitHoh){
 						enter = false;
 					}
 					
-					var mL = (blade.length / 2) - arm.lengthMin;
+					var mL = (blade.length / 2) - arm.bladeLengthMax;
 					
 					if(mL > -baseData.window.marginC){
 						enter = false;
@@ -161,6 +162,17 @@ function fillTable (armLength, bladeLength, wipeAngle){
 						enter = false;
 					}
 					
+					var maxArmEL = baseData.window.eyeLevel + (((baseData.window.eyeLevelMargin/100) * blade.length)/2) + baseData.window.centreDistance;
+	
+					var minArmEL = baseData.window.eyeLevel - (((baseData.window.eyeLevelMargin/100) * blade.length)/2) + baseData.window.centreDistance;
+					
+					if ((minArmEL + (blade.length/2)) > baseData.window.height + baseData.window.centreDistance ){
+						enter = false;
+					}
+					
+					if ((arm.lengthMin > maxArmEL) || (arm.lengthMax < minArmEL)){
+						enter = false;
+					}
 					
 					if (blade.length > motor.bladeMax) {
 						enter = false;
@@ -176,11 +188,23 @@ function fillTable (armLength, bladeLength, wipeAngle){
 				}
 			}
 		}
+		
+		for (var i = 0; i < combinations.length; i++){
+		combinations[i] = calcCombo(combinations[i]);
+		if (combinations[i].wipePercentage > maxComboPercentage){
+			maxComboPercentage = combinations[i].wipePercentage;
+			maxPercentile = [];
+		}
+		if (combinations[i].wipePercentage === maxComboPercentage){
+			maxPercentile.push(combinations[i]);
+		}
+	}
 	}
 	
-	for (var i = 0; i < combinations.length; i++){
-		combinations[i] = calcCombo(combinations[i]);
-	}
+	
+	
+	
+
 	
 	
 	var fBlades = processBlades ();
@@ -199,10 +223,19 @@ function fillTable (armLength, bladeLength, wipeAngle){
 		
 	});
 	
-	if (!showAllParts)
-	fBlades = [fBlades.firstWhere(function (e) {
-		return e.wipePercentage === maxPercentage;
-	})];
+	if (!showAllParts){
+	fBlades = database.blades.where(function (e) {
+		//return e.wipePercentage === maxPercentage;
+		
+		for(var i = 0; i < maxPercentile.length; i++){
+			if(e.uid === maxPercentile[i].blade.uid){
+				return true;
+			}
+		}
+		
+		return false;
+	});
+	}
 	
 	var avgPercentage = avgCount / fBlades.length;
 
@@ -226,32 +259,15 @@ function fillTable (armLength, bladeLength, wipeAngle){
 
 	});
 	} else { 
-		 fArms = database.arms.where(function (a) {
-			var fitType = baseData.window.isPantograph === a.isPantograph;
-			var al = fBlades[0].optimalArmLength;
-			var bl = fBlades[0].length;
-			var fitBlade = ((a.lengthMin <= al) && (a.lengthMax >= al)) && ((a.bladeLengthMax >= bl) && (a.bladeLengthMin <= bl));
-			return fitType && fitBlade;
-		});
-		
-		if (fArms.length === 0){ // If it don't work, use old filters. Better than nothing.
-			fArms = database.arms.where(function (a) {
-		var fitType = baseData.window.isPantograph === a.isPantograph;
-		var fitWindow =
-			((limits.window.armMax > a.lengthMin) &&
-			(limits.window.armMin < a.lengthMax) &&
-			(limits.window.bladeMax > a.bladeLengthMin) &&
-			(limits.window.bladeMin < a.bladeLengthMax));
-		
-		var fitMotor =!isFinite(limits.motor.armMax) || !isFinite(limits.motor.bladeMax) || !isFinite(limits.motor.hoh) ||
-			(a.lengthMin < limits.motor.armMax && a.bladeLengthMin < limits.motor.bladeMax && a.hoh === limits.motor.hoh);
-		
-		var fitBlade = !isFinite(limits.blade.bladeLength) || !isFinite(limits.blade.maxArmLength) || !isFinite(limits.blade.minArmLength) || ((a.bladeLengthMin <= limits.blade.bladeLength) && (limits.blade.bladeLength <= a.bladeLengthMax) && (a.lengthMin <= limits.blade.maxArmLength) && a.lengthMax > limits.blade.minArmLength);
-		
-		return fitWindow && fitMotor && fitBlade && fitType && (filteredBladesMax > a.bladeLengthMin);
-
-	});
+		fArms = database.arms.where(function (e) {
+		 for(var i = 0; i < maxPercentile.length; i++){
+			if(e.uid === maxPercentile[i].arm.uid){
+				return true;
+			}
 		}
+		
+		return false;
+	});
 	}
 	
 	var fMotors;
@@ -285,25 +301,13 @@ function fillTable (armLength, bladeLength, wipeAngle){
 		
 		fMotors = database.motors.where(function (a) {
 
-		var fitType = (baseData.window.isPantograph && a.isPantograph) || (!baseData.window.isPantograph && a.isPendulum);
-		
-		var fitWindow = ((limits.window.bladeMin < a.bladeMax) &&
-			(limits.window.bladeMin < a.bladeMax));
-		
-		var fitArm = !isFinite(limits.arm.armMin) || !isFinite(limits.arm.bladeMin) ||
-			(a.armMax > limits.arm.armMin && a.bladeMax > limits.arm.bladeMin);
-		
-		var fitArmThickness = baseData.window.isPantograph ? ((limits.arm.hoh === 0) || (limits.arm.hoh === null) || (!isFinite(limits.arm.hoh)) || (limits.arm.hoh === a.hoh)) : true;
-			
-			
-		var fitBlade = (fBlades[0].length <= a.bladeMax) && (fBlades[0].optimalArmLength <= a.armMax);
-		
-		return fitType && fitWindow && fitArm && fitBlade && fitArmThickness;
-		/*
-		if(myLimits.bladeLength){
-			return a.bladeMax <= myLimits.bladeLength;
+		for(var i = 0; i < maxPercentile.length; i++){
+			if(a.uid === maxPercentile[i].motor.uid){
+				return true;
+			}
 		}
-		return myLimits.armMin < a.bladeMax;*/
+		
+		return false;
 		});
 	}
 	

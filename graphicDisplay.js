@@ -583,13 +583,30 @@ function drawSheme (data) {
 	
 	var pixelWidth = mmWidth / pixelSize;
 	var pixelHeight = mmHeight / pixelSize;
-	
+	/*
 	var pointA = new Phaser.Point((game.width - pixelWidth) / 2,				((game.height - pixelHeight) / 2) + (baseData.windowRaw.centreDistance/pixelSize));
 	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),((game.height - pixelHeight) / 2) + (baseData.windowRaw.centreDistance/pixelSize));
 	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), (game.height - ((game.height - pixelHeight) / 2)) + (baseData.windowRaw.centreDistance/pixelSize));
 	var pointD = new Phaser.Point((game.width - pixelWidth) / 2,				 (game.height - ((game.height - pixelHeight) / 2)) + (baseData.windowRaw.centreDistance/pixelSize));
+	*/
 	
+	/*var pointA = new Phaser.Point((game.width - pixelWidth) / 2,				((game.height - pixelHeight) / 2) - ((baseData.windowRaw.centreDistance > 0 ? 0 : baseData.windowRaw.centreDistance)/pixelSize));
+	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),((game.height - pixelHeight) / 2) - ((baseData.windowRaw.centreDistance > 0 ? 0 : baseData.windowRaw.centreDistance)/pixelSize));
+	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), (game.height - ((game.height - pixelHeight) / 2)) - ((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance)/pixelSize));
+	var pointD = new Phaser.Point((game.width - pixelWidth) / 2,				 (game.height - ((game.height - pixelHeight) / 2)) - ((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance)/pixelSize));*/
 
+	/*var pointA = new Phaser.Point((game.width - pixelWidth) / 2, ((baseData.windowRaw.centreDistance > 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin) / pixelSize);
+	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), ((baseData.windowRaw.centreDistance > 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin) / pixelSize);
+	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),  ((baseData.windowRaw.centreDistance > 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin + mmHeight) / pixelSize);
+	var pointD = new Phaser.Point((game.width - pixelWidth) / 2, ((baseData.windowRaw.centreDistance > 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin + mmHeight) / pixelSize);*/
+	
+	var vShuffle = (game.height - (pixelMargin*2) - pixelHeight - ((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) / pixelSize)) / 2;
+	
+	var pointA = new Phaser.Point((game.width - pixelWidth) / 2, (((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin) / pixelSize) + vShuffle);
+	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), (((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin) / pixelSize) + vShuffle);
+	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),  (((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin + mmHeight) / pixelSize) + vShuffle);
+	var pointD = new Phaser.Point((game.width - pixelWidth) / 2, (((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin + mmHeight) / pixelSize) + vShuffle);
+	
 	//drawMeasure (measurementGraphics, new Phaser.Point(500, 100), new Phaser.Point(500, 500));
 	//drawMeasure (measurementGraphics, new Phaser.Point(100, 100), new Phaser.Point(500, 100));
 	
@@ -967,12 +984,17 @@ function buildWindow(graphics, width, height, patternSprite, pixelMargin) {
 	
 	var pixelWidth = width / pixelSize;
 	var pixelHeight = height / pixelSize;
+	/*
+	var pointA = new Phaser.Point((game.width - pixelWidth) / 2,				((game.height - pixelHeight) / 2) - ((baseData.windowRaw.centreDistance > 0 ? 0 : baseData.windowRaw.centreDistance)/pixelSize));
+	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),((game.height - pixelHeight) / 2) - ((baseData.windowRaw.centreDistance > 0 ? 0 : baseData.windowRaw.centreDistance)/pixelSize));
+	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), (game.height - ((game.height - pixelHeight) / 2)) - ((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance)/pixelSize));
+	var pointD = new Phaser.Point((game.width - pixelWidth) / 2,				 (game.height - ((game.height - pixelHeight) / 2)) - ((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance)/pixelSize));*/
+	var vShuffle = (game.height - (pixelMargin*2) - pixelHeight - ((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) / pixelSize)) / 2;
 	
-	var pointA = new Phaser.Point((game.width - pixelWidth) / 2,				((game.height - pixelHeight) / 2) + (baseData.windowRaw.centreDistance/pixelSize));
-	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),((game.height - pixelHeight) / 2) + (baseData.windowRaw.centreDistance/pixelSize));
-	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), (game.height - ((game.height - pixelHeight) / 2)) + (baseData.windowRaw.centreDistance/pixelSize));
-	var pointD = new Phaser.Point((game.width - pixelWidth) / 2,				 (game.height - ((game.height - pixelHeight) / 2)) + (baseData.windowRaw.centreDistance/pixelSize));
-	
+	var pointA = new Phaser.Point((game.width - pixelWidth) / 2, (((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin) / pixelSize) + vShuffle);
+	var pointB = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2), (((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin) / pixelSize) + vShuffle);
+	var pointC = new Phaser.Point( game.width - ((game.width - pixelWidth) / 2),  (((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin + height) / pixelSize) + vShuffle);
+	var pointD = new Phaser.Point((game.width - pixelWidth) / 2, (((baseData.windowRaw.centreDistance < 0 ? 0 : baseData.windowRaw.centreDistance) + millimeterMargin + height) / pixelSize) + vShuffle);
 	graphics.moveTo(pointA.x, pointA.y);
 	
 	graphics.beginFill(0xffffff);
@@ -986,10 +1008,6 @@ function buildWindow(graphics, width, height, patternSprite, pixelMargin) {
 
 // Calculate millimeter size of one pixel.
 function calculateScale (width, height, margin){
-	
-	if(isPreview){
-		margin /= 2;
-	}
 	
 	var outerRatio = game.width / game.height;
 	var innerRatio = (width + margin + margin) / (height + margin + margin);

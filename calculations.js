@@ -625,7 +625,7 @@ function getMaxBladeLength (width, height, eyeLevel){
 }
 
 // vOffset must be margin adjusted!
-function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOffset) {
+function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOffset, combination) {
 	var retVar = Number.POSITIVE_INFINITY;
 	if (isPantograph) {
 		// Horizontal check
@@ -634,7 +634,6 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 		// Prevent incorrect calculations, zero divisions etc.
 		if (armLength > (width / 2)) {
 			hLimit = Math.asin((width/2) / armLength);
-			//hLimit = ((Math.PI/2) - hLimit) * 2;
 			hLimit = hLimit + hLimit;
 			if(isNaN(hLimit)){
 				console.error("h-nan");
@@ -644,9 +643,8 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 		// Vertical check
 		var vLimit = Number.POSITIVE_INFINITY;
 		
-		if (/*-(bladeLength / 2) <= vOffset &&*/ (bladeLength/2) + vOffset <= armLength) {
+		if ((bladeLength/2) + vOffset <= armLength) {
 			vLimit = Math.acos(((bladeLength/2) + vOffset) / armLength);
-			//vLimit = ((Math.PI/2) - vLimit) * 2;
 			vLimit = vLimit + vLimit;
 			if(isNaN(vLimit)){
 				console.error("v-nan");
@@ -654,10 +652,10 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 		}
 		
 		// Returns
-		if (hLimit < retVar/* && hLimit < maxDegreesPantograph*/){
+		if (hLimit < retVar){
 			retVar = hLimit;
 		}
-		if (vLimit < retVar/* && vLimit < maxDegreesPantograph*/){
+		if (vLimit < retVar){
 			retVar = vLimit;
 		}
 		
@@ -665,6 +663,7 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 			return 0;
 		}
 		
+		if (typeof combination === "undefined"){
 		if(isFinite(processLimits.angleMax) && isFinite(processLimits.angleMin)){
 			if(retVar > (processLimits.angleMax * (Math.PI/180))){
 				return processLimits.angleMax * (Math.PI/180);
@@ -678,6 +677,27 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 				var stage = processLimits.angleStages;
 				var min = processLimits.angleMin;
 				var max = processLimits.angleMax;
+				retVar -= min;
+				retVar /= stage;
+				retVar = Math.round(retVar);
+				retVar *= stage;
+				retVar += min;
+				retVar *= Math.PI/180;
+			}
+		}
+		} else {
+			if(retVar > (combination.motor.angleMax * (Math.PI/180))){
+				return combination.motor.angleMax * (Math.PI/180);
+			}else if (retVar < (combination.motor.angleMin * (Math.PI/180))){
+				return 0;
+			}
+			
+			if(combination.motor.angleStep > 0){
+				
+				retVar *= 180/Math.PI;								
+				var stage = combination.motor.angleStep;
+				var min = combination.motor.angleMin;
+				var max = combination.motor.angleMax;
 				retVar -= min;
 				retVar /= stage;
 				retVar = Math.round(retVar);
@@ -721,6 +741,7 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 			return 0;
 		}
 		
+		if (typeof combination === "undefined"){
 		if(isFinite(processLimits.angleMax) && isFinite(processLimits.angleMin)){
 			if(retVar > (processLimits.angleMax * (Math.PI/180))){
 				return processLimits.angleMax * (Math.PI/180);
@@ -742,7 +763,27 @@ function getWipeAngle (isPantograph, width, height, armLength, bladeLength, vOff
 				retVar *= Math.PI/180;
 			}
 		}
-		
+		} else {
+			if(retVar > (combination.motor.angleMax * (Math.PI/180))){
+				return combination.motor.angleMax * (Math.PI/180);
+			}else if (retVar < (combination.motor.angleMin * (Math.PI/180))){
+				return 0;
+			}
+			
+			if(combination.motor.angleStep > 0){
+				
+				retVar *= 180/Math.PI;								
+				var stage = combination.motor.angleStep;
+				var min = combination.motor.angleMin;
+				var max = combination.motor.angleMax;
+				retVar -= min;
+				retVar /= stage;
+				retVar = Math.round(retVar);
+				retVar *= stage;
+				retVar += min;
+				retVar *= Math.PI/180;
+			}
+		}
 		
 		
 		return retVar;
@@ -753,16 +794,30 @@ var pollOffset = 0.25; // Amount of millimiters offset is used when determining 
 var pollCount = 50; // Amount of polls per sweep. More takes longer, but finishes in less sweeps.
 
 // Use searching algorithm to find optimal arm length. Dependend on pollCount and pollOffset.
-function getOptimalArmLength (isPantograph, bladeLength, angleLimit, width, height, vOffset) {
+function getOptimalArmLength (isPantograph, bladeLength, angleLimit, width, height, vOffset, combination) {
 	var maxArmLength = height - (bladeLength / 2) + vOffset;
 	var minArmLength = (bladeLength / 2) + (vOffset > 0 ? vOffset : 0);
 	
-	if (processLimits.armMax < maxArmLength){
-		maxArmLength = processLimits.armMax;
-	}
+	if (typeof combination === "undefined"){
+		if (processLimits.armMax < maxArmLength){
+			maxArmLength = processLimits.armMax;
+		}
 	
-	if (processLimits.armMin > minArmLength){
-		minArmLength = processLimits.armMin;
+		if (processLimits.armMin > minArmLength){
+			minArmLength = processLimits.armMin;
+		}
+	} else {
+		if (combination.arm.lengthMax < maxArmLength){
+			maxArmLength = combination.arm.lengthMax;
+		}
+	
+		if (combination.arm.lengthMin > minArmLength){
+			minArmLength = combination.arm.lengthMin;
+		}
+		
+		if (combination.motor.armMax < maxArmLength){
+			maxArmLength = combination.motor.armMax;
+		}
 	}
 	
 	var maxArmEL = baseData.window.eyeLevel + (((baseData.window.eyeLevelMargin/100) * bladeLength)/2) + baseData.window.centreDistance;
@@ -789,7 +844,7 @@ function getOptimalArmLength (isPantograph, bladeLength, angleLimit, width, heig
 		var val = i + minArmLength;
 		p.value = val;
 		
-		var wa = getWipeAngle (isPantograph, width, height, val, bladeLength, vOffset);
+		var wa = getWipeAngle (isPantograph, width, height, val, bladeLength, vOffset, combination);
 		p.perc = getWipePercentage(isPantograph, val, bladeLength, wa, width, height, vOffset);
 		
 		if (p.perc > maxPerc){
@@ -808,6 +863,21 @@ function fLerp (min, max, f) {
 }
 
 function calcCombo (combination){
+	var width = baseData.window.width;
+	var height = baseData.window.height
+	var vOffset = baseData.window.centreDistance;
+	
+	var optimalLength = getOptimalArmLength (baseData.window.isPantograph, combination.blade.length, Math.PI, width, height, vOffset, combination);
+	var wipeAngle = getWipeAngle (baseData.window.isPantograph, width, height, optimalLength, combination.blade.length, vOffset, combination);
+	var wipePercentage = getWipePercentage (baseData.window.isPantograph, optimalLength, combination.blade.length, wipeAngle, width, height, vOffset);
+		
+	wipeAngle *= 57.295780181884765625;
+	
+	combination.optimalArmLength = optimalLength;
+	combination.wipeAngle = wipeAngle;
+	combination.wipePercentage = wipePercentage;
+	
+	return combination;
 	
 }
 
