@@ -454,7 +454,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 	function (val) {return SizeNotation(Number(val));},
 	function (val) {return SizeNotation(Number(val));},
 	function (val) {return SizeNotation(Number(val));},
-	function (val) {return SizeNotation(Number(val));}], onArmsClick);
+	function (val) {return SizeNotation(Number(val), true);}], onArmsClick);
 	
 	
 	buildTable (fBlades, ["range", "artNr", "length", "optimalArmLength", "wipeAngle", "wipePercentage"], ["Range", "Art. Nr.", "Length", "Optimal Arm Length", "Wipe Angle", "Wipe Percentage"], "blades", [null,
@@ -482,7 +482,7 @@ function fillTable (armLength, bladeLength, wipeAngle){
 			   }return element;
 	}], onBladesClick);
 
-	buildTable (fMotors, ["range", "name", "hoh", "armMax", "bladeMax", "angleMin", "angleMax", "angleStep"], ["Range", "Art. Nr.", "Centre Distance", "Arm Max", "Blade Max", "Min. Angle", "Max. Angle", "Angle Step"], "motors", [null,null,function (val) {return SizeNotation(Number(val));}, function (val) {return SizeNotation(Number(val));},function (val) {return SizeNotation(Number(val));},function(val){
+	buildTable (fMotors, ["range", "name", "hoh", "armMax", "bladeMax", "angleMin", "angleMax", "angleStep"], ["Range", "Art. Nr.", "Centre Distance", "Arm Max", "Blade Max", "Min. Angle", "Max. Angle", "Angle Step"], "motors", [null,null,function (val) {return SizeNotation(Number(val), true);}, function (val) {return SizeNotation(Number(val));},function (val) {return SizeNotation(Number(val));},function(val){
 		return val + "°";
 	},function(val){
 		return val + "°";

@@ -579,10 +579,13 @@ function Meta (units) {
 }
 
 // size must be MM to work correctly.
-function SizeNotation (size) {
+function SizeNotation (size, alwaysMM) {
 	var dat = document.getElementById("units").value;
 	var isInch = dat === "inch";
 	if (isInch){ // inch
+        if (alwaysMM){
+            return Number(size).toFixed(0) + " mm (" + (Number(size) / 25.4).toFixed(2) + " in)"; 
+        }
 		return (Number(size) / 25.4).toFixed(2) + " in";
 	} else { // mm
 		return (Number(size).toFixed(0) + " mm");
