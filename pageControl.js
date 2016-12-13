@@ -945,6 +945,26 @@ function p4Next(){
 	resetLimits();
 }
 
+var LastUnits = "mm";
+
+function unitsChange(){
+    if (document.getElementById("units").value !== LastUnits){
+    if((document.getElementById("units") || "").value === "mm"){
+        (document.getElementById("units") || "").value /= 
+        document.getElementById("marginH").value  = Number((document.getElementById("marginH")  || "").value) * 25.4;
+	   document.getElementById("marginVT").value = Number((document.getElementById("marginVT") || "").value) * 25.4;
+	   document.getElementById("marginVB").value = Number((document.getElementById("marginVB") || "").value) * 25.4;
+	   document.getElementById("marginC").value  = Number((document.getElementById("marginC")  || "").value) * 25.4;
+    } else {
+        document.getElementById("marginH").value  = Number((document.getElementById("marginH")  || "").value) / 25.4;
+	   document.getElementById("marginVT").value = Number((document.getElementById("marginVT") || "").value) / 25.4;
+	   document.getElementById("marginVB").value = Number((document.getElementById("marginVB") || "").value) / 25.4;
+	   document.getElementById("marginC").value  = Number((document.getElementById("marginC")  || "").value) / 25.4;
+    }
+        LastUnits = document.getElementById("units").value;
+    }
+}
+
 function setPreviewImage(source){
 	var img = document.getElementById("preview-image");
 	img.src = source;
