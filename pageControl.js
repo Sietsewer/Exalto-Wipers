@@ -71,20 +71,20 @@ function getWindowData () {
 	var marginC  = Number((document.getElementById("marginC")  || "").value);
 	var marginEyeLevel = Number((document.getElementById("marginEyeLevel") || "").value);
 	
-	var units = (document.getElementById("windowBulkheadThickness") || "").value;
+	var units = (document.getElementById("units") || "").value;
 	
 	var isInches = (units === "inch");
 	
 	if(isInches){
-		height /= 25.4;
-		width /= 25.4;
-		centreDistance /= 25.4;
-		eyeLevel /= 25.4;
+		height *= 25.4;
+		width *= 25.4;
+		centreDistance *= 25.4;
+		eyeLevel *= 25.4;
 	
-		marginH /= 25.4;
-		marginVT /= 25.4;
-		marginVB /= 25.4;
-		marginC /= 25.4;
+		marginH *= 25.4;
+		marginVT *= 25.4;
+		marginVB *= 25.4;
+		marginC *= 25.4;
 	}
 	
 	baseData.windowRaw.width = width;
@@ -814,7 +814,7 @@ function inputError () {
 	
 	var errored = false;
 	
-	var isMM = document.getElementById("units").value === "mm" ? true : document.getElementById("units").value === "inch" ? false : null; 
+	var isMM = (document.getElementById("units") || "").value === "mm" ? true : (document.getElementById("units").value === "inch" ? false : null); 
 	
 	// height
 	var wh = isMM ? Number(document.getElementById("windowHeight").value) : Number(document.getElementById("windowHeight").value * 25.4);
