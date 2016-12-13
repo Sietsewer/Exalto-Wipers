@@ -950,16 +950,26 @@ var LastUnits = "mm";
 function unitsChange(){
     if (document.getElementById("units").value !== LastUnits){
     if((document.getElementById("units") || "").value === "mm"){
-        (document.getElementById("units") || "").value /= 
+        
         document.getElementById("marginH").value  = Number((document.getElementById("marginH")  || "").value) * 25.4;
-	   document.getElementById("marginVT").value = Number((document.getElementById("marginVT") || "").value) * 25.4;
-	   document.getElementById("marginVB").value = Number((document.getElementById("marginVB") || "").value) * 25.4;
-	   document.getElementById("marginC").value  = Number((document.getElementById("marginC")  || "").value) * 25.4;
+        document.getElementById("marginVT").value = Number((document.getElementById("marginVT") || "").value) * 25.4;
+        document.getElementById("marginVB").value = Number((document.getElementById("marginVB") || "").value) * 25.4;
+        document.getElementById("marginC").value  = Number((document.getElementById("marginC")  || "").value) * 25.4;
+        document.getElementById("windowHeight").value  = Number((document.getElementById("windowHeight")  || "").value) * 25.4;
+        document.getElementById("windowTopWidth").value  = Number((document.getElementById("windowTopWidth")  || "").value) * 25.4;
+        document.getElementById("windowCentreDistance").value  = Number((document.getElementById("windowCentreDistance")  || "").value) * 25.4;
+        document.getElementById("windowEyeLevel").value  = Number((document.getElementById("windowEyeLevel")  || "").value) * 25.4;
+
     } else {
         document.getElementById("marginH").value  = Number((document.getElementById("marginH")  || "").value) / 25.4;
-	   document.getElementById("marginVT").value = Number((document.getElementById("marginVT") || "").value) / 25.4;
-	   document.getElementById("marginVB").value = Number((document.getElementById("marginVB") || "").value) / 25.4;
-	   document.getElementById("marginC").value  = Number((document.getElementById("marginC")  || "").value) / 25.4;
+        document.getElementById("marginVT").value = Number((document.getElementById("marginVT") || "").value) / 25.4;
+        document.getElementById("marginVB").value = Number((document.getElementById("marginVB") || "").value) / 25.4;
+        document.getElementById("marginC").value  = Number((document.getElementById("marginC")  || "").value) / 25.4;
+        document.getElementById("windowHeight").value  = Number((document.getElementById("windowHeight")  || "").value) / 25.4;
+        document.getElementById("windowTopWidth").value  = Number((document.getElementById("windowTopWidth")  || "").value) / 25.4;
+        document.getElementById("windowCentreDistance").value  = Number((document.getElementById("windowCentreDistance")  || "").value) / 25.4;
+        document.getElementById("windowEyeLevel").value  = Number((document.getElementById("windowEyeLevel")  || "").value) / 25.4;
+
     }
         LastUnits = document.getElementById("units").value;
     }
